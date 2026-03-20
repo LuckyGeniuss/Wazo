@@ -223,9 +223,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         
         <div className="flex items-end gap-2">
-          <span className="text-lg font-bold text-gray-900">₴{pricing.finalPrice.toFixed(2)}</span>
+          <span className="text-lg font-bold text-gray-900">{Math.round(pricing.finalPrice).toLocaleString('uk-UA')} ₴</span>
           {(isSale || discountPercentage > 0) && (
-            <span className="text-sm text-gray-400 line-through mb-0.5">₴{(product.compareAtPrice || pricing.originalPrice).toFixed(2)}</span>
+            <span className="text-sm text-gray-400 line-through mb-0.5">{Math.round((product.compareAtPrice || pricing.originalPrice)).toLocaleString('uk-UA')} ₴</span>
           )}
         </div>
       </Link>

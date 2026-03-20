@@ -145,11 +145,11 @@ export async function createOrder(storeId: string, productId: string, data: Orde
     //     orderId: order.id,
     //     customerName: order.customerName,
     //     storeName: product.store.name,
-    //     totalPrice: `₴${order.totalPrice.toFixed(2)}`,
+    //     totalPrice: `${Math.round(order.totalPrice).toLocaleString('uk-UA')} ₴`,
     //     orderItems: order.orderItems.map(item => ({
     //       name: item.product.name,
     //       quantity: item.quantity,
-    //       price: `₴${item.price.toFixed(2)}`,
+    //       price: `${Math.round(item.price).toLocaleString('uk-UA')} ₴`,
     //       imageUrl: item.product.imageUrl || undefined,
     //     })),
     //     storeSlug: product.store.slug,
@@ -287,7 +287,7 @@ export async function updateOrderStatus(orderId: string, storeId: string, status
             orderItems: fullOrder.orderItems.map(item => ({
               name: item.product.name,
               quantity: item.quantity,
-              price: `₴${item.price.toFixed(2)}`,
+              price: `${Math.round(item.price).toLocaleString('uk-UA')} ₴`,
               imageUrl: item.product.imageUrl || undefined,
             })),
             storeSlug: fullOrder.store.slug,

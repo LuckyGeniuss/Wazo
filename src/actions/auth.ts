@@ -7,9 +7,10 @@ import { registerSchema, RegisterInput } from "@/lib/validations/auth";
 export async function registerUser(data: RegisterInput) {
   try {
     const validatedData = registerSchema.parse(data);
+    const email = validatedData.email.toLowerCase();
 
     const existingUser = await prisma.user.findUnique({
-      where: { email: validatedData.email },
+      where: { email },
     });
 
     if (existingUser) {
@@ -21,7 +22,7 @@ export async function registerUser(data: RegisterInput) {
     await prisma.user.create({
       data: {
         name: validatedData.name,
-        email: validatedData.email,
+        email,
         password: hashedPassword,
       },
     });

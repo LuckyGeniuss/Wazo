@@ -21,7 +21,13 @@ export default async function StoreDashboardLayout({
   }
 
   // Проверяем права: пользователь — владелец ИЛИ участник команды
-  const userRole = await getUserStoreRole(session.user.id, storeId);
+  let userRole;
+  try {
+    userRole = await getUserStoreRole(session.user.id, storeId);
+  } catch (error) {
+    console.error("Error getting user store role:", error);
+    // Continue, userRole will be undefined and redirect will happen below
+  }
 
   if (!userRole) {
     redirect("/dashboard");
@@ -30,18 +36,28 @@ export default async function StoreDashboardLayout({
   // Получаем все магазины пользователя для StoreSwitcher:
   // - магазины, где он владелец
   // - магазины, в командах которых он состоит
-  const [ownedStores, teamStores] = await Promise.all([
-    prisma.store.findMany({
-      where: { ownerId: session.user.id },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.store.findMany({
-      where: {
-        teamMembers: { some: { userId: session.user.id } },
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  let ownedStores = [];
+  let teamStores = [];
+  
+  try {
+    const results = await Promise.all([
+      prisma.store.findMany({
+        where: { ownerId: session.user.id },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.store.findMany({
+        where: {
+          teamMembers: { some: { userId: session.user.id } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+    ownedStores = results[0];
+    teamStores = results[1];
+  } catch (error) {
+    console.error("Error fetching stores for sidebar:", error);
+    // You can also redirect to a fallback or handle the empty state
+  }
 
   // Объединяем без дублей
   const storeMap = new Map(ownedStores.map((s) => [s.id, s]));

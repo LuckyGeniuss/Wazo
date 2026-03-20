@@ -20,6 +20,17 @@ export default async function DashboardPage() {
   // Получаем магазины пользователя
   const stores = await prisma.store.findMany({
     where: { ownerId: session.user.id },
+    include: {
+      _count: {
+        select: {
+          products: true,
+          orders: true,
+        }
+      },
+      orders: {
+        select: { totalPrice: true }
+      }
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -31,7 +42,7 @@ export default async function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-blue-600">Wazo.CRM</span>
+              <span className="text-xl font-bold text-blue-600">Wazo.Market</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700 text-sm">
@@ -69,7 +80,10 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {stores.map((store) => (
+            {stores.map((store) => {
+              const gmv = store.orders.reduce((sum, order) => sum + order.totalPrice, 0);
+              
+              return (
               <div
                 key={store.id}
                 className="bg-white overflow-hidden shadow rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200 flex flex-col"
@@ -77,6 +91,21 @@ export default async function DashboardPage() {
                 <div className="px-6 py-5 flex-1">
                   <h3 className="text-lg font-medium text-gray-900 mb-1">{store.name}</h3>
                   <p className="text-sm text-gray-500 mb-4">slug: /{store.slug}</p>
+                  
+                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase">Товары</p>
+                      <p className="font-semibold text-gray-900">{store._count.products}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase">Заказы</p>
+                      <p className="font-semibold text-gray-900">{store._count.orders}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase">Оборот</p>
+                      <p className="font-semibold text-green-600">{Math.round(gmv).toLocaleString('uk-UA')} ₴</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 flex justify-between items-center">
                   <span className="text-xs text-gray-500">
@@ -90,7 +119,7 @@ export default async function DashboardPage() {
                   </Link>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         )}
       </main>

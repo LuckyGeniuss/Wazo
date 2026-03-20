@@ -53,7 +53,7 @@ const CustomTooltip = ({
     return (
       <div className="bg-neutral-900 text-white text-xs py-2 px-3 rounded-xl shadow-xl border border-neutral-700">
         <p className="font-medium text-neutral-300 mb-1">{label}</p>
-        <p className="text-indigo-300 font-bold">₴{payload[0].value.toFixed(2)}</p>
+        <p className="text-indigo-300 font-bold">{Math.round(payload[0].value).toLocaleString('uk-UA')} ₴</p>
       </div>
     );
   }
@@ -75,7 +75,7 @@ export function AnalyticsClient({
   const statCards = [
     {
       title: "Доход (всего)",
-      value: `₴${totalRevenue.toFixed(2)}`,
+      value: `${Math.round(totalRevenue).toLocaleString('uk-UA')} ₴`,
       icon: DollarSign,
       color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
       trend: "+12%",
@@ -281,7 +281,7 @@ export function AnalyticsClient({
                       </span>
                     </td>
                     <td className="py-3 text-right font-semibold text-neutral-900 dark:text-neutral-100">
-                      ${order.totalPrice.toFixed(2)}
+                      ${Math.round(order.totalPrice).toLocaleString('uk-UA')}
                     </td>
                   </tr>
                 ))}

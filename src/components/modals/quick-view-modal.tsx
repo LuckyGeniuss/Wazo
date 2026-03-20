@@ -70,7 +70,7 @@ export function QuickViewModal() {
                 <span className="text-sm text-gray-500">({product.reviewsCount || 0} отзывов)</span>
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-6">
-                ${product.price.toFixed(2)}
+                ${Math.round(product.price).toLocaleString('uk-UA')}
               </div>
               <p className="text-gray-600 leading-relaxed mb-8">
                 {product.description || "Описание отсутствует."}

@@ -38,13 +38,13 @@ export default function CheckoutPage() {
         {items.map((item) => (
           <div key={item.id} className="flex justify-between items-center p-4 border rounded">
             <span>{item.product.name} (x{item.quantity})</span>
-            <span className="font-medium">₴{(getItemPrice(item) * item.quantity).toFixed(2)}</span>
+            <span className="font-medium">{Math.round((getItemPrice(item) * item.quantity)).toLocaleString('uk-UA')} ₴</span>
           </div>
         ))}
       </div>
       <div className="flex justify-between items-center text-2xl font-bold">
         <span>Total:</span>
-        <span>₴{total.toFixed(2)}</span>
+        <span>{Math.round(total).toLocaleString('uk-UA')} ₴</span>
       </div>
       <button
         onClick={onCheckout}

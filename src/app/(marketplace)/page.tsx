@@ -13,16 +13,16 @@ export const revalidate = 3600;
 
 import { CategoryIcons } from '@/components/marketplace/category-icons';
 
-const CAT_CONFIG: Record<string, { gradient: string; bg: string; text: string }> = {
-  electronics: { gradient: 'linear-gradient(135deg, #1e40af, #0284c7)', bg: '#1e40af', text: '#ffffff' },
-  clothing:    { gradient: 'linear-gradient(135deg, #9d174d, #e11d48)', bg: '#9d174d', text: '#ffffff' },
-  home:        { gradient: 'linear-gradient(135deg, #92400e, #d97706)', bg: '#92400e', text: '#ffffff' },
-  beauty:      { gradient: 'linear-gradient(135deg, #6d28d9, #a21caf)', bg: '#6d28d9', text: '#ffffff' },
-  sport:       { gradient: 'linear-gradient(135deg, #065f46, #059669)', bg: '#065f46', text: '#ffffff' },
-  auto:        { gradient: 'linear-gradient(135deg, #1e293b, #475569)', bg: '#1e293b', text: '#ffffff' },
-  kids:        { gradient: 'linear-gradient(135deg, #78350f, #f59e0b)', bg: '#78350f', text: '#ffffff' },
-  books:       { gradient: 'linear-gradient(135deg, #134e4a, #0d9488)', bg: '#134e4a', text: '#ffffff' },
-  food:        { gradient: 'linear-gradient(135deg, #365314, #65a30d)', bg: '#365314', text: '#ffffff' },
+const CAT_CONFIG: Record<string, { gradient: string; bg: string; text: string; emoji: string }> = {
+  electronics: { gradient: 'linear-gradient(135deg, #1e40af, #0284c7)', bg: '#1e40af', text: '#ffffff', emoji: '📱' },
+  clothing:    { gradient: 'linear-gradient(135deg, #9d174d, #e11d48)', bg: '#9d174d', text: '#ffffff', emoji: '👕' },
+  home:        { gradient: 'linear-gradient(135deg, #92400e, #d97706)', bg: '#92400e', text: '#ffffff', emoji: '🏠' },
+  beauty:      { gradient: 'linear-gradient(135deg, #6d28d9, #a21caf)', bg: '#6d28d9', text: '#ffffff', emoji: '💄' },
+  sport:       { gradient: 'linear-gradient(135deg, #065f46, #059669)', bg: '#065f46', text: '#ffffff', emoji: '⚽' },
+  auto:        { gradient: 'linear-gradient(135deg, #1e293b, #475569)', bg: '#1e293b', text: '#ffffff', emoji: '🚗' },
+  kids:        { gradient: 'linear-gradient(135deg, #78350f, #f59e0b)', bg: '#78350f', text: '#ffffff', emoji: '🧸' },
+  books:       { gradient: 'linear-gradient(135deg, #134e4a, #0d9488)', bg: '#134e4a', text: '#ffffff', emoji: '📚' },
+  food:        { gradient: 'linear-gradient(135deg, #365314, #65a30d)', bg: '#365314', text: '#ffffff', emoji: '🍎' },
 };
 
 export default async function MarketplacePage() {
@@ -216,9 +216,9 @@ export default async function MarketplacePage() {
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {globalCategories.map((category, i) => {
                   const slug = (category as any).slug || category.id;
-                  const Icon = CategoryIcons[slug] || CategoryIcons.tools;
-                  const config = CAT_CONFIG[slug] || { gradient: 'linear-gradient(135deg, #4c1d95, #7c3aed)', bg: '#4c1d95', text: '#ffffff' };
+                  const config = CAT_CONFIG[slug] || { gradient: 'linear-gradient(135deg, #4c1d95, #7c3aed)', bg: '#4c1d95', text: '#ffffff', emoji: '📦' };
                   const isBig = i < 2;
+                  const emoji = (category as any).emoji || config.emoji;
 
                   return (
                     <Link
@@ -230,9 +230,9 @@ export default async function MarketplacePage() {
                       {/* Shine effect */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                        {/* SVG іконка */}
-                        <div className={`transition-all duration-300 group-hover:scale-110 ${isBig ? 'w-14 h-14' : 'w-10 h-10'}`} style={{ color: config.text, opacity: 0.9 }}>
-                          <Icon className="w-full h-full" />
+                        {/* Emoji */}
+                        <div className={`transition-all duration-300 group-hover:scale-110 flex items-center justify-center ${isBig ? 'text-5xl' : 'text-3xl'}`}>
+                          {emoji}
                         </div>
                         <div>
                           <p className={`font-bold leading-tight ${isBig ? 'text-xl' : 'text-sm'}`} style={{ color: config.text }}>

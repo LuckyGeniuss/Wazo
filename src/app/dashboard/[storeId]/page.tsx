@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import {
   getTotalRevenue,
@@ -44,21 +45,16 @@ export default async function StoreDashboardPage({
         getDailyRevenue(storeId),
         getTopProducts(storeId),
       ]);
+      
+    if (!store) {
+      throw new Error("Store not found");
+    }
   } catch (error) {
     console.error("[DASHBOARD_PAGE_ERROR]", error);
-    return (
-      <div className="flex items-center justify-center h-64 text-neutral-500">
-        Произошла ошибка при загрузке данных дашборда.
-      </div>
-    );
   }
 
   if (!store) {
-    return (
-      <div className="flex items-center justify-center h-64 text-neutral-500">
-        Магазин не найден
-      </div>
-    );
+    redirect("/dashboard");
   }
 
   return (
