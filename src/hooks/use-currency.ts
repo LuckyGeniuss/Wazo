@@ -16,8 +16,8 @@ export const useCurrency = create<CurrencyStore>()(
   persist(
     (set, get) => ({
       selectedCode: "UAH",
-      rates: { UAH: 1, EUR: 0.92, UAH: 41.0 },
-      symbols: { UAH: "₴", EUR: "€", UAH: "₴" },
+      rates: { USD: 1, EUR: 0.92, UAH: 41.0 },
+      symbols: { USD: "$", EUR: "€", UAH: "₴" },
       setSelectedCurrency: (code: string) => set({ selectedCode: code }),
       setRates: (rates, symbols) => set({ rates, symbols }),
       convert: (amount: number, fromCode: string = "UAH") => {

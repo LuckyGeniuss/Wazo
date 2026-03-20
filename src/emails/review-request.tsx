@@ -28,7 +28,7 @@ export const ReviewRequestEmail = ({
   productImageUrl,
   productId,
   storeSlug,
-  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://localhost:3000",
+  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
 }: ReviewRequestEmailProps) => {
   const reviewBase = `₴{appUrl}/${storeSlug}/product/${productId}?rating=`;
 

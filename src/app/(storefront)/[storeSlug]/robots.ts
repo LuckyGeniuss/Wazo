@@ -6,7 +6,7 @@ export default async function robots({
   params: Promise<{ storeSlug: string }>;
 }): Promise<MetadataRoute.Robots> {
   const { storeSlug } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app";
   const storeUrl = `₴{baseUrl}/${storeSlug}`;
 
   return {

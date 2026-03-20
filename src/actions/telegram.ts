@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import crypto from "crypto";
 
-const APP_URL = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+const APP_URL = (process.env.NEXTAUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL) || "https://wazo-market.vercel.app";
 
 /**
  * Генерирует одноразовый код привязки Telegram (10 минут)

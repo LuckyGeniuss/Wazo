@@ -30,7 +30,7 @@ export const ReturnConfirmationEmail = ({
   refundMethod,
   estimatedDays = 5,
   storeSlug,
-  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://localhost:3000",
+  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
 }: ReturnConfirmationEmailProps) => (
   <Html>
     <Head />

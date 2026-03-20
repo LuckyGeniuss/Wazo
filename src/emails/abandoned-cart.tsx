@@ -31,7 +31,7 @@ export const AbandonedCartEmail = ({
               Hello, {customerName}!
             </Text>
             <Text style={paragraph}>
-              We noticed you left some great items in your cart at <Link href={`http://localhost:3000/${storeSlug}`} style={anchor}>{storeName}</Link>.
+              We noticed you left some great items in your cart at <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}`} style={anchor}>{storeName}</Link>.
               They are still waiting for you!
             </Text>
 
@@ -51,7 +51,7 @@ export const AbandonedCartEmail = ({
             ))}
             <Hr style={hr} />
 
-            <Link href={`http://localhost:3000/${storeSlug}/cart`} style={button}>
+            <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}/cart`} style={button}>
               Return to Cart
             </Link>
 

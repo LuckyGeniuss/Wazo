@@ -5,7 +5,7 @@ type StoreSitemap = NonNullable<Awaited<ReturnType<typeof prisma.store.findMany>
 type ProductSitemap = NonNullable<Awaited<ReturnType<typeof prisma.product.findMany>>>[number];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}';
 
   const stores = await prisma.store.findMany({
     select: {

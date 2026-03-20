@@ -26,6 +26,12 @@ export function MarketplaceHeader() {
         <nav className="flex items-center gap-4">
           <InstallPwaButton />
           <CurrencySwitcher />
+          <select className="text-xs border rounded-lg px-2 py-1 outline-none bg-transparent hover:bg-muted/50 transition-colors">
+            <option value="uk">🇺🇦 UA</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="kk">🇰🇿 KZ</option>
+            <option value="pl">🇵🇱 PL</option>
+          </select>
           <a href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4">
             Dashboard
           </a>

@@ -11,6 +11,20 @@ import { ProductCard, ProductCardProduct } from "@/components/renderers/product-
 
 export const revalidate = 3600;
 
+import { CategoryIcons } from '@/components/marketplace/category-icons';
+
+const CAT_CONFIG: Record<string, { gradient: string; bg: string; text: string }> = {
+  electronics: { gradient: 'linear-gradient(135deg, #1e40af, #0284c7)', bg: '#1e40af', text: '#ffffff' },
+  clothing:    { gradient: 'linear-gradient(135deg, #9d174d, #e11d48)', bg: '#9d174d', text: '#ffffff' },
+  home:        { gradient: 'linear-gradient(135deg, #92400e, #d97706)', bg: '#92400e', text: '#ffffff' },
+  beauty:      { gradient: 'linear-gradient(135deg, #6d28d9, #a21caf)', bg: '#6d28d9', text: '#ffffff' },
+  sport:       { gradient: 'linear-gradient(135deg, #065f46, #059669)', bg: '#065f46', text: '#ffffff' },
+  auto:        { gradient: 'linear-gradient(135deg, #1e293b, #475569)', bg: '#1e293b', text: '#ffffff' },
+  kids:        { gradient: 'linear-gradient(135deg, #78350f, #f59e0b)', bg: '#78350f', text: '#ffffff' },
+  books:       { gradient: 'linear-gradient(135deg, #134e4a, #0d9488)', bg: '#134e4a', text: '#ffffff' },
+  food:        { gradient: 'linear-gradient(135deg, #365314, #65a30d)', bg: '#365314', text: '#ffffff' },
+};
+
 export default async function MarketplacePage() {
   // Получаем все магазины для отображения
   const stores = await prisma.store.findMany({
@@ -153,14 +167,14 @@ export default async function MarketplacePage() {
             </div>
             
             <h1 className="text-6xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-8">
-              Покупайте и продавайте <br className="hidden md:block"/>
+              Ваш маркетплейс для <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                вашей мечты
+                України, Європи та Казахстану
               </span>
             </h1>
             
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Мощная платформа с визуальным конструктором, AI-помощником и встроенной CRM. Запустите продажи сегодня.
+              Мільйон товарів — одна платформа. Щодня тисячі покупок у 7 країнах. Доставка НП, оплата карткою.
             </p>
 
             <div className="mb-12 relative z-20">
@@ -200,28 +214,39 @@ export default async function MarketplacePage() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {globalCategories.map((category) => (
-                  <Link
-                    key={category.id}
-                    href={`/category/${(category as any).slug || category.id}`}
-                    className="group flex flex-col items-center p-4 bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50 hover:border-indigo-100"
-                  >
-                    <div className="w-16 h-16 mb-4 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-transform duration-300">
-                      {(category as any).imageUrl ? (
-                        <img
-                          src={(category as any).imageUrl}
-                          alt={category.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <FolderTree className="w-8 h-8 text-indigo-300" />
-                      )}
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900 text-center line-clamp-2">
-                      {category.name}
-                    </span>
-                  </Link>
-                ))}
+                {globalCategories.map((category, i) => {
+                  const slug = (category as any).slug || category.id;
+                  const Icon = CategoryIcons[slug] || CategoryIcons.tools;
+                  const config = CAT_CONFIG[slug] || { gradient: 'linear-gradient(135deg, #4c1d95, #7c3aed)', bg: '#4c1d95', text: '#ffffff' };
+                  const isBig = i < 2;
+
+                  return (
+                    <Link
+                      key={category.id}
+                      href={`/category/${slug}`}
+                      className={`group relative overflow-hidden rounded-2xl cursor-pointer hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 ${isBig ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}`}
+                      style={{ background: config.gradient }}
+                    >
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 p-4 flex flex-col justify-between">
+                        {/* SVG іконка */}
+                        <div className={`transition-all duration-300 group-hover:scale-110 ${isBig ? 'w-14 h-14' : 'w-10 h-10'}`} style={{ color: config.text, opacity: 0.9 }}>
+                          <Icon className="w-full h-full" />
+                        </div>
+                        <div>
+                          <p className={`font-bold leading-tight ${isBig ? 'text-xl' : 'text-sm'}`} style={{ color: config.text }}>
+                            {category.name}
+                          </p>
+                          <p className="text-xs mt-0.5 opacity-60" style={{ color: config.text }}>
+                            {/* Assuming category has products count, falling back to 0 */}
+                            {(category as any)._count?.products || 0} товарів
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </section>

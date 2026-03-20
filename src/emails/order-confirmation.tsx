@@ -34,7 +34,7 @@ export const OrderConfirmationEmail = ({
             Hello, {customerName},
           </Text>
           <Text style={paragraph}>
-            Thank you for your order at <Link href={`http://localhost:3000/${storeSlug}`} style={anchor}>{storeName}</Link>.
+            Thank you for your order at <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}`} style={anchor}>{storeName}</Link>.
             Your order has been successfully received and will be processed shortly.
           </Text>
 
@@ -59,7 +59,7 @@ export const OrderConfirmationEmail = ({
           <Hr style={hr} />
 
           <Text style={paragraph}>
-            You can track your order status by logging into your <Link href="http://localhost:3000/account" style={anchor}>account</Link>.
+            You can track your order status by logging into your <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/account`} style={anchor}>account</Link>.
           </Text>
           <Text style={paragraph}>
             If you have any questions, please contact us.
