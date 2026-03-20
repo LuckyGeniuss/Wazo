@@ -6,11 +6,8 @@ export default async function SuperAdminStores() {
   const stores = await prisma.store.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      teamMembers: {
-        include: {
-          user: true
-        }
-      }
+      _count: { select: { products: true, orders: true } },
+      owner: { select: { name: true, email: true } },
     }
   });
 

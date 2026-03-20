@@ -404,47 +404,6 @@ export default async function MarketplacePage() {
         </section>
 
       </main>
-
-      <footer className="bg-white border-t border-gray-200/50 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="col-span-1 md:col-span-2">
-              <Link href="/" className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
-                  <ShoppingBag className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-xl font-bold text-gray-900">Wazo.Market</span>
-              </Link>
-              <p className="text-gray-500 max-w-sm">
-                Платформа нового поколения для создания и масштабирования e-commerce бизнеса.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Продукт</h4>
-              <ul className="space-y-3">
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Возможности</Link></li>
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Цены</Link></li>
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Интеграции</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Поддержка</h4>
-              <ul className="space-y-3">
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Документация</Link></li>
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Контакты</Link></li>
-                <li><Link href="#" className="text-gray-500 hover:text-blue-600 transition-colors">Статус</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-400">© 2019 - 2026 Wazo.Market. Все права защищены.</p>
-            <div className="flex gap-6 text-sm text-gray-400">
-              <Link href="#" className="hover:text-gray-900">Политика конфиденциальности</Link>
-              <Link href="#" className="hover:text-gray-900">Условия использования</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
