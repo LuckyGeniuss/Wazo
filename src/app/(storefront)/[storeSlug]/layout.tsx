@@ -44,7 +44,7 @@ export default async function StorefrontLayout({
     "--store-radius": radiusMap[themeConfig.borderRadius as keyof typeof radiusMap],
     fontFamily: themeConfig.fontFamily === "Inter" 
       ? "var(--font-geist-sans)" 
-      : `"${themeConfig.fontFamily}", sans-serif`,
+      : `"₴{themeConfig.fontFamily}", sans-serif`,
   } as React.CSSProperties;
 
   return (

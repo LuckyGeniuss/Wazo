@@ -18,7 +18,7 @@ export function useCartSync() {
     // Проверяем, изменились ли items
     // Сравниваем просто по длине и id товаров + количеству для простоты и производительности
     const getSimpleState = (itemsArr: typeof items) => 
-        itemsArr.map(i => `${i.id}-${i.quantity}`).join('|');
+        itemsArr.map(i => `₴{i.id}-${i.quantity}`).join('|');
 
     if (getSimpleState(items) === getSimpleState(prevItemsRef.current) && timeoutRef.current !== null) {
       // Инициализация или нет изменений с прошлой синхронизации

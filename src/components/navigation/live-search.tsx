@@ -139,9 +139,9 @@ export function LiveSearch() {
                               <p className="text-xs text-neutral-500 truncate">{product.store.name}</p>
                             </div>
                             <div className="text-right">
-                              <div className="text-sm font-semibold text-neutral-900">${product.price.toFixed(2)}</div>
+                              <div className="text-sm font-semibold text-neutral-900">₴{product.price.toFixed(2)}</div>
                               {product.compareAtPrice && product.compareAtPrice > product.price && (
-                                <div className="text-xs text-neutral-400 line-through">${product.compareAtPrice.toFixed(2)}</div>
+                                <div className="text-xs text-neutral-400 line-through">₴{product.compareAtPrice.toFixed(2)}</div>
                               )}
                             </div>
                           </Link>

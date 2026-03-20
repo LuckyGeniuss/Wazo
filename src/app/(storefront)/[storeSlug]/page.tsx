@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: StorefrontRootProps): Promise
     };
   }
 
-  const title = `${store.name} | Маркетплейс`;
+  const title = `₴{store.name} | Маркетплейс`;
   const description = `Добро пожаловать в магазин ${store.name} на нашей платформе.`;
 
   return {

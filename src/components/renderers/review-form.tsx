@@ -79,7 +79,7 @@ export function ReviewForm({ productId, onSuccess }: ReviewFormProps) {
             >
               <Star
                 size={24}
-                className={`${
+                className={`₴{
                   (hover || rating) >= star ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
                 } transition-colors`}
               />

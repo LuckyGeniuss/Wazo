@@ -52,7 +52,7 @@ export const OrderShippedEmail = ({
           </Text>
           <Text style={paragraph}>
             Great news! Your order #{orderId.slice(0, 8).toUpperCase()} from{" "}
-            <Link href={`${appUrl}/${storeSlug}`} style={anchor}>
+            <Link href={`₴{appUrl}/${storeSlug}`} style={anchor}>
               {storeName}
             </Link>{" "}
             has been shipped and is on its way to you!
@@ -100,7 +100,7 @@ export const OrderShippedEmail = ({
           <Hr style={hr} />
 
           <Button
-            href={`${appUrl}/account`}
+            href={`₴{appUrl}/account`}
             style={button}
           >
             Track Order

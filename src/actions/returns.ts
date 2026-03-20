@@ -189,7 +189,7 @@ export async function updateReturnStatus(input: z.infer<typeof updateReturnStatu
             orderId: returnRequest.orderId,
             customerName: returnRequest.order.customerName,
             storeName: store.name,
-            totalPrice: refundAmount ? `$${refundAmount.toFixed(2)}` : "N/A",
+            totalPrice: refundAmount ? `₴${refundAmount.toFixed(2)}` : "N/A",
             orderItems: [],
             storeSlug: store.slug,
           }),

@@ -58,7 +58,7 @@ export async function createPage(storeId: string, name: string) {
       if (!existingPage) {
         isUnique = true;
       } else {
-        uniqueSlug = `${baseSlug}-${counter}`;
+        uniqueSlug = `₴{baseSlug}-${counter}`;
         counter++;
       }
     }

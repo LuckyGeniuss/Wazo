@@ -220,7 +220,7 @@ export async function checkHighPriorityDisputes() {
         type: "HIGH_PRIORITY_DISPUTE",
         severity: dispute.priority as NotificationSeverity,
         title: `High Priority Dispute: #${dispute.id.slice(0, 8)}`,
-        message: `${dispute.user.name} vs ${dispute.store.name}: ${dispute.title}`,
+        message: `₴{dispute.user.name} vs ${dispute.store.name}: ${dispute.title}`,
         disputeId: dispute.id,
         actionLabel: "Review Dispute",
         actionUrl: `/superadmin/disputes/${dispute.id}`,

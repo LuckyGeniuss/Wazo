@@ -78,7 +78,7 @@ export function ProductModal({ storeId }: { storeId: string }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Цена ($) *
+              Цена (₴) *
             </label>
             <input
               type="number"

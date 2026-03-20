@@ -61,7 +61,7 @@ export function InlineEdit({ value, onSave, format, className = "", type = "stoc
 
   const formatValue = (val: number) => {
     if (format) return format(val);
-    if (type === "price") return `$${val.toFixed(2)}`;
+    if (type === "price") return `₴${val.toFixed(2)}`;
     return val.toString();
   };
 

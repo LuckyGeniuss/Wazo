@@ -30,7 +30,7 @@ async function decreaseStock(
     }
 
     if (variant.stock < quantity) {
-      throw new Error(`Недостатньо товару на складі для варіації "${variant.name}"`);
+      throw new Error(`Недостатньо товару на складі для варіації "₴{variant.name}"`);
     }
 
     // Зменшуємо stock варіації
@@ -50,7 +50,7 @@ async function decreaseStock(
     }
 
     if (product.stock < quantity) {
-      throw new Error(`Недостатньо товару на складі для "${product.name}"`);
+      throw new Error(`Недостатньо товару на складі для "₴{product.name}"`);
     }
 
     // Зменшуємо stock продукту
@@ -145,11 +145,11 @@ export async function createOrder(storeId: string, productId: string, data: Orde
     //     orderId: order.id,
     //     customerName: order.customerName,
     //     storeName: product.store.name,
-    //     totalPrice: `$${order.totalPrice.toFixed(2)}`,
+    //     totalPrice: `₴${order.totalPrice.toFixed(2)}`,
     //     orderItems: order.orderItems.map(item => ({
     //       name: item.product.name,
     //       quantity: item.quantity,
-    //       price: `$${item.price.toFixed(2)}`,
+    //       price: `₴${item.price.toFixed(2)}`,
     //       imageUrl: item.product.imageUrl || undefined,
     //     })),
     //     storeSlug: product.store.slug,
@@ -179,7 +179,7 @@ export async function createOrder(storeId: string, productId: string, data: Orde
           price: item.price,
         })),
       },
-      `${process.env.NEXTAUTH_URL ?? ""}/dashboard/${storeId}/orders/${order.id}`
+      `₴{process.env.NEXTAUTH_URL ?? ""}/dashboard/${storeId}/orders/${order.id}`
     ).catch((err: unknown) => console.error("[TELEGRAM_NOTIFY]", err));
 
     return { success: "Заказ успешно оформлен!", orderId: order.id };
@@ -287,7 +287,7 @@ export async function updateOrderStatus(orderId: string, storeId: string, status
             orderItems: fullOrder.orderItems.map(item => ({
               name: item.product.name,
               quantity: item.quantity,
-              price: `$${item.price.toFixed(2)}`,
+              price: `₴${item.price.toFixed(2)}`,
               imageUrl: item.product.imageUrl || undefined,
             })),
             storeSlug: fullOrder.store.slug,

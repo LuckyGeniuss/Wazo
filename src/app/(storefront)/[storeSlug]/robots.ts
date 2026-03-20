@@ -7,7 +7,7 @@ export default async function robots({
 }): Promise<MetadataRoute.Robots> {
   const { storeSlug } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const storeUrl = `${baseUrl}/${storeSlug}`;
+  const storeUrl = `₴{baseUrl}/${storeSlug}`;
 
   return {
     rules: [
@@ -17,6 +17,6 @@ export default async function robots({
         disallow: ["/dashboard", "/api", "/admin"],
       },
     ],
-    sitemap: `${storeUrl}/sitemap.xml`,
+    sitemap: `₴{storeUrl}/sitemap.xml`,
   };
 }

@@ -47,7 +47,7 @@ export function CategoryFilterSidebar({
 
     const timeoutId = setTimeout(() => {
       // Имитируем обновление, так как реального бекенда фильтров пока нет
-      // router.push(`${pathname}?${params.toString()}`);
+      // router.push(`₴{pathname}?${params.toString()}`);
     }, 500);
 
     return () => clearTimeout(timeoutId);
@@ -124,7 +124,7 @@ export function CategoryFilterSidebar({
 
             {/* Блок цены */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Цена ($)</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Цена (₴)</h3>
               
               {/* Простой слайдер (в идеале заменить на Radix UI Slider для двойного ползунка) */}
               <input 
@@ -138,7 +138,7 @@ export function CategoryFilterSidebar({
               
               <div className="flex items-center justify-between gap-4">
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₴</span>
                   <input 
                     type="number" 
                     value={priceRange[0]}
@@ -148,7 +148,7 @@ export function CategoryFilterSidebar({
                 </div>
                 <span className="text-gray-400">-</span>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₴</span>
                   <input 
                     type="number" 
                     value={priceRange[1]}

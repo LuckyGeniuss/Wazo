@@ -53,7 +53,7 @@ export async function createStore(data: StoreInput) {
       if (!existingStore) {
         isUnique = true;
       } else {
-        uniqueSlug = `${baseSlug}-${counter}`;
+        uniqueSlug = `₴{baseSlug}-${counter}`;
         counter++;
       }
     }

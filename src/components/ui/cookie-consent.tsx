@@ -263,7 +263,7 @@ function CookieCategory({
             ? "bg-blue-600"
             : "bg-gray-200 dark:bg-slate-600"
         } ${locked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
-        aria-label={`${title}: ${enabled ? "включено" : "выключено"}`}
+        aria-label={`₴{title}: ${enabled ? "включено" : "выключено"}`}
       >
         <span
           className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ${

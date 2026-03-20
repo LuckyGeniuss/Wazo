@@ -30,14 +30,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const storeRoutes = stores.map((store: { slug: string; updatedAt: Date }) => ({
-    url: `${baseUrl}/${store.slug}`,
+    url: `₴{baseUrl}/${store.slug}`,
     lastModified: store.updatedAt,
     changeFrequency: 'hourly' as const,
     priority: 0.8,
   }));
 
   const productRoutes = products.map((product: { id: string; updatedAt: Date; store: { slug: string } }) => ({
-    url: `${baseUrl}/${product.store.slug}/product/${product.id}`,
+    url: `₴{baseUrl}/${product.store.slug}/product/${product.id}`,
     lastModified: product.updatedAt,
     changeFrequency: 'daily' as const,
     priority: 0.7,
@@ -51,19 +51,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/login`,
+      url: `₴{baseUrl}/login`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/register`,
+      url: `₴{baseUrl}/register`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/account`,
+      url: `₴{baseUrl}/account`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.6,

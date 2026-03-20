@@ -67,7 +67,7 @@ export const LowStockAlertEmail = ({
                 </Text>
               </div>
               <Link
-                href={`${appUrl}/dashboard/${storeId}/products/${item.productId}`}
+                href={`₴{appUrl}/dashboard/${storeId}/products/${item.productId}`}
                 style={restockLink}
               >
                 Restock
@@ -77,7 +77,7 @@ export const LowStockAlertEmail = ({
 
           <Hr style={hr} />
 
-          <Button href={`${appUrl}/dashboard/${storeId}/inventory`} style={button}>
+          <Button href={`₴{appUrl}/dashboard/${storeId}/inventory`} style={button}>
             Manage Inventory
           </Button>
 

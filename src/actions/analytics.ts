@@ -433,7 +433,7 @@ export const getLTVByMonth = cache(
     >();
 
     for (const order of orders) {
-      const month = `${order.createdAt.getFullYear()}-${String(order.createdAt.getMonth() + 1).padStart(2, '0')}`;
+      const month = `₴{order.createdAt.getFullYear()}-${String(order.createdAt.getMonth() + 1).padStart(2, '0')}`;
 
       if (!monthData.has(month)) {
         monthData.set(month, {
@@ -553,7 +553,7 @@ export const getCohortData = cache(
     for (const order of orders) {
       if (!order.customerEmail) continue;
 
-      const orderMonth = `${order.createdAt.getFullYear()}-${String(
+      const orderMonth = `₴{order.createdAt.getFullYear()}-${String(
         order.createdAt.getMonth() + 1
       ).padStart(2, "0")}`;
 

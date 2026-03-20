@@ -42,7 +42,7 @@ export const ReturnConfirmationEmail = ({
           <Text style={paragraph}>Hello, {customerName}!</Text>
           <Text style={paragraph}>
             Your return request for order #{orderId.slice(0, 8).toUpperCase()} from{" "}
-            <Link href={`${appUrl}/${storeSlug}`} style={anchor}>
+            <Link href={`₴{appUrl}/${storeSlug}`} style={anchor}>
               {storeName}
             </Link>{" "}
             has been approved and processed.
@@ -63,7 +63,7 @@ export const ReturnConfirmationEmail = ({
           <Hr style={hr} />
           <Text style={paragraph}>
             If you have any questions regarding your return, please contact us via your{" "}
-            <Link href={`${appUrl}/account`} style={anchor}>
+            <Link href={`₴{appUrl}/account`} style={anchor}>
               account
             </Link>
             .

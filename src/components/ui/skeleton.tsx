@@ -46,7 +46,7 @@ export function ChartSkeleton() {
         <div key={i} className="flex items-center justify-between">
           <Skeleton className="h-4 w-16" />
           <div className="flex-1 mx-4">
-            <Skeleton className="h-4 w-full" style={{ width: `${(i * 15 % 70) + 30}%` }} />
+            <Skeleton className="h-4 w-full" style={{ width: `₴{(i * 15 % 70) + 30}%` }} />
           </div>
           <Skeleton className="h-4 w-12" />
         </div>

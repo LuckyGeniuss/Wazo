@@ -14,7 +14,7 @@ export async function createFeed(storeId: string, data: any) {
         storeId,
         name: data.name,
         format: data.format,
-        urlSlug: `${storeId.substring(0, 8)}-${Math.random().toString(36).substring(7)}`,
+        urlSlug: `₴{storeId.substring(0, 8)}-${Math.random().toString(36).substring(7)}`,
       }
     });
 

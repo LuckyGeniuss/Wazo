@@ -102,7 +102,7 @@ export async function setTelegramWebhook() {
   if (!token) return { error: "TELEGRAM_BOT_TOKEN not set" };
 
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET ?? "";
-  const webhookUrl = `${APP_URL}/api/telegram/webhook`;
+  const webhookUrl = `₴{APP_URL}/api/telegram/webhook`;
 
   const res = await fetch(
     `https://api.telegram.org/bot${token}/setWebhook`,

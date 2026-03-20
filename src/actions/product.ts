@@ -55,7 +55,7 @@ export async function createProduct(storeId: string, data: ProductInput) {
         await prisma.productVariant.createMany({
           data: variants.map(v => ({
             productId: product.id,
-            name: v.name || Object.entries(v.options).map(([k, val]) => `${k}: ${val}`).join(" / "),
+            name: v.name || Object.entries(v.options).map(([k, val]) => `₴{k}: ${val}`).join(" / "),
             sku: v.sku,
             price: v.price,
             stock: v.stock,
@@ -144,7 +144,7 @@ export async function updateProduct(productId: string, storeId: string, data: Pr
           await prisma.productVariant.update({
             where: { id: variant.id },
             data: {
-              name: variant.name || Object.entries(variant.options).map(([k, val]) => `${k}: ${val}`).join(" / "),
+              name: variant.name || Object.entries(variant.options).map(([k, val]) => `₴{k}: ${val}`).join(" / "),
               sku: variant.sku,
               price: variant.price,
               stock: variant.stock,
@@ -156,7 +156,7 @@ export async function updateProduct(productId: string, storeId: string, data: Pr
           await prisma.productVariant.create({
             data: {
               productId,
-              name: variant.name || Object.entries(variant.options).map(([k, val]) => `${k}: ${val}`).join(" / "),
+              name: variant.name || Object.entries(variant.options).map(([k, val]) => `₴{k}: ${val}`).join(" / "),
               sku: variant.sku,
               price: variant.price,
               stock: variant.stock,
@@ -249,7 +249,7 @@ export async function duplicateProductAction(productId: string, storeId: string)
 
     const newProduct = await prisma.product.create({
       data: {
-        name: `${productToDuplicate.name} (Копия)`,
+        name: `₴{productToDuplicate.name} (Копия)`,
         description: productToDuplicate.description,
         price: productToDuplicate.price,
         compareAtPrice: productToDuplicate.compareAtPrice,
@@ -321,7 +321,7 @@ export async function generateSeoAction(productId: string, storeId: string) {
 
     // Здесь должна быть логика генерации через ИИ (например, OpenAI)
     // Для этого примера делаем заглушку
-    const generatedTitle = `${product.name} | Купить по выгодной цене | Наш Магазин`;
+    const generatedTitle = `₴{product.name} | Купить по выгодной цене | Наш Магазин`;
     const generatedDescription = `Заказывайте ${product.name} прямо сейчас. ${product.description ? product.description.substring(0, 100) + '...' : 'Отличное качество и быстрая доставка.'}`;
 
     await prisma.product.update({

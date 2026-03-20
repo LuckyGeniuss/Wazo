@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
-  const title = `${product.name} | ${product.store?.name || "Маркетплейс"}`;
+  const title = `₴{product.name} | ${product.store?.name || "Маркетплейс"}`;
   const description = product.description || `Купите ${product.name} в магазине ${product.store?.name || "Маркетплейс"}.`;
   const imageUrl = product.imageUrl || undefined;
 
@@ -146,7 +146,7 @@ export default async function ProductPage(props: ProductPageProps) {
 
           <div className="mt-3">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl text-gray-900">${product.price.toFixed(2)}</p>
+            <p className="text-3xl text-gray-900">₴{product.price.toFixed(2)}</p>
           </div>
 
           {/* Reviews */}

@@ -111,7 +111,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {hoverImage && (
                <Image
                  src={hoverImage}
-                 alt={`${product.name} - вид 2`}
+                 alt={`₴{product.name} - вид 2`}
                  fill
                  className={`object-cover object-center transition-all duration-500 scale-105 ${
                    product.imageUrl ? "opacity-0 group-hover:opacity-100" : "opacity-100 group-hover:scale-110"
@@ -223,9 +223,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         
         <div className="flex items-end gap-2">
-          <span className="text-lg font-bold text-gray-900">${pricing.finalPrice.toFixed(2)}</span>
+          <span className="text-lg font-bold text-gray-900">₴{pricing.finalPrice.toFixed(2)}</span>
           {(isSale || discountPercentage > 0) && (
-            <span className="text-sm text-gray-400 line-through mb-0.5">${(product.compareAtPrice || pricing.originalPrice).toFixed(2)}</span>
+            <span className="text-sm text-gray-400 line-through mb-0.5">₴{(product.compareAtPrice || pricing.originalPrice).toFixed(2)}</span>
           )}
         </div>
       </Link>

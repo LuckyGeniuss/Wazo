@@ -15,19 +15,19 @@ interface CurrencyStore {
 export const useCurrency = create<CurrencyStore>()(
   persist(
     (set, get) => ({
-      selectedCode: "USD",
-      rates: { USD: 1, EUR: 0.92, UAH: 41.0 },
-      symbols: { USD: "$", EUR: "€", UAH: "₴" },
+      selectedCode: "UAH",
+      rates: { UAH: 1, EUR: 0.92, UAH: 41.0 },
+      symbols: { UAH: "₴", EUR: "€", UAH: "₴" },
       setSelectedCurrency: (code: string) => set({ selectedCode: code }),
       setRates: (rates, symbols) => set({ rates, symbols }),
-      convert: (amount: number, fromCode: string = "USD") => {
+      convert: (amount: number, fromCode: string = "UAH") => {
         const { selectedCode, rates } = get();
         return libConvert(amount, fromCode, selectedCode, rates);
       },
-      format: (amount: number, fromCode: string = "USD") => {
+      format: (amount: number, fromCode: string = "UAH") => {
         const { selectedCode, symbols } = get();
         const converted = get().convert(amount, fromCode);
-        return libFormatPrice(converted, selectedCode, symbols[selectedCode] || "$");
+        return libFormatPrice(converted, selectedCode, symbols[selectedCode] || "₴");
       },
     }),
     {

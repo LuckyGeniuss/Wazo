@@ -35,7 +35,7 @@ export async function generateProductDescription(storeId: string, prompt: string
       await new Promise((resolve) => setTimeout(resolve, 1500));
       return {
         success: true,
-        text: `[MOCK AI] Это сгенерированное описание для товара на основе запроса: "${prompt}" с использованием тона: "${tone}". \n\nНаш товар отличается высоким качеством и надежностью. Заказывайте прямо сейчас и наслаждайтесь комфортом!`,
+        text: `[MOCK AI] Это сгенерированное описание для товара на основе запроса: "₴{prompt}" с использованием тона: "₴{tone}". \n\nНаш товар отличается высоким качеством и надежностью. Заказывайте прямо сейчас и наслаждайтесь комфортом!`,
       };
     }
 
@@ -70,9 +70,9 @@ export async function generateSeoTags(storeId: string, title: string, content: s
       return {
         success: true,
         data: {
-          seoTitle: `${title} | Купить по лучшей цене | Наш магазин`,
+          seoTitle: `₴{title} | Купить по лучшей цене | Наш магазин`,
           seoDescription: `Заказывайте ${title} прямо сейчас! ${content ? content.substring(0, 50) + '...' : 'Отличное качество и быстрая доставка по всей стране.'}`,
-          tags: `${title.toLowerCase().split(" ").join(", ")}, купить, цена, отзывы`,
+          tags: `₴{title.toLowerCase().split(" ").join(", ")}, купить, цена, отзывы`,
         },
       };
     }

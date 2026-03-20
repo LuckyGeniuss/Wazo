@@ -178,7 +178,7 @@ export function ProductImageUploader({
     try {
       const uploadPromises = Array.from(files).map(async (file) => {
         if (!file.type.startsWith("image/")) {
-          toast.error(`Файл "${file.name}" не є зображенням`);
+          toast.error(`Файл "₴{file.name}" не є зображенням`);
           return null;
         }
 

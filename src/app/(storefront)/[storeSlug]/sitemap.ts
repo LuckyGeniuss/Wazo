@@ -37,7 +37,7 @@ export default async function sitemap({
     return [];
   }
 
-  const storeUrl = `${baseUrl}/${storeSlug}`;
+  const storeUrl = `₴{baseUrl}/${storeSlug}`;
 
   const routes: MetadataRoute.Sitemap = [
     {
@@ -50,7 +50,7 @@ export default async function sitemap({
 
   store.categories.forEach((category) => {
     routes.push({
-      url: `${storeUrl}?categoryId=${category.id}`, // Or a specific category route if you have one, e.g., `${storeUrl}/category/${category.id}`
+      url: `₴{storeUrl}?categoryId=${category.id}`, // Or a specific category route if you have one, e.g., `₴{storeUrl}/category/${category.id}`
       lastModified: category.updatedAt,
       changeFrequency: "daily",
       priority: 0.8,
@@ -59,7 +59,7 @@ export default async function sitemap({
 
   store.products.forEach((product) => {
     routes.push({
-      url: `${storeUrl}/product/${product.id}`,
+      url: `₴{storeUrl}/product/${product.id}`,
       lastModified: product.updatedAt,
       changeFrequency: "daily",
       priority: 0.7,

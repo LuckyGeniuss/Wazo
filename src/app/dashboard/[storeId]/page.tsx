@@ -17,30 +17,41 @@ export default async function StoreDashboardPage({
 }) {
   const { storeId } = await params;
 
-  const [store, totalRevenue, salesCount, productsCount, dailyRevenue, topProducts] =
-    await Promise.all([
-      prisma.store.findUnique({
-        where: { id: storeId },
-        include: {
-          orders: {
-            take: 10,
-            orderBy: { createdAt: "desc" },
-            select: {
-              id: true,
-              customerName: true,
-              createdAt: true,
-              status: true,
-              totalPrice: true,
+  let store, totalRevenue, salesCount, productsCount, dailyRevenue, topProducts;
+
+  try {
+    [store, totalRevenue, salesCount, productsCount, dailyRevenue, topProducts] =
+      await Promise.all([
+        prisma.store.findUnique({
+          where: { id: storeId },
+          include: {
+            orders: {
+              take: 10,
+              orderBy: { createdAt: "desc" },
+              select: {
+                id: true,
+                customerName: true,
+                createdAt: true,
+                status: true,
+                totalPrice: true,
+              },
             },
           },
-        },
-      }),
-      getTotalRevenue(storeId),
-      getSalesCount(storeId),
-      getProductsCount(storeId),
-      getDailyRevenue(storeId),
-      getTopProducts(storeId),
-    ]);
+        }),
+        getTotalRevenue(storeId),
+        getSalesCount(storeId),
+        getProductsCount(storeId),
+        getDailyRevenue(storeId),
+        getTopProducts(storeId),
+      ]);
+  } catch (error) {
+    console.error("[DASHBOARD_PAGE_ERROR]", error);
+    return (
+      <div className="flex items-center justify-center h-64 text-neutral-500">
+        Произошла ошибка при загрузке данных дашборда.
+      </div>
+    );
+  }
 
   if (!store) {
     return (

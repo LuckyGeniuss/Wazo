@@ -126,7 +126,7 @@ export default async function BuyerAccountPage() {
                         <p className="text-sm text-gray-700">{new Date(order.createdAt).toLocaleDateString("ru-RU")}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-gray-900">${order.totalPrice.toFixed(2)}</p>
+                        <p className="text-sm font-bold text-gray-900">₴{order.totalPrice.toFixed(2)}</p>
                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                           order.status === "COMPLETED" ? "bg-green-100 text-green-700" :
                           order.status === "CANCELLED" ? "bg-red-100 text-red-700" :
@@ -159,7 +159,7 @@ export default async function BuyerAccountPage() {
                                 {item.product.name} x {item.quantity}
                               </Link>
                             </div>
-                            <p className="text-sm text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
+                            <p className="text-sm text-gray-900">₴{(item.price * item.quantity).toFixed(2)}</p>
                           </div>
                         ))}
                       </div>
@@ -236,7 +236,7 @@ export default async function BuyerAccountPage() {
                           <StarRating rating={avgRating} size={12} />
                           <span className="ml-1 text-xs text-gray-500">({item.product.reviews.length})</span>
                         </div>
-                        <p className="text-indigo-600 font-bold mb-4">${item.product.price.toFixed(2)}</p>
+                        <p className="text-indigo-600 font-bold mb-4">₴{item.product.price.toFixed(2)}</p>
                         <div className="mt-auto pt-4 border-t flex justify-between items-center">
                           <Link
                             href={`/${item.product.store.slug}/product/${item.productId}`}

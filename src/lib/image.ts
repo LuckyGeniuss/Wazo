@@ -50,7 +50,7 @@ export function getBlurDataUrl(imageUrl?: string | null): string | undefined {
   
   // For Cloudinary URLs, add blur effect
   if (imageUrl.includes('res.cloudinary.com')) {
-    return `${imageUrl}?q_10,f_auto`;
+    return `₴{imageUrl}?q_10,f_auto`;
   }
   
   // For other URLs, return a small base64 placeholder

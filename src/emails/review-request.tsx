@@ -30,7 +30,7 @@ export const ReviewRequestEmail = ({
   storeSlug,
   appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://localhost:3000",
 }: ReviewRequestEmailProps) => {
-  const reviewBase = `${appUrl}/${storeSlug}/product/${productId}?rating=`;
+  const reviewBase = `₴{appUrl}/${storeSlug}/product/${productId}?rating=`;
 
   return (
     <Html>
@@ -43,7 +43,7 @@ export const ReviewRequestEmail = ({
             <Text style={paragraph}>Здравствуйте, {customerName}!</Text>
             <Text style={paragraph}>
               Надеемся, вам понравился ваш заказ из магазина{" "}
-              <Link href={`${appUrl}/${storeSlug}`} style={anchor}>
+              <Link href={`₴{appUrl}/${storeSlug}`} style={anchor}>
                 {storeName}
               </Link>
               . Ваше мнение очень важно для нас и других покупателей!
@@ -67,7 +67,7 @@ export const ReviewRequestEmail = ({
               {[1, 2, 3, 4, 5].map((rating) => (
                 <Link
                   key={rating}
-                  href={`${reviewBase}${rating}`}
+                  href={`₴{reviewBase}${rating}`}
                   style={starButton}
                 >
                   {"★".repeat(rating)}{"☆".repeat(5 - rating)} {rating}/5
