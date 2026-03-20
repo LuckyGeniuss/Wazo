@@ -1,0 +1,2 @@
+PGUSER=neondb_owner
+PGPASSWORD=npg_wEvx5fAIj2BnJWT_SECRET="ваш_випадковий_секрет_для_токенів_12345"
