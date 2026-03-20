@@ -1,88 +1,91 @@
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { formatPrice } from "@/lib/currency/converter";
+import { formatPrice } from "@/lib/format";
 
 export default async function SuperAdminDashboard() {
-  const [storeCount, userCount, ordersCount, recentOrders, aggregations] = await Promise.all([
-    prisma.store.count(),
+  const [storesCount, usersCount, productsCount, ordersStats, recentOrders] = await Promise.all([
+    prisma.store.count({ where: { isSuspended: false } }),
     prisma.user.count(),
-    prisma.order.count(),
+    prisma.product.count({ where: { isArchived: false } }),
+    prisma.order.aggregate({ _sum: { totalPrice: true }, _count: true }),
     prisma.order.findMany({
-      take: 10,
-      orderBy: { createdAt: "desc" },
-      include: { store: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true, totalPrice: true, status: true, createdAt: true, customerName: true,
+        store: { select: { name: true } },
+      },
     }),
-    prisma.order.aggregate({
-      _sum: { totalPrice: true }
-    })
   ]);
 
-  const totalRevenue = aggregations._sum.totalPrice || 0;
+  const totalRevenue = ordersStats._sum.totalPrice || 0;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">System Overview</h1>
+      <h1 className="text-3xl font-bold">Огляд платформи</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Total Stores</CardTitle>
+            <CardTitle>Активні магазини</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{storeCount}</p>
+            <p className="text-3xl font-bold">{storesCount}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Total Users</CardTitle>
+            <CardTitle>Користувачі</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{userCount}</p>
+            <p className="text-3xl font-bold">{usersCount}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Total Orders</CardTitle>
+            <CardTitle>Активні товари</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{ordersCount}</p>
+            <p className="text-3xl font-bold">{productsCount}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Total GMV</CardTitle>
+            <CardTitle>Platform GMV</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600">{formatPrice(totalRevenue, "UAH", "₴")}</p>
+            <p className="text-3xl font-bold text-green-600">{formatPrice(totalRevenue)}</p>
           </CardContent>
         </Card>
       </div>
 
-      <h2 className="text-2xl font-bold mt-8 mb-4">Recent Orders</h2>
-      <Card>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Store</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Total Price</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {recentOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">{order.id.slice(0, 8)}</TableCell>
-                <TableCell>{order.store.name}</TableCell>
-                <TableCell>{order.customerName}</TableCell>
-                <TableCell>{order.status}</TableCell>
-                <TableCell className="text-right">{formatPrice(order.totalPrice, "UAH", "₴")}</TableCell>
+      <div className="mt-8 mb-4">
+        <h2 className="text-2xl font-bold mb-4">Останні 5 замовлень</h2>
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Store</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Total Price</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
+            </TableHeader>
+            <TableBody>
+              {recentOrders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.id.slice(0, 8)}</TableCell>
+                  <TableCell>{order.store.name}</TableCell>
+                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>{order.status}</TableCell>
+                  <TableCell className="text-right">{formatPrice(order.totalPrice)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      </div>
     </div>
   );
 }

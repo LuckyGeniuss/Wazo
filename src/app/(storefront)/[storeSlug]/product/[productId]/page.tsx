@@ -172,7 +172,7 @@ export default async function ProductPage(
             {/* Ціна */}
             <div className="flex items-baseline gap-4">
               <span className="text-4xl font-black text-violet-700">
-                ₴{product.price.toLocaleString('uk-UA')}
+                ₴{Math.round(product.price).toLocaleString('uk-UA')}
               </span>
               {product.compareAtPrice && product.compareAtPrice > product.price && (
                 <span className="text-xl text-muted-foreground line-through">
@@ -200,7 +200,7 @@ export default async function ProductPage(
                       {variant.name || 'Варіант'}
                       {variant.price && variant.price !== product.price && (
                         <span className="ml-1 text-xs text-muted-foreground">
-                          ₴{variant.price.toLocaleString('uk-UA')}
+                          ₴{Math.round(variant.price).toLocaleString('uk-UA')}
                         </span>
                       )}
                     </button>
@@ -404,7 +404,7 @@ export default async function ProductPage(
                         {p.name}
                       </h3>
                       <p className="text-sm font-black text-violet-700">
-                        ₴{p.price.toLocaleString('uk-UA')}
+                        ₴{Math.round(p.price).toLocaleString('uk-UA')}
                       </p>
                     </div>
                   </Link>

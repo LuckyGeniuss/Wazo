@@ -64,7 +64,7 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
 
   const groups: SidebarGroup[] = [
     {
-      label: "Wazo.CRM",
+      label: "Wazo.Market",
       routes: [
         {
           href: `/dashboard/${storeId}`,
@@ -303,7 +303,7 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
       >
         <div className="flex items-center justify-between p-6">
           <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl tracking-tight">
-            Wazo.CRM
+            Wazo.Market
           </Link>
           <button
             onClick={close}

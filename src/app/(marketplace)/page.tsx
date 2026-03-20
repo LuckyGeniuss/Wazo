@@ -13,16 +13,22 @@ export const revalidate = 3600;
 
 import { CategoryIcons } from '@/components/marketplace/category-icons';
 
-const CAT_CONFIG: Record<string, { gradient: string; bg: string; text: string; emoji: string }> = {
-  electronics: { gradient: 'linear-gradient(135deg, #1e40af, #0284c7)', bg: '#1e40af', text: '#ffffff', emoji: '📱' },
-  clothing:    { gradient: 'linear-gradient(135deg, #9d174d, #e11d48)', bg: '#9d174d', text: '#ffffff', emoji: '👕' },
-  home:        { gradient: 'linear-gradient(135deg, #92400e, #d97706)', bg: '#92400e', text: '#ffffff', emoji: '🏠' },
-  beauty:      { gradient: 'linear-gradient(135deg, #6d28d9, #a21caf)', bg: '#6d28d9', text: '#ffffff', emoji: '💄' },
-  sport:       { gradient: 'linear-gradient(135deg, #065f46, #059669)', bg: '#065f46', text: '#ffffff', emoji: '⚽' },
-  auto:        { gradient: 'linear-gradient(135deg, #1e293b, #475569)', bg: '#1e293b', text: '#ffffff', emoji: '🚗' },
-  kids:        { gradient: 'linear-gradient(135deg, #78350f, #f59e0b)', bg: '#78350f', text: '#ffffff', emoji: '🧸' },
-  books:       { gradient: 'linear-gradient(135deg, #134e4a, #0d9488)', bg: '#134e4a', text: '#ffffff', emoji: '📚' },
-  food:        { gradient: 'linear-gradient(135deg, #365314, #65a30d)', bg: '#365314', text: '#ffffff', emoji: '🍎' },
+const CAT_EMOJI: Record<string, string> = {
+  electronics: '📱', clothing: '👕', home: '🏠', beauty: '💄',
+  sport: '⚽', auto: '🚗', kids: '🧸', books: '📚', food: '🛒',
+  tools: '🔧', pets: '🐾', jewelry: '💎',
+};
+
+const CAT_GRADIENT: Record<string, string> = {
+  electronics: 'from-blue-600 to-cyan-500',
+  clothing:    'from-pink-600 to-rose-500',
+  home:        'from-amber-500 to-orange-400',
+  beauty:      'from-purple-600 to-pink-500',
+  sport:       'from-green-600 to-emerald-500',
+  auto:        'from-slate-700 to-slate-500',
+  kids:        'from-yellow-500 to-amber-400',
+  books:       'from-teal-600 to-cyan-500',
+  food:        'from-lime-600 to-green-500',
 };
 
 export default async function MarketplacePage() {
@@ -213,33 +219,36 @@ export default async function MarketplacePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 auto-rows-[130px]">
                 {globalCategories.map((category, i) => {
                   const slug = (category as any).slug || category.id;
-                  const config = CAT_CONFIG[slug] || { gradient: 'linear-gradient(135deg, #4c1d95, #7c3aed)', bg: '#4c1d95', text: '#ffffff', emoji: '📦' };
+                  const emoji = CAT_EMOJI[slug] || '🛍️';
+                  const grad  = CAT_GRADIENT[slug] || 'from-violet-600 to-indigo-500';
                   const isBig = i < 2;
-                  const emoji = (category as any).emoji || config.emoji;
 
                   return (
                     <Link
                       key={category.id}
                       href={`/category/${slug}`}
-                      className={`group relative overflow-hidden rounded-2xl cursor-pointer hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 ${isBig ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}`}
-                      style={{ background: config.gradient }}
+                      className={`group relative overflow-hidden rounded-2xl
+                                  bg-gradient-to-br ${grad}
+                                  hover:scale-[1.03] hover:shadow-xl transition-all duration-300
+                                  ${isBig ? 'col-span-2 row-span-2' : ''}`}
                     >
-                      {/* Shine effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10
+                                      transition-colors duration-300" />
                       <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                        {/* Emoji */}
-                        <div className={`transition-all duration-300 group-hover:scale-110 flex items-center justify-center ${isBig ? 'text-5xl' : 'text-3xl'}`}>
+                        <span className={`transition-transform duration-300
+                                          group-hover:scale-125 select-none
+                                          ${isBig ? 'text-6xl' : 'text-4xl'}`}>
                           {emoji}
-                        </div>
+                        </span>
                         <div>
-                          <p className={`font-bold leading-tight ${isBig ? 'text-xl' : 'text-sm'}`} style={{ color: config.text }}>
+                          <p className={`font-bold text-white leading-tight
+                                         ${isBig ? 'text-xl' : 'text-sm'}`}>
                             {category.name}
                           </p>
-                          <p className="text-xs mt-0.5 opacity-60" style={{ color: config.text }}>
-                            {/* Assuming category has products count, falling back to 0 */}
+                          <p className="text-white/60 text-xs mt-0.5">
                             {(category as any)._count?.products || 0} товарів
                           </p>
                         </div>

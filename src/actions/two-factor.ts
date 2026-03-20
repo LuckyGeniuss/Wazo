@@ -6,7 +6,7 @@ import * as OTPAuth from "otpauth";
 import QRCode from "qrcode";
 import { randomBytes, createHash } from "crypto";
 
-const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Wazo.CRM";
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Wazo.Market";
 
 // ─── Генерация секрета и QR-кода ──────────────────────────────────────────────
 

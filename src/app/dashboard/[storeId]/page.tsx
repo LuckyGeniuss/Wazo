@@ -18,37 +18,40 @@ export default async function StoreDashboardPage({
 }) {
   const { storeId } = await params;
 
+  if (!storeId) redirect('/dashboard');
+
   let store, totalRevenue, salesCount, productsCount, dailyRevenue, topProducts;
 
   try {
-    [store, totalRevenue, salesCount, productsCount, dailyRevenue, topProducts] =
-      await Promise.all([
-        prisma.store.findUnique({
-          where: { id: storeId },
-          include: {
-            orders: {
-              take: 10,
-              orderBy: { createdAt: "desc" },
-              select: {
-                id: true,
-                customerName: true,
-                createdAt: true,
-                status: true,
-                totalPrice: true,
-              },
-            },
+    store = await prisma.store.findFirst({
+      where: { id: storeId },
+      include: {
+        orders: {
+          take: 10,
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            customerName: true,
+            createdAt: true,
+            status: true,
+            totalPrice: true,
           },
-        }),
+        },
+      },
+    }).catch(() => null);
+
+    if (!store) {
+      throw new Error("Store not found");
+    }
+
+    [totalRevenue, salesCount, productsCount, dailyRevenue, topProducts] =
+      await Promise.all([
         getTotalRevenue(storeId),
         getSalesCount(storeId),
         getProductsCount(storeId),
         getDailyRevenue(storeId),
         getTopProducts(storeId),
       ]);
-      
-    if (!store) {
-      throw new Error("Store not found");
-    }
   } catch (error) {
     console.error("[DASHBOARD_PAGE_ERROR]", error);
   }

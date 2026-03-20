@@ -84,42 +84,60 @@ export default async function DashboardPage() {
               const gmv = store.orders.reduce((sum, order) => sum + order.totalPrice, 0);
               
               return (
-              <div
-                key={store.id}
-                className="bg-white overflow-hidden shadow rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200 flex flex-col"
-              >
-                <div className="px-6 py-5 flex-1">
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">{store.name}</h3>
-                  <p className="text-sm text-gray-500 mb-4">slug: /{store.slug}</p>
-                  
-                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase">Товары</p>
-                      <p className="font-semibold text-gray-900">{store._count.products}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase">Заказы</p>
-                      <p className="font-semibold text-gray-900">{store._count.orders}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 uppercase">Оборот</p>
-                      <p className="font-semibold text-green-600">{Math.round(gmv).toLocaleString('uk-UA')} ₴</p>
+                <div key={store.id} className="bg-white border rounded-2xl overflow-hidden
+                                                hover:shadow-lg hover:border-violet-200
+                                                transition-all group">
+                  {/* Шапка картки */}
+                  <div className="p-5 border-b bg-gradient-to-r from-violet-50 to-indigo-50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600
+                                        flex items-center justify-center text-white font-black text-lg
+                                        shadow-md">
+                          {store.name[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-base">{store.name}</h3>
+                          <p className="text-xs text-slate-500">wazo-market.vercel.app/{store.slug}</p>
+                        </div>
+                      </div>
+                      <span className="text-xs font-medium px-2 py-1 rounded-full
+                                       bg-green-100 text-green-700">
+                        Активний
+                      </span>
                     </div>
                   </div>
+
+                  {/* Статистика */}
+                  <div className="grid grid-cols-3 divide-x">
+                    {[
+                      { label: 'Товарів',    value: store._count.products },
+                      { label: 'Замовлень',  value: store._count.orders },
+                      { label: 'GMV',        value: `₴${Math.round(gmv).toLocaleString('uk-UA')}` },
+                    ].map(stat => (
+                      <div key={stat.label} className="p-4 text-center">
+                        <p className="text-xl font-black text-slate-800">{stat.value}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{stat.label}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Дії */}
+                  <div className="p-4 flex gap-2">
+                    <a href={`/dashboard/${store.id}`}
+                       className="flex-1 text-center py-2.5 bg-violet-600 text-white rounded-xl
+                                  text-sm font-semibold hover:bg-violet-700 transition-colors">
+                      Управління →
+                    </a>
+                    <a href={`/${store.slug}`} target="_blank"
+                       className="px-4 py-2.5 border rounded-xl text-sm text-slate-600
+                                  hover:bg-slate-50 transition-colors">
+                      Вітрина ↗
+                    </a>
+                  </div>
                 </div>
-                <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 flex justify-between items-center">
-                  <span className="text-xs text-gray-500">
-                    Создан {new Date(store.createdAt).toLocaleDateString("ru-RU")}
-                  </span>
-                  <Link
-                    href={`/dashboard/${store.id}`}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500"
-                  >
-                    Управление →
-                  </Link>
-                </div>
-              </div>
-            )})}
+              );
+            })}
           </div>
         )}
       </main>
