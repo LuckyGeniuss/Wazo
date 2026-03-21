@@ -19,6 +19,7 @@ export default function CheckoutPage() {
     email: '',
     phone: '',
     address: '',
+    deliveryMethod: 'nova_poshta',
   });
 
   const total = items.reduce((sum, item) => sum + getItemPrice(item) * item.quantity, 0);
@@ -49,7 +50,7 @@ export default function CheckoutPage() {
         customerName: formData.name,
         customerEmail: formData.email,
         customerPhone: formData.phone,
-        shippingAddress: formData.address,
+        shippingAddress: `[${formData.deliveryMethod}] ${formData.address}`,
         items: items.map(item => ({
           productId: item.product.id,
           quantity: item.quantity,
@@ -127,6 +128,25 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-12 gap-10">
           {/* Checkout Form */}
           <div className="lg:col-span-7 space-y-8">
+            {/* Progress Bar */}
+            <div className="flex items-center justify-between mb-8 relative">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 z-0 rounded-full"></div>
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1/2 h-1 bg-violet-600 z-0 rounded-full"></div>
+              
+              <div className="relative z-10 flex flex-col items-center gap-2 bg-slate-50 px-2">
+                <div className="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">1</div>
+                <span className="text-xs font-semibold text-slate-800">Контакти</span>
+              </div>
+              <div className="relative z-10 flex flex-col items-center gap-2 bg-slate-50 px-2">
+                <div className="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-sm shadow-sm border-2 border-white">2</div>
+                <span className="text-xs font-semibold text-slate-800">Доставка</span>
+              </div>
+              <div className="relative z-10 flex flex-col items-center gap-2 bg-slate-50 px-2">
+                <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm border-2 border-white">3</div>
+                <span className="text-xs font-semibold text-slate-400">Оплата</span>
+              </div>
+            </div>
+
             <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm">
               <h2 className="text-2xl font-black text-slate-900 mb-6 tracking-tight">Оформлення замовлення</h2>
               
@@ -166,6 +186,38 @@ export default function CheckoutPage() {
 
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-slate-800 border-b pb-2">Доставка</h3>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.deliveryMethod === 'nova_poshta' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                      <input 
+                        type="radio" 
+                        name="deliveryMethod" 
+                        value="nova_poshta" 
+                        checked={formData.deliveryMethod === 'nova_poshta'}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                      />
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-900 text-sm">Нова Пошта</span>
+                        <span className="text-xs text-slate-500">До відділення або поштомату</span>
+                      </div>
+                    </label>
+                    <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.deliveryMethod === 'ukrposhta' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                      <input 
+                        type="radio" 
+                        name="deliveryMethod" 
+                        value="ukrposhta" 
+                        checked={formData.deliveryMethod === 'ukrposhta'}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                      />
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-900 text-sm">Укрпошта</span>
+                        <span className="text-xs text-slate-500">До відділення</span>
+                      </div>
+                    </label>
+                  </div>
+
                   <div className="space-y-1.5">
                     <label htmlFor="address" className="text-sm font-semibold text-slate-700">Адреса доставки <span className="text-red-500">*</span></label>
                     <input 

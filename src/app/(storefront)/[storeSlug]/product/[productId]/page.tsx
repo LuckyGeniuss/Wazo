@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { ReviewForm } from '@/components/storefront/review-form';
+import { TrackView } from '@/components/storefront/track-view';
+import { BuyOneClick } from '@/components/storefront/buy-one-click';
+import { ProductCardProduct } from '@/components/renderers/product-card';
 
 export default async function ProductPage(
   props: { params: Promise<{ storeSlug: string; productId: string }> }
@@ -59,8 +62,14 @@ export default async function ProductPage(
     ? product.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / product.reviews.length
     : product.avgRating || 0;
 
+  const trackProduct = {
+    ...product,
+    store: product.store as any,
+  } as unknown as ProductCardProduct;
+
   return (
     <div className="bg-background min-h-screen">
+      <TrackView product={trackProduct} />
       {/* Breadcrumbs */}
       <div className="border-b bg-muted/30">
         <div className="container mx-auto px-4 py-2.5">
@@ -236,12 +245,16 @@ export default async function ProductPage(
             </div>
 
             {/* Купити зараз */}
-            <Link href="/checkout"
-                  className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl
-                             font-bold text-base border-2 border-violet-600 text-violet-700
-                             hover:bg-violet-50 transition-all">
-              Купити зараз
-            </Link>
+            <BuyOneClick 
+              product={{
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: allImages[0] || "",
+                storeId: product.storeId,
+                storeName: product.store?.name || ""
+              }}
+            />
 
             {/* Гарантії */}
             <div className="grid grid-cols-3 gap-3 py-4 border-t border-b">

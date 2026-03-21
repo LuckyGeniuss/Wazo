@@ -227,33 +227,38 @@ export default async function BuyerAccountPage() {
                     <CardContent className="p-6">
                       <p className="text-sm text-muted-foreground mb-4">Store: <span className="font-medium text-foreground">{order.store.name}</span></p>
                       <div className="space-y-4">
-                        {order.orderItems.map((item: NonNullable<OrderWithDetails>["orderItems"][number]) => (
-                          <div key={item.id} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                              <div className="h-12 w-12 bg-muted rounded-md overflow-hidden relative">
-                                {item.product.images && Array.isArray(item.product.images) && item.product.images[0] ? (
-                                  <Image 
-                                    src={item.product.images[0] as string} 
-                                    alt={item.product.name} 
-                                    fill
-                                    className="object-cover"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-muted">
-                                    <Package className="h-4 w-4 text-muted-foreground" />
-                                  </div>
-                                )}
+                        {order.orderItems.map((item: NonNullable<OrderWithDetails>["orderItems"][number]) => {
+                          const productImages = item.product.images as string[] | null;
+                          const imageUrl = productImages?.[0] || item.product.imageUrl;
+
+                          return (
+                            <div key={item.id} className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <div className="h-12 w-12 bg-muted rounded-md overflow-hidden relative">
+                                  {imageUrl ? (
+                                    <Image 
+                                      src={imageUrl} 
+                                      alt={item.product.name} 
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-muted">
+                                      <Package className="h-4 w-4 text-muted-foreground" />
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <Link href={`/${order.store.slug}/product/${item.productId}`} className="text-sm font-medium hover:underline">
+                                    {item.product.name}
+                                  </Link>
+                                  <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                </div>
                               </div>
-                              <div>
-                                <Link href={`/${order.store.slug}/product/${item.productId}`} className="text-sm font-medium hover:underline">
-                                  {item.product.name}
-                                </Link>
-                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                              </div>
+                              <p className="text-sm font-medium">{Math.round((Number(item.price) * item.quantity)).toLocaleString('uk-UA')} ₴</p>
                             </div>
-                            <p className="text-sm font-medium">{Math.round((Number(item.price) * item.quantity)).toLocaleString('uk-UA')} ₴</p>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
@@ -286,7 +291,7 @@ export default async function BuyerAccountPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {wishlist.map((item: WishlistItemWithDetails) => {
                   const productImages = item.product.images as string[] | null;
-                  const imageUrl = productImages?.[0];
+                  const imageUrl = productImages?.[0] || item.product.imageUrl;
                   
                   return (
                     <Card key={item.id} className="overflow-hidden flex flex-col">

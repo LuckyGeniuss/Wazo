@@ -3,12 +3,13 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, ShoppingBag, Store, TrendingUp, Star, ArrowRight, ShieldCheck, FolderTree, Tag, Sparkles } from "lucide-react";
-import { LiveSearch } from "@/components/navigation/live-search";
+import { LiveSearchDropdown } from "@/components/navigation/live-search-dropdown";
 import { ProductGrid } from "@/components/renderers/product-grid";
 import { CategoryCarousel } from "@/components/renderers/category-carousel";
 import { Button } from "@/components/ui/button";
 import { getFeedProducts } from "@/actions/marketplace";
 import { ProductCard, ProductCardProduct } from "@/components/renderers/product-card";
+import { RecentlyViewed } from "@/components/marketplace/recently-viewed";
 
 export const revalidate = 3600;
 
@@ -92,6 +93,11 @@ export default async function MarketplacePage() {
   // Получаем все магазины для отображения
   const stores = await prisma.store.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: { products: true }
+      }
+    },
     take: 12
   });
 
@@ -154,16 +160,7 @@ export default async function MarketplacePage() {
             </Link>
 
             <div className="hidden md:flex flex-1 max-w-2xl mx-12">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Поиск товаров и магазинов..."
-                  className="block w-full pl-12 pr-4 py-3 bg-gray-100/50 border-transparent rounded-2xl text-gray-900 placeholder-gray-500 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all sm:text-sm"
-                />
-              </div>
+              <LiveSearchDropdown />
             </div>
 
             <div className="flex items-center space-x-6">
@@ -241,7 +238,7 @@ export default async function MarketplacePage() {
             </p>
 
             <div className="mb-12 relative z-20">
-              <LiveSearch />
+              <LiveSearchDropdown />
             </div>
             
             <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
@@ -267,28 +264,78 @@ export default async function MarketplacePage() {
                   <Store className="w-6 h-6" />
                 </div>
                 <h4 className="text-3xl font-black text-gray-900 mb-1">1,000+</h4>
-                <p className="text-sm text-gray-500 font-medium text-center">Активных магазинов</p>
+                <p className="text-sm text-gray-500 font-medium text-center">Активних магазинів</p>
               </div>
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-xl mb-3">
                   <ShoppingBag className="w-6 h-6" />
                 </div>
                 <h4 className="text-3xl font-black text-gray-900 mb-1">5M+</h4>
-                <p className="text-sm text-gray-500 font-medium text-center">Товаров в каталоге</p>
+                <p className="text-sm text-gray-500 font-medium text-center">Товарів в каталозі</p>
               </div>
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl mb-3">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <h4 className="text-3xl font-black text-gray-900 mb-1">100%</h4>
-                <p className="text-sm text-gray-500 font-medium text-center">Безопасные сделки</p>
+                <p className="text-sm text-gray-500 font-medium text-center">Безпечні угоди</p>
               </div>
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-orange-600 rounded-xl mb-3">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <h4 className="text-3xl font-black text-gray-900 mb-1">24/7</h4>
-                <p className="text-sm text-gray-500 font-medium text-center">Поддержка клиентов</p>
+                <p className="text-sm text-gray-500 font-medium text-center">Підтримка клієнтів</p>
+              </div>
+            </div>
+
+            {/* Trust Signals / Features Strip */}
+            <div className="mt-16 border-t border-gray-200/50 pt-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="flex items-center gap-4 bg-white/60 p-5 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900 text-left">Оригінальні товари</h5>
+                    <p className="text-sm text-gray-500 text-left">Гарантія якості від продавців</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 bg-white/60 p-5 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex-shrink-0 w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900 text-left">Швидка доставка</h5>
+                    <p className="text-sm text-gray-500 text-left">Нова Пошта та Укрпошта</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 bg-white/60 p-5 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex-shrink-0 w-12 h-12 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900 text-left">Безпечна оплата</h5>
+                    <p className="text-sm text-gray-500 text-left">Захист кожної транзакції</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 bg-white/60 p-5 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex-shrink-0 w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900 text-left">Зручне повернення</h5>
+                    <p className="text-sm text-gray-500 text-left">14 днів на повернення товару</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -434,6 +481,8 @@ export default async function MarketplacePage() {
           </section>
         )}
 
+        <RecentlyViewed />
+
         {/* Featured Stores - Glassmorphism Carousel Idea */}
         <section className="py-24 bg-white/50 backdrop-blur-sm border-y border-gray-200/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -458,14 +507,24 @@ export default async function MarketplacePage() {
                     <div className="relative h-full bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50 hover:border-white">
                       <div className="h-32 mb-6 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center overflow-hidden relative">
                          {/* Placeholder for cover image */}
-                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 mix-blend-overlay"></div>
-                         <Store className="w-12 h-12 text-gray-300" />
+                         {(store as any).coverImage ? (
+                           <Image src={(store as any).coverImage} alt={store.name} fill className="object-cover mix-blend-overlay opacity-50" />
+                         ) : (
+                           <>
+                             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 mix-blend-overlay"></div>
+                             <Store className="w-12 h-12 text-gray-300" />
+                           </>
+                         )}
                       </div>
                       <div className="relative -mt-12 mb-4">
                         <div className="w-16 h-16 bg-white rounded-2xl shadow-md mx-auto flex items-center justify-center border border-gray-100 overflow-hidden transform group-hover:scale-105 transition-transform duration-500">
-                          <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">
-                            {store.name.charAt(0)}
-                          </span>
+                          {(store as any).logoUrl ? (
+                            <Image src={(store as any).logoUrl} alt={store.name} width={64} height={64} className="object-cover" />
+                          ) : (
+                            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600">
+                              {store.name.charAt(0)}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="text-center">
@@ -474,12 +533,14 @@ export default async function MarketplacePage() {
                         </h3>
                         <div className="flex items-center justify-center gap-1 text-sm text-yellow-500 mb-3">
                           <Star className="w-4 h-4 fill-current" />
-                          <span className="font-medium text-gray-900">4.9</span>
-                          <span className="text-gray-500">(120)</span>
+                          <span className="font-medium text-gray-900">{(store as any).rating || 4.9}</span>
+                          <span className="text-gray-500">({(store as any).reviewsCount || 120})</span>
                         </div>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                          Электроника
-                        </span>
+                        <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-100">
+                            {store._count?.products || 0} товарів
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </Link>

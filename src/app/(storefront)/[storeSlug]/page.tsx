@@ -3,8 +3,9 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Package, Star, Heart, ShoppingCart, Check, ArrowRight } from 'lucide-react';
-import { ProductCardClient } from '@/components/storefront/product-card-client';
+import { Package, Check } from 'lucide-react';
+import { StorefrontClient } from '@/components/storefront/storefront-client';
+import { FloatingCartButton } from '@/components/storefront/floating-cart-button';
 
 export const dynamic = 'force-dynamic';
 
@@ -92,47 +93,15 @@ export default async function StorefrontPage(
         </div>
       </section>
 
-      {/* Фільтр категорій */}
-      {cats.length > 1 && (
-        <div className="sticky top-16 z-30 bg-white border-b shadow-sm">
-          <div className="container mx-auto px-4">
-            <div className="flex gap-2 py-3 overflow-x-auto">
-              {cats.map(cat => (
-                <span key={cat.slug}
-                      className="flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium
-                                 border hover:bg-slate-50 transition-colors cursor-pointer whitespace-nowrap">
-                  {cat.name}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Товари */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-black">
-            Всі товари <span className="text-slate-400 font-normal text-base">({store.products.length})</span>
-          </h2>
-        </div>
-
-        {store.products.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border">
-            <Package size={48} className="mx-auto text-slate-200 mb-4" />
-            <p className="text-xl font-bold text-slate-400">Товари незабаром з'являться</p>
-            <Link href="/search" className="mt-4 inline-block text-sm text-violet-600 hover:underline">
-              Переглянути інші магазини →
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {store.products.map(p => (
-              <ProductCardClient key={p.id} p={p} storeSlug={storeSlug} accentColor={theme.accent} />
-            ))}
-          </div>
-        )}
-      </div>
+      {/* Фільтр категорій та Товари (Клієнтський компонент) */}
+      <StorefrontClient 
+        store={store}
+        storeSlug={storeSlug}
+        cats={cats}
+        theme={theme}
+      />
+      
+      <FloatingCartButton />
     </div>
   );
 }
