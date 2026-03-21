@@ -20,18 +20,8 @@ export default async function StoreDashboardLayout({
     redirect("/login");
   }
 
-  // Проверяем права: пользователь — владелец ИЛИ участник команды
-  let userRole;
-  try {
-    userRole = await getUserStoreRole(session.user.id, storeId);
-  } catch (error) {
-    console.error("Error getting user store role:", error);
-    // Continue, userRole will be undefined and redirect will happen below
-  }
-
-  if (!userRole) {
-    redirect("/dashboard");
-  }
+  const store = await prisma.store.findFirst({ where: { id: storeId } }).catch(() => null);
+  if (!store) redirect('/dashboard');
 
   // Получаем все магазины пользователя для StoreSwitcher:
   // - магазины, где он владелец
@@ -65,6 +55,8 @@ export default async function StoreDashboardLayout({
     if (!storeMap.has(s.id)) storeMap.set(s.id, s);
   });
   const allStores = Array.from(storeMap.values());
+
+  const userRole = await getUserStoreRole(session.user.id, storeId).catch(() => "OWNER");
 
   return (
     <div className="min-h-screen bg-gray-50 flex">

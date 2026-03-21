@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,6 +11,17 @@ import { getFeedProducts } from "@/actions/marketplace";
 import { ProductCard, ProductCardProduct } from "@/components/renderers/product-card";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Wazo.Market | Ваш маркетплейс",
+  description: "Мільйон товарів — одна платформа. Щодня тисячі покупок у 7 країнах. Доставка НП, оплата карткою.",
+  openGraph: {
+    title: "Wazo.Market | Ваш маркетплейс",
+    description: "Мільйон товарів — одна платформа.",
+    type: "website",
+    locale: "uk_UA",
+  },
+};
 
 import { CategoryIcons } from '@/components/marketplace/category-icons';
 
