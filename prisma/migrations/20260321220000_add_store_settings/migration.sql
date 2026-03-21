@@ -1,0 +1,1 @@
+-- Add StoreSettings table

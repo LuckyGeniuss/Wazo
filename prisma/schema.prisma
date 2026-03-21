@@ -174,9 +174,47 @@ model Store {
     disputeCases DisputeCase[]
     adminNotifications AdminNotification[]
     leaderboardEntries SellerLeaderboard[]
+    storeSettings StoreSettings?
   }
-
-model TelegramLinkCode {
+  
+  // ==========================================
+  // STORE FRONTEND SETTINGS (Demo Template)
+  // ==========================================
+  
+  model StoreSettings {
+    id String @id @default(uuid())
+    storeId String @unique
+  
+    // Theme Config
+    primaryColor String @default("#3b82f6")
+    secondaryColor String @default("#64748b")
+    accentColor String @default("#22c55e")
+    backgroundColor String @default("#ffffff")
+    textColor String @default("#1e293b")
+  
+    // Layout Config
+    heroBannerUrl String?
+    heroTitle String?
+    heroSubtitle String?
+    showCategories Boolean @default(true)
+    showFeaturedProducts Boolean @default(true)
+    productsLayout String @default("grid") // grid, list
+    productsPerRow Int @default(4)
+  
+    // Header/Footer
+    headerLogo String?
+    footerText String?
+    footerLinks Json @default("[]")
+  
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  
+    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  
+    @@index([storeId])
+  }
+  
+  model TelegramLinkCode {
   id        String    @id @default(uuid())
   storeId   String
   code      String    @unique
