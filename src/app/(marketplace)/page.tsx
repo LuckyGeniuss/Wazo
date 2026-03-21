@@ -34,6 +34,20 @@ const CAT_EMOJI: Record<string, string> = {
   'avtotovari': '🚗', 'dityachi-tovari': '🧸', 'dim-i-sad': '🏠',
   'tovari-dlya-tvarin': '🐾', 'budivnictvo-ta-remont': '🔧',
   'produkti-harchuvannya': '🛒',
+  'electronics-smartphones': '📱',
+  'electronics-laptops': '💻',
+  'electronics-audio': '🎧',
+  'electronics-wearables': '⌚',
+  'fashion-shoes': '👟',
+  'fashion-clothing': '👕',
+  'electronics-gaming': '🎮',
+  'home-appliances': '📺',
+  'home-kitchen': '🍳',
+  'electronics-cameras': '📷',
+  'home-furniture': '🪑',
+  'fashion-outerwear': '🧥',
+  'electronics-tablets': '📱',
+  'home-smart': '🏠',
 };
 
 const CAT_GRADIENT: Record<string, string> = {
@@ -58,6 +72,20 @@ const CAT_GRADIENT: Record<string, string> = {
   'tovari-dlya-tvarin': 'from-orange-600 to-amber-500',
   'budivnictvo-ta-remont': 'from-stone-600 to-stone-400',
   'produkti-harchuvannya': 'from-lime-600 to-green-500',
+  'electronics-smartphones': 'from-blue-600 to-cyan-500',
+  'electronics-laptops': 'from-indigo-600 to-blue-500',
+  'electronics-audio': 'from-purple-600 to-pink-500',
+  'electronics-wearables': 'from-slate-700 to-slate-500',
+  'fashion-shoes': 'from-pink-600 to-rose-500',
+  'fashion-clothing': 'from-fuchsia-600 to-purple-500',
+  'electronics-gaming': 'from-green-600 to-emerald-500',
+  'home-appliances': 'from-stone-600 to-stone-400',
+  'home-kitchen': 'from-amber-500 to-orange-400',
+  'electronics-cameras': 'from-slate-700 to-slate-500',
+  'home-furniture': 'from-orange-600 to-amber-500',
+  'fashion-outerwear': 'from-rose-600 to-pink-500',
+  'electronics-tablets': 'from-blue-600 to-cyan-500',
+  'home-smart': 'from-teal-600 to-cyan-500',
 };
 
 export default async function MarketplacePage() {
