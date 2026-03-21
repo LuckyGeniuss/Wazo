@@ -29,6 +29,11 @@ const CAT_EMOJI: Record<string, string> = {
   electronics: '📱', clothing: '👕', home: '🏠', beauty: '💄',
   sport: '⚽', auto: '🚗', kids: '🧸', books: '📚', food: '🛒',
   tools: '🔧', pets: '🐾', jewelry: '💎',
+  'mobilni-telefoni': '📱', 'noutbuki': '💻', 'odyag': '👕',
+  'vzuttya': '👟', 'krasa-ta-zdorovya': '💄', 'sport-i-zahoplennya': '⚽',
+  'avtotovari': '🚗', 'dityachi-tovari': '🧸', 'dim-i-sad': '🏠',
+  'tovari-dlya-tvarin': '🐾', 'budivnictvo-ta-remont': '🔧',
+  'produkti-harchuvannya': '🛒',
 };
 
 const CAT_GRADIENT: Record<string, string> = {
@@ -41,6 +46,18 @@ const CAT_GRADIENT: Record<string, string> = {
   kids:        'from-yellow-500 to-amber-400',
   books:       'from-teal-600 to-cyan-500',
   food:        'from-lime-600 to-green-500',
+  'mobilni-telefoni': 'from-blue-600 to-cyan-500',
+  'noutbuki': 'from-indigo-600 to-blue-500',
+  'odyag': 'from-pink-600 to-rose-500',
+  'vzuttya': 'from-purple-600 to-pink-500',
+  'krasa-ta-zdorovya': 'from-fuchsia-600 to-purple-500',
+  'sport-i-zahoplennya': 'from-green-600 to-emerald-500',
+  'avtotovari': 'from-slate-700 to-slate-500',
+  'dityachi-tovari': 'from-yellow-500 to-amber-400',
+  'dim-i-sad': 'from-amber-500 to-orange-400',
+  'tovari-dlya-tvarin': 'from-orange-600 to-amber-500',
+  'budivnictvo-ta-remont': 'from-stone-600 to-stone-400',
+  'produkti-harchuvannya': 'from-lime-600 to-green-500',
 };
 
 export default async function MarketplacePage() {

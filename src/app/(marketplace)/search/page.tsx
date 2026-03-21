@@ -52,10 +52,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   // Build orderBy
-  let orderBy: any = { createdAt: "desc" };
-  if (sort === "price_asc") orderBy = { price: "asc" };
-  if (sort === "price_desc") orderBy = { price: "desc" };
-  if (sort === "popular") orderBy = { viewsCount: "desc" }; // assuming there's a views field or just omit
+  let orderBy: any = [{ createdAt: "desc" }, { id: "desc" }];
+  if (sort === "price_asc") orderBy = [{ price: "asc" }, { id: "desc" }];
+  if (sort === "price_desc") orderBy = [{ price: "desc" }, { id: "desc" }];
+  if (sort === "popular") orderBy = [{ viewsCount: "desc" }, { id: "desc" }]; // assuming there's a views field or just omit
 
   // Fetch products and total count
   const [products, totalCount, categories] = await Promise.all([

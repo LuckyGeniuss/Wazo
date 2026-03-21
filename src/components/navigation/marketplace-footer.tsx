@@ -9,7 +9,7 @@ export function MarketplaceFooter() {
           <div>
             <h3 className="text-lg font-semibold mb-4">About Us</h3>
             <p className="text-muted-foreground text-sm">
-              The premium enterprise multi-tenant marketplace platform for building stores and selling products online.
+              Wazo.Market — маркетплейс нового покоління для України, Європи та Казахстану
             </p>
           </div>
           <div>
