@@ -1,0 +1,8 @@
+# System Rules for AI Assistant
+
+1. Read before editing: ALWAYS read the file before attempting to modify it.
+2. Never delete files: Do not delete files or remove significant portions of code without explicit permission.
+3. Append instead of replace: Prefer appending or modifying specific lines instead of completely replacing files.
+4. Always verify changes: Ensure that your code changes do not break the build (run `npm run build` to verify).
+5. Language: Use the Ukrainian language for UI elements and prices in ₴ (UAH).
+6. Commit changes: Always commit and push successful builds.
