@@ -156,6 +156,11 @@ model Store {
   sellerVerification SellerVerification?
     tierPrices TierPrice[]
   
+    // Integrations
+    openaiApiKey String?
+    novaPoshtaApiKey String?
+    stripeAccountId String?
+
     // Telegram Bot
     telegramChatId String?
     telegramBotEnabled Boolean @default(false)
