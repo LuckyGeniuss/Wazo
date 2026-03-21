@@ -212,7 +212,16 @@ export default async function ProductPage(
             {/* Кнопки дій */}
             <div className="flex gap-3">
               <div className="flex-1">
-                <AddToCartButton product={product} storeName={product.store?.name} fullWidth size="lg" />
+                <AddToCartButton 
+                  productId={product.id}
+                  name={product.name}
+                  price={product.price}
+                  imageUrl={allImages[0] || ""}
+                  storeId={product.storeId}
+                  storeName={product.store?.name}
+                  fullWidth 
+                  size="lg" 
+                />
               </div>
               <button className="w-14 h-14 flex items-center justify-center border-2 rounded-2xl
                                   hover:border-red-300 hover:bg-red-50 hover:text-red-500

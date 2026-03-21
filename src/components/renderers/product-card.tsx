@@ -132,7 +132,11 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0 flex gap-2 z-20">
           <div className="flex-1">
             <AddToCartButton 
-              product={product} 
+              productId={product.id}
+              name={product.name}
+              price={pricing.finalPrice}
+              imageUrl={product.imageUrl || undefined}
+              storeId={product.storeId}
               storeName={product.store?.slug || product.storeId} 
               fullWidth 
               className="mt-4 py-2 text-sm font-medium"

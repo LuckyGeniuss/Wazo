@@ -3,13 +3,17 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Check } from "lucide-react";
-import { useCart } from "@/hooks/use-cart";
-import { Product } from "@prisma/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/hooks/use-cart";
 
 interface AddToCartButtonProps {
-  product: any; // Using any to accommodate both Prisma Product and ProductCardProduct
+  product?: any; // To maintain compatibility
+  productId?: string;
+  name?: string;
+  price?: number;
+  imageUrl?: string;
+  storeId?: string;
   storeName?: string;
   variantId?: string;
   className?: string;
@@ -20,6 +24,11 @@ interface AddToCartButtonProps {
 
 export function AddToCartButton({ 
   product, 
+  productId,
+  name,
+  price,
+  imageUrl,
+  storeId,
   storeName, 
   variantId, 
   className,
@@ -29,6 +38,7 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+
   const cart = useCart();
 
   useEffect(() => {
@@ -53,17 +63,43 @@ export function AddToCartButton({
     e.stopPropagation();
     e.preventDefault();
     
-    // Check if item already exists in cart
-    const exists = cart.items.find(item => item.product.id === product.id && item.variantId === variantId);
-    
-    cart.addItem(product, storeName, variantId);
-    
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
-    
-    toast.success("Додано в кошик", {
-      description: `${product.name} успішно додано до вашого кошика.`,
-    });
+    try {
+      // Determine the item properties
+      const pId = productId || product?.id;
+      const pName = name || product?.name;
+      const pPrice = price || product?.price;
+      const pImage = imageUrl || product?.imageUrl || (product?.images?.[0]?.url);
+      const sId = storeId || product?.storeId;
+      const sName = storeName || product?.store?.name;
+      
+      if (!pId) {
+        toast.error("Помилка: Товар не знайдено");
+        return;
+      }
+      
+      // Use the cart store to add the item
+      cart.addItem(
+        product || { id: pId, name: pName, price: pPrice, imageUrl: pImage, storeId: sId } as any, 
+        sName, 
+        variantId
+      );
+      
+      // Dispatch events
+      window.dispatchEvent(new Event('cart-updated'));
+      window.dispatchEvent(new Event('storage')); // trigger cross-tab updates if any
+      
+      // Show success state
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 2000);
+      
+      toast.success("Додано в кошик!", {
+        description: `${pName || "Товар"} успішно додано до кошика.`,
+      });
+      
+    } catch (error) {
+      console.error("Cart error:", error);
+      toast.error("Не вдалося додати товар в кошик");
+    }
   };
 
   return (
@@ -79,8 +115,8 @@ export function AddToCartButton({
     >
       {isAdded ? (
         <>
-          <Check className="w-4 h-4 mr-2" />
-          {size !== "icon" && <span>Додано</span>}
+          <Check className="w-4 h-4 mr-2 text-green-600" />
+          {size !== "icon" && <span className="text-green-700">Додано!</span>}
         </>
       ) : (
         <>

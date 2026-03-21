@@ -21,13 +21,15 @@ export default async function ProductsPage({
       storeId,
       store: { ownerId: session.user.id },
     },
+    include: {
+      category: true,
+    },
     orderBy: { createdAt: "desc" },
   });
 
   return (
     <div>
-      <ProductModal storeId={storeId} />
-      <ProductsClient data={products} />
+      <ProductsClient data={products} storeId={storeId} />
     </div>
   );
 }
