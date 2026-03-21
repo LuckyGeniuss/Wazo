@@ -7,6 +7,7 @@ import {
   ChevronRight, Check, Package, ZoomIn, ChevronLeft
 } from 'lucide-react';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
+import { ReviewForm } from '@/components/storefront/review-form';
 
 export default async function ProductPage(
   props: { params: Promise<{ storeSlug: string; productId: string }> }
@@ -380,6 +381,8 @@ export default async function ProductPage(
               ))}
             </div>
           )}
+
+          <ReviewForm productId={product.id} />
         </div>
 
         {/* ── ПОВ'ЯЗАНІ ТОВАРИ ────────────────────────────── */}

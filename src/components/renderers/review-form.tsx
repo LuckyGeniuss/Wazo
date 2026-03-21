@@ -42,7 +42,7 @@ export function ReviewForm({ productId, onSuccess }: ReviewFormProps) {
   const onSubmit = async (data: ReviewFormValues) => {
     setIsPending(true);
     try {
-      const result = await createReview(productId, data);
+      const result = await createReview(productId, { rating: data.rating, comment: data.comment });
       if (result.success) {
         toast.success("Отзыв успешно добавлен!");
         reset();

@@ -1,7 +1,9 @@
-import { NextResponse } from 'next/dist/server/web/spec-extension/response';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { z } from 'zod';
+import { sendTelegramMessage } from '@/lib/telegram';
+import { sendOrderConfirmationEmailToBuyer } from '@/lib/email-order';
 
 const OrderItemSchema = z.object({
   productId: z.string().min(1),
@@ -92,6 +94,40 @@ export async function POST(req: Request) {
 
       return newOrder;
     });
+
+    const store = await prisma.store.findUnique({
+      where: { id: storeId },
+      select: { name: true, telegramChatId: true, telegramBotEnabled: true },
+    });
+
+    if (store) {
+      // Send Email to Buyer
+      await sendOrderConfirmationEmailToBuyer({
+        email: customerEmail,
+        orderId: order.id,
+        customerName,
+        totalPrice,
+        storeName: store.name,
+      });
+
+      // Send Telegram Notification to Seller
+      if (store.telegramBotEnabled && store.telegramChatId) {
+        let orderDetails = `📦 <b>Нове замовлення!</b>\n\n`;
+        orderDetails += `👤 Клієнт: ${customerName}\n`;
+        orderDetails += `📱 Телефон: ${customerPhone}\n`;
+        orderDetails += `💰 Сума: ₴${totalPrice.toLocaleString('uk-UA')}\n\n`;
+        orderDetails += `<b>Товари:</b>\n`;
+        
+        items.forEach((item) => {
+          const product = productMap.get(item.productId);
+          if (product) {
+            orderDetails += `- ${product.name} (x${item.quantity})\n`;
+          }
+        });
+
+        await sendTelegramMessage(store.telegramChatId, orderDetails);
+      }
+    }
 
     return NextResponse.json({ success: true, orderId: order.id }, { status: 201 });
 
