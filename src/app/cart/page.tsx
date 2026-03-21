@@ -7,8 +7,10 @@ import { useCart } from '@/hooks/use-cart';
 import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, total, clearCart } = useCart();
+  const { items, removeItem, updateQuantity, removeAll } = useCart();
   const router = useRouter();
+
+  const total = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
   if (!items || items.length === 0) {
     return (
@@ -31,7 +33,7 @@ export default function CartPage() {
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-black">Кошик ({items.length})</h1>
-        <button onClick={clearCart} className="text-sm text-red-500 hover:text-red-700 flex items-center gap-1.5">
+        <button onClick={removeAll} className="text-sm text-red-500 hover:text-red-700 flex items-center gap-1.5">
           <Trash2 size={14} /> Очистити
         </button>
       </div>
@@ -42,10 +44,10 @@ export default function CartPage() {
           {items.map((item: any) => (
             <div key={item.id} className="bg-white border rounded-2xl p-4 flex gap-4">
               <div className="w-20 h-20 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0">
-                {item.image && <img src={item.image} alt={item.name} className="w-full h-full object-cover" />}
+                {item.product.imageUrl && <img src={item.product.imageUrl} alt={item.product.name} className="w-full h-full object-cover" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm line-clamp-2">{item.name}</p>
+                <p className="font-semibold text-sm line-clamp-2">{item.product.name}</p>
                 <p className="text-xs text-slate-400 mt-0.5">{item.storeName || 'Магазин'}</p>
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex items-center gap-1 border rounded-xl overflow-hidden">
@@ -60,7 +62,7 @@ export default function CartPage() {
                     </button>
                   </div>
                   <span className="font-black text-violet-700">
-                    ₴{Math.round(item.price * (item.quantity || 1)).toLocaleString('uk-UA')}
+                    ₴{Math.round(item.product.price * (item.quantity || 1)).toLocaleString('uk-UA')}
                   </span>
                 </div>
               </div>

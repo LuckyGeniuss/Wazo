@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ShoppingCart, Search, User, Menu, LogOut, Package, Settings, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/hooks/use-cart";
@@ -21,7 +22,13 @@ export function MarketplaceHeader() {
   const cart = useCart();
   const { data: session } = useSession();
 
-  const cartItemsCount = cart.items.reduce((total, item) => total + item.quantity, 0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const cartItemsCount = mounted ? cart.items.reduce((total, item) => total + item.quantity, 0) : 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">

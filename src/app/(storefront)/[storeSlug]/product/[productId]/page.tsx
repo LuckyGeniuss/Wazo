@@ -6,7 +6,7 @@ import {
   Star, ShoppingCart, Heart, Share2, Shield, Truck, RotateCcw,
   ChevronRight, Check, Package, ZoomIn, ChevronLeft
 } from 'lucide-react';
-import { OrderButton } from '@/components/renderers/order-button';
+import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 
 export default async function ProductPage(
   props: { params: Promise<{ storeSlug: string; productId: string }> }
@@ -212,7 +212,7 @@ export default async function ProductPage(
             {/* Кнопки дій */}
             <div className="flex gap-3">
               <div className="flex-1">
-                <OrderButton storeId={product.storeId} productId={product.id} />
+                <AddToCartButton product={product} storeName={product.store?.name} fullWidth size="lg" />
               </div>
               <button className="w-14 h-14 flex items-center justify-center border-2 rounded-2xl
                                   hover:border-red-300 hover:bg-red-50 hover:text-red-500

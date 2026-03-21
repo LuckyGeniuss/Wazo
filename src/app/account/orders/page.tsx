@@ -20,12 +20,15 @@ type OrderWithDetails = Prisma.OrderGetPayload<{
   };
 }>;
 
-export default async function OrdersPage() {
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
   const session = await auth();
+  const sp = await searchParams;
 
   if (!session?.user) {
     redirect("/login");
   }
+
+  const isSuccess = sp?.success === "true";
 
   const orders: OrderWithDetails[] = await prisma.order.findMany({
     where: {
@@ -54,6 +57,13 @@ export default async function OrdersPage() {
         </Button>
         <h1 className="text-3xl font-bold tracking-tight">Order History</h1>
       </div>
+
+      {isSuccess && (
+        <div className="mb-8 p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl flex items-center gap-3">
+          <Package className="h-5 w-5 text-emerald-600" />
+          <p className="font-medium">Замовлення успішно оформлено! Дякуємо за покупку.</p>
+        </div>
+      )}
 
       {orders.length === 0 ? (
         <Card className="border-dashed">

@@ -4,7 +4,7 @@ import { useQuickView } from "@/hooks/use-quick-view";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { StarRating } from "../ui/star-rating";
-import { OrderButton } from "../renderers/order-button";
+import { AddToCartButton } from "../ui/add-to-cart-button";
 
 export function QuickViewModal() {
   const { isOpen, onClose, productId, storeId } = useQuickView();
@@ -76,7 +76,7 @@ export function QuickViewModal() {
                 {product.description || "Описание отсутствует."}
               </p>
               <div className="mt-auto">
-                <OrderButton storeId={storeId!} productId={productId!} />
+                <AddToCartButton product={product} storeName={product.store?.name || storeId!} fullWidth size="lg" />
               </div>
             </div>
           </>

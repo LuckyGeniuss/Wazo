@@ -100,7 +100,7 @@ export const useCart = create<CartStore>()(
       }
     }),
     {
-      name: "cart-storage",
+      name: "wazo-cart",
       storage: createJSONStorage(() => localStorage),
     }
   )

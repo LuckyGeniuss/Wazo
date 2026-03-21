@@ -5,7 +5,7 @@ import Link from "next/link";
 import { GitCompare } from "lucide-react";
 import { StarRating } from "../ui/star-rating";
 import { useQuickView } from "@/hooks/use-quick-view";
-import { OrderButton } from "./order-button";
+import { AddToCartButton } from "@/components/ui/add-to-cart-button";
 import { PriceCalculator } from "@/lib/price-calculator";
 import { WishlistButton } from "@/components/ui/wishlist-button";
 import { useCompare } from "@/hooks/use-compare";
@@ -131,7 +131,12 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Кнопки поверх картинки при hover (bottom) */}
         <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0 flex gap-2 z-20">
           <div className="flex-1">
-            <OrderButton storeId={product.storeId} productId={product.id} />
+            <AddToCartButton 
+              product={product} 
+              storeName={product.store?.slug || product.storeId} 
+              fullWidth 
+              className="mt-4 py-2 text-sm font-medium"
+            />
           </div>
           <button
             onClick={(e) => {

@@ -69,9 +69,9 @@ export default function CheckoutPage() {
         throw new Error(data.error || 'Помилка при створенні замовлення');
       }
 
-      setSuccess(true);
       removeAll();
       toast.success("Замовлення успішно оформлено!");
+      router.push("/account/orders?success=true");
       
     } catch (error: any) {
       console.error(error);

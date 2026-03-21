@@ -259,6 +259,38 @@ export default async function MarketplacePage() {
                 Изучить возможности
               </Link>
             </div>
+
+            {/* Stats Bar */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-gray-200/50 pt-8 mt-8">
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-xl mb-3">
+                  <Store className="w-6 h-6" />
+                </div>
+                <h4 className="text-3xl font-black text-gray-900 mb-1">1,000+</h4>
+                <p className="text-sm text-gray-500 font-medium text-center">Активных магазинов</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-xl mb-3">
+                  <ShoppingBag className="w-6 h-6" />
+                </div>
+                <h4 className="text-3xl font-black text-gray-900 mb-1">5M+</h4>
+                <p className="text-sm text-gray-500 font-medium text-center">Товаров в каталоге</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl mb-3">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h4 className="text-3xl font-black text-gray-900 mb-1">100%</h4>
+                <p className="text-sm text-gray-500 font-medium text-center">Безопасные сделки</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-orange-600 rounded-xl mb-3">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <h4 className="text-3xl font-black text-gray-900 mb-1">24/7</h4>
+                <p className="text-sm text-gray-500 font-medium text-center">Поддержка клиентов</p>
+              </div>
+            </div>
           </div>
         </section>
 
