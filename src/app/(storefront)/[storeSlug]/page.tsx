@@ -19,7 +19,6 @@ export default async function StorefrontPage(
       products: {
         where: { isArchived: false, stock: { gt: 0 } },
         include: {
-          images: { orderBy: { position: 'asc' }, take: 1 },
           category: { select: { name: true, slug: true } },
         },
         orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
@@ -128,7 +127,7 @@ export default async function StorefrontPage(
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {store.products.map(p => {
-              const img = p.images?.[0]?.url || p.imageUrl;
+              const img = p.images?.[0] || p.imageUrl;
               const disc = p.compareAtPrice && p.compareAtPrice > p.price
                 ? Math.round((1 - p.price / p.compareAtPrice) * 100) : null;
 

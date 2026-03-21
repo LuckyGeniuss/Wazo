@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, ShoppingCart, User, Heart } from "lucide-react";
-import { useCartStore } from "@/components/providers/cart-sync-provider"; // assuming this exists or use a generic badge
+import { useCart } from "@/hooks/use-cart";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
   // Attempt to get cart items count if the store exists, else default to 0
   let cartCount = 0;
   try {
-    const state = useCartStore.getState() as any;
+    const state = useCart.getState() as any;
     cartCount = state.items?.length || 0;
   } catch(e) {}
 

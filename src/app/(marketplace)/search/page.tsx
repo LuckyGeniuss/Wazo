@@ -64,7 +64,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       include: {
         store: { select: { slug: true, name: true } },
         category: { select: { slug: true, name: true } },
-        images: { take: 1 },
       },
       skip,
       take: limit,
@@ -219,7 +218,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               <>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
                   {products.map((product) => {
-                    const img = product.images?.[0]?.url || product.imageUrl;
+                    const img = product.images?.[0] || product.imageUrl;
                     return (
                       <Link 
                         key={product.id} 

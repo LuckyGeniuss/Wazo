@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { useSession } from "next-auth/react";
