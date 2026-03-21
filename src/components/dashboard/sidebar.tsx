@@ -36,7 +36,8 @@ import {
   X,
   BookOpen,
   Languages,
-  } from "lucide-react";
+  Store as StoreIcon,
+} from "lucide-react";
 
 interface SidebarProps {
   stores: Store[];
@@ -193,6 +194,13 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
           label: "Страницы сайта",
           icon: Files,
           requiredPermission: "builder:use",
+        },
+        {
+          href: `/dashboard/${storeId}/storefront`,
+          label: "Редактор вітрини",
+          icon: StoreIcon,
+          activePattern: `/dashboard/${storeId}/storefront`,
+          requiredPermission: "settings:manage",
         },
         {
           href: `/dashboard/${storeId}/banners`,
