@@ -4,15 +4,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, ShoppingCart, User, Heart } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
+import { useState, useEffect } from "react";
 
 export function MobileBottomNav() {
-  const pathname = usePathname();
-  // Attempt to get cart items count if the store exists, else default to 0
-  let cartCount = 0;
-  try {
-    const state = useCart.getState() as any;
-    cartCount = state.items?.length || 0;
-  } catch(e) {}
+const pathname = usePathname();
+const cart = useCart();
+const [cartCount, setCartCount] = useState(0);
+
+useEffect(() => {
+  // Initialize cart count
+  setCartCount(cart.items.reduce((total, item) => total + item.quantity, 0));
+
+  const handleCartUpdated = () => {
+    setCartCount(cart.items.reduce((total, item) => total + item.quantity, 0));
+  };
+
+  window.addEventListener('cart-updated', handleCartUpdated);
+  return () => window.removeEventListener('cart-updated', handleCartUpdated);
+}, [cart.items]);
 
   const navItems = [
     { label: "Головна", icon: Home, href: "/" },

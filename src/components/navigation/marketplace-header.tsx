@@ -23,12 +23,21 @@ export function MarketplaceHeader() {
   const { data: session } = useSession();
 
   const [mounted, setMounted] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    setCartCount(cart.items.reduce((total, item) => total + item.quantity, 0));
 
-  const cartItemsCount = mounted ? cart.items.reduce((total, item) => total + item.quantity, 0) : 0;
+    const handleCartUpdated = () => {
+      setCartCount(cart.items.reduce((total, item) => total + item.quantity, 0));
+    };
+
+    window.addEventListener('cart-updated', handleCartUpdated);
+    return () => window.removeEventListener('cart-updated', handleCartUpdated);
+  }, [cart.items]);
+
+  const cartItemsCount = mounted ? cartCount : 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">

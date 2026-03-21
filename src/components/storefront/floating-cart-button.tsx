@@ -8,14 +8,21 @@ import { useEffect, useState } from "react";
 export function FloatingCartButton() {
   const cart = useCart();
   const [mounted, setMounted] = useState(false);
+  const [itemCount, setItemCount] = useState(0);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    setItemCount(cart.items.reduce((total, item) => total + item.quantity, 0));
 
-  if (!mounted || cart.items.length === 0) return null;
+    const handleCartUpdated = () => {
+      setItemCount(cart.items.reduce((total, item) => total + item.quantity, 0));
+    };
 
-  const itemCount = cart.items.reduce((total, item) => total + item.quantity, 0);
+    window.addEventListener('cart-updated', handleCartUpdated);
+    return () => window.removeEventListener('cart-updated', handleCartUpdated);
+  }, [cart.items]);
+
+  if (!mounted || itemCount === 0) return null;
 
   return (
     <Link 

@@ -19,11 +19,14 @@ export function AddToCartBtn({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     try {
       addItem(p, p.store?.name || storeSlug);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
+      
+      // Dispatch cart-updated event for header counter sync
+      window.dispatchEvent(new Event('cart-updated'));
     } catch (err) {
       console.error('Cart error:', err);
     }
