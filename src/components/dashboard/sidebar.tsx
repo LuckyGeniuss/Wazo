@@ -298,30 +298,32 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={close}
+          aria-hidden="true"
         />
       )}
 
-      {/* Sidebar container */}
+      {/* Sidebar container - fixed для mobile, static для desktop */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-slate-900 text-slate-300 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-slate-900 text-slate-300 transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:h-full ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between p-6">
+        <div className="flex items-center justify-between p-6 border-b border-slate-800">
           <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl tracking-tight">
             Wazo.Market
           </Link>
           <button
             onClick={close}
-            className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden"
+            className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white md:hidden"
+            aria-label="Закрити меню"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="px-6 pb-4">
+        <div className="px-6 py-4 border-b border-slate-800">
           <StoreSwitcher items={stores} />
         </div>
 
@@ -355,14 +357,14 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="mt-auto p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800">
           <RoleSwitcher />
           <Link
             href="/logout"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition-colors mt-2"
           >
             <LogOut className="h-5 w-5 text-slate-500" />
-            Выйти
+            Вийти
           </Link>
         </div>
       </div>

@@ -61,11 +61,22 @@ export default async function StoreDashboardLayout({
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <ModalProvider />
-      <Sidebar stores={allStores} userRole={userRole as any} />
+      {/* Sidebar фіксованої ширини, повної висоти */}
+      <div className="hidden md:flex md:flex-shrink-0">
+        <div className="w-72">
+          <Sidebar stores={allStores} userRole={userRole as any} />
+        </div>
+      </div>
+      
+      {/* Мобільний Sidebar (виїжджаючий) */}
+      <div className="md:hidden">
+        <Sidebar stores={allStores} userRole={userRole as any} />
+      </div>
 
-      <div className="flex-1 flex flex-col">
+      {/* Контент займає решту простору */}
+      <div className="flex-1 flex flex-col min-w-0">
         <TopBar storeId={storeId} />
-        <main className="flex-1 p-4 md:p-8 overflow-auto">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </main>
       </div>

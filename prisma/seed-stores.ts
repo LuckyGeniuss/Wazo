@@ -3,7 +3,131 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-// 20 реалістичних продуктів для кожного магазину
+// Продукти для Epicentr (будівельні товари) - 10 одиниць
+const epicentrProducts = [
+  {
+    name: "Перфоратор Bosch Professional GBH 2-26",
+    description: "Потужний перфоратор з продуктивністю 2.7 Дж, швидкістю 900 об/хв та системою віброзахисту.",
+    price: 4299,
+    compareAtPrice: 4999,
+    stock: 25,
+    imageUrl: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=600&auto=format&fit=crop",
+    colors: ["Blue", "Black"],
+    tags: ["інструменти", "перфоратор", "bosch", "будівництво"],
+    isFeatured: true,
+    categorySlug: "tools-perforators",
+  },
+  {
+    name: "Цегла повнотіла червона М100",
+    description: "Міцна будівельна цегла для зовнішніх та внутрішніх робіт. Розмір 250x120x65 мм.",
+    price: 12,
+    compareAtPrice: 15,
+    stock: 5000,
+    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=600&auto=format&fit=crop",
+    colors: ["Red"],
+    tags: ["будматеріали", "цегла", "будівництво"],
+    isFeatured: true,
+    categorySlug: "building-materials",
+  },
+  {
+    name: "Диван кутовий Modern Comfort",
+    description: "Затишний кутовий диван з м'якою оббивкою, розкладним механізмом та ящиком для білизни.",
+    price: 18999,
+    compareAtPrice: 22999,
+    stock: 10,
+    imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop",
+    colors: ["Gray", "Beige", "Blue"],
+    tags: ["меблі", "диван", "вітальня"],
+    isFeatured: true,
+    categorySlug: "home-furniture",
+  },
+  {
+    name: "Ванна акрилова Luxe 170x75",
+    description: "Сучасна акрилова ванна з ергономічним дизайном, гідромасажною системою та антибактеріальним покриттям.",
+    price: 8999,
+    compareAtPrice: 10999,
+    stock: 15,
+    imageUrl: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=600&auto=format&fit=crop",
+    colors: ["White"],
+    tags: ["сантехніка", "ванна", "акрилова"],
+    isFeatured: true,
+    categorySlug: "plumbing-bathtubs",
+  },
+  {
+    name: "Лампа світлодіодна розумна Philips Hue",
+    description: "Розумна LED лампа з можливістю зміни кольору, віддаленим керуванням та голосовим управлінням.",
+    price: 1299,
+    compareAtPrice: 1599,
+    stock: 100,
+    imageUrl: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?q=80&w=600&auto=format&fit=crop",
+    colors: ["White"],
+    tags: ["електрика", "лампи", "розумний дім"],
+    isFeatured: false,
+    categorySlug: "electrical-lighting",
+  },
+  {
+    name: "Двері вхідні металеві Guardian",
+    description: "Міцні вхідні двері з потрійним замком, шумоізоляцією та порошковим покриттям.",
+    price: 12999,
+    compareAtPrice: 14999,
+    stock: 8,
+    imageUrl: "https://images.unsplash.com/photo-1558618047-3c5fbad23313?q=80&w=600&auto=format&fit=crop",
+    colors: ["Brown", "Black", "Gray"],
+    tags: ["двері", "вхідні", "металеві"],
+    isFeatured: true,
+    categorySlug: "doors-entrance",
+  },
+  {
+    name: "Вікно пластикове Rehau 1200x1400",
+    description: "Енергозберігаюче вікно з 5-камерним профілем, потрійним склом та мікропровітрюванням.",
+    price: 6499,
+    compareAtPrice: 7499,
+    stock: 20,
+    imageUrl: "https://images.unsplash.com/photo-1464082354059-27db6ce50048?q=80&w=600&auto=format&fit=crop",
+    colors: ["White"],
+    tags: ["вікна", "пластикові", "rehau"],
+    isFeatured: true,
+    categorySlug: "windows-plastic",
+  },
+  {
+    name: "Плитка керамічна Marble Style 60x60",
+    description: "Підлогова плитка з імітацією мармуру, стійкістю до зношування та ковзання.",
+    price: 549,
+    compareAtPrice: 649,
+    stock: 500,
+    imageUrl: "https://images.unsplash.com/photo-1579632652768-6cb9dcf85912?q=80&w=600&auto=format&fit=crop",
+    colors: ["White", "Gray", "Beige"],
+    tags: ["плитка", "кераміка", "підлогова"],
+    isFeatured: false,
+    categorySlug: "tiles-floor",
+  },
+  {
+    name: "Фарба інтер'єрна Tikkurila Harmony 9л",
+    description: "Матова фарба для внутрішніх робіт, стійка до миття, з низьким вмістом ЛОС.",
+    price: 1899,
+    compareAtPrice: 2199,
+    stock: 60,
+    imageUrl: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=600&auto=format&fit=crop",
+    colors: ["White", "Gray", "Beige", "Blue"],
+    tags: ["фарба", "інтер'єр", "tikkurila"],
+    isFeatured: false,
+    categorySlug: "paint-interior",
+  },
+  {
+    name: "Дриль-шурупокрут Bosch GSR 18V-55",
+    description: "Акумуляторний дриль з крутним моментом 55 Нм, 2 швидкостями та LED-підсвіткою.",
+    price: 3499,
+    compareAtPrice: 3999,
+    stock: 30,
+    imageUrl: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=600&auto=format&fit=crop",
+    colors: ["Blue", "Black"],
+    tags: ["інструменти", "дриль", "шурупокрут", "bosch"],
+    isFeatured: true,
+    categorySlug: "tools-drills",
+  },
+];
+
+// 20 реалістичних продуктів для інших магазинів
 const productTemplates = [
   {
     name: "Apple iPhone 15 Pro Max 256GB",
@@ -362,11 +486,14 @@ async function main() {
 
     console.log(`✅ Магазин створено: ${store.slug} (ID: ${store.id})`);
 
+    // Вибір продуктів для магазину
+    const productsForStore = storeConfig.slug === "epicentr" ? epicentrProducts : productTemplates;
+
     // Створюємо продукти для магазину
     console.log(`📦 Створення продуктів для ${store.name}...`);
-    for (const template of productTemplates) {
+    for (const template of productsForStore) {
       const externalId = `${store.slug}-${template.name.substring(0, 20).replace(/\s+/g, "-").toLowerCase()}`;
-      
+
       // Отримуємо categoryId за slug
       const categoryId = categoryMap.get(template.categorySlug);
 
@@ -407,7 +534,7 @@ async function main() {
       });
     }
 
-    console.log(`✅ Створено ${productTemplates.length} продуктів для ${store.name}`);
+    console.log(`✅ Створено ${productsForStore.length} продуктів для ${store.name}`);
   }
 
   console.log("🎉 Seeding finished successfully!");
