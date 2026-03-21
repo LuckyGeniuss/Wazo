@@ -1,0 +1,22 @@
+{
+	"mcpServers": {
+		"filesystem": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"/Users/serhiivarava/Desktop/Новая папка 6"
+			],
+			"alwaysAllow": [
+				"read_file",
+				"read_multiple_files",
+				"write_file",
+				"edit_file",
+				"list_directory",
+				"directory_tree",
+				"search_files"
+			],
+			"disabled": true
+		}
+	}
+}
