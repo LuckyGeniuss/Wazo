@@ -25,7 +25,7 @@ export default async function StoreDashboardPage(
     const store = await prisma.store.findFirst({
       where: { id: storeId },
       select: { id: true, name: true, slug: true, createdAt: true },
-    });
+    }).catch(() => null);
 
     if (!store) redirect('/dashboard');
 

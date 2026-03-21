@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Star, ShoppingCart, SlidersHorizontal, ChevronRight, X } from "lucide-react";
 
-export const revalidate = 60; // 1 min cache
+
 
 interface SearchPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
