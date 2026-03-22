@@ -200,19 +200,19 @@ export function MarketplaceHeader() {
         <CategoryMenu />
         
         <nav className="hidden lg:flex items-center gap-6 text-sm">
-          <Link href="/promotions" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+          <Link href="/search?sort=discount" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Акції
           </Link>
-          <Link href="/new" className="text-gray-700 hover:text-blue-600 transition-colors">
+          <Link href="/search?sort=new" className="text-gray-700 hover:text-blue-600 transition-colors">
             Новинки
           </Link>
-          <Link href="/bestsellers" className="text-gray-700 hover:text-blue-600 transition-colors">
+          <Link href="/search?sort=bestsellers" className="text-gray-700 hover:text-blue-600 transition-colors">
             Хіти продажів
           </Link>
-          <Link href="/outlet" className="text-gray-700 hover:text-blue-600 transition-colors">
+          <Link href="/search?sort=discount&minDiscount=10" className="text-gray-700 hover:text-blue-600 transition-colors">
             Аутлет
           </Link>
-          <Link href="/brands" className="text-gray-700 hover:text-blue-600 transition-colors">
+          <Link href="/search?filter=brands" className="text-gray-700 hover:text-blue-600 transition-colors">
             Бренди
           </Link>
         </nav>

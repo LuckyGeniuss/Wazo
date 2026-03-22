@@ -10,14 +10,14 @@ const CATEGORIES = [
     name: "Електроніка",
     icon: "📱",
     subcategories: [
-      { name: "Мобільні телефони", href: "/category/electronics-smartphones" },
-      { name: "Навушники", href: "/category/electronics-audio" },
-      { name: "Ноутбуки", href: "/category/electronics-laptops" },
-      { name: "Планшети", href: "/category/electronics-tablets" },
-      { name: "Розумні годинники", href: "/category/electronics-wearables" },
-      { name: "Ігрові консолі", href: "/category/electronics-gaming" },
-      { name: "Камери", href: "/category/electronics-cameras" },
-      { name: "Розумний дім", href: "/category/home-smart" },
+      { name: "Мобільні телефони", href: "/search?category=electronics-smartphones" },
+      { name: "Навушники", href: "/search?category=electronics-audio" },
+      { name: "Ноутбуки", href: "/search?category=electronics-laptops" },
+      { name: "Планшети", href: "/search?category=electronics-tablets" },
+      { name: "Розумні годинники", href: "/search?category=electronics-wearables" },
+      { name: "Ігрові консолі", href: "/search?category=electronics-gaming" },
+      { name: "Камери", href: "/search?category=electronics-cameras" },
+      { name: "Розумний дім", href: "/search?category=home-smart" },
     ],
   },
   {
@@ -25,13 +25,13 @@ const CATEGORIES = [
     name: "Одяг та взуття",
     icon: "👕",
     subcategories: [
-      { name: "Чоловічий одяг", href: "/category/fashion-clothing" },
-      { name: "Жіночий одяг", href: "/category/fashion-clothing" },
-      { name: "Дитячий одяг", href: "/category/fashion-clothing" },
-      { name: "Чоловіче взуття", href: "/category/fashion-shoes" },
-      { name: "Жіноче взуття", href: "/category/fashion-shoes" },
-      { name: "Верхній одяг", href: "/category/fashion-outerwear" },
-      { name: "Спортивний одяг", href: "/category/fashion-clothing" },
+      { name: "Чоловічий одяг", href: "/search?category=fashion-clothing" },
+      { name: "Жіночий одяг", href: "/search?category=fashion-clothing" },
+      { name: "Дитячий одяг", href: "/search?category=fashion-clothing" },
+      { name: "Чоловіче взуття", href: "/search?category=fashion-shoes" },
+      { name: "Жіноче взуття", href: "/search?category=fashion-shoes" },
+      { name: "Верхній одяг", href: "/search?category=fashion-outerwear" },
+      { name: "Спортивний одяг", href: "/search?category=fashion-clothing" },
     ],
   },
   {
@@ -39,12 +39,12 @@ const CATEGORIES = [
     name: "Дім і сад",
     icon: "🏠",
     subcategories: [
-      { name: "Побутова техніка", href: "/category/home-appliances" },
-      { name: "Меблі", href: "/category/home-furniture" },
-      { name: "Кухня", href: "/category/home-kitchen" },
-      { name: "Декор", href: "/category/home" },
-      { name: "Сад і город", href: "/category/home" },
-      { name: "Освітлення", href: "/category/home" },
+      { name: "Побутова техніка", href: "/search?category=home-appliances" },
+      { name: "Меблі", href: "/search?category=home-furniture" },
+      { name: "Кухня", href: "/search?category=home-kitchen" },
+      { name: "Декор", href: "/search?category=home" },
+      { name: "Сад і город", href: "/search?category=home" },
+      { name: "Освітлення", href: "/search?category=home" },
     ],
   },
   {
@@ -52,12 +52,12 @@ const CATEGORIES = [
     name: "Краса і здоров'я",
     icon: "💄",
     subcategories: [
-      { name: "Догляд за обличчям", href: "/category/beauty" },
-      { name: "Догляд за волоссям", href: "/category/beauty" },
-      { name: "Парфумерія", href: "/category/beauty" },
-      { name: "Косметика", href: "/category/beauty" },
-      { name: "Гігієна", href: "/category/beauty" },
-      { name: "Медичні товари", href: "/category/beauty" },
+      { name: "Догляд за обличчям", href: "/search?category=beauty" },
+      { name: "Догляд за волоссям", href: "/search?category=beauty" },
+      { name: "Парфумерія", href: "/search?category=beauty" },
+      { name: "Косметика", href: "/search?category=beauty" },
+      { name: "Гігієна", href: "/search?category=beauty" },
+      { name: "Медичні товари", href: "/search?category=beauty" },
     ],
   },
   {
@@ -65,11 +65,11 @@ const CATEGORIES = [
     name: "Спорт і відпочинок",
     icon: "⚽",
     subcategories: [
-      { name: "Фітнес", href: "/category/sport" },
-      { name: "Велосипеди", href: "/category/sport" },
-      { name: "Кемпінг", href: "/category/sport" },
-      { name: "Риболовля", href: "/category/sport" },
-      { name: "Туризм", href: "/category/sport" },
+      { name: "Фітнес", href: "/search?category=sport" },
+      { name: "Велосипеди", href: "/search?category=sport" },
+      { name: "Кемпінг", href: "/search?category=sport" },
+      { name: "Риболовля", href: "/search?category=sport" },
+      { name: "Туризм", href: "/search?category=sport" },
     ],
   },
   {
@@ -77,10 +77,10 @@ const CATEGORIES = [
     name: "Автомобілі",
     icon: "🚗",
     subcategories: [
-      { name: "Аксесуари", href: "/category/auto" },
-      { name: "Масла та хімія", href: "/category/auto" },
-      { name: "Електроніка", href: "/category/auto" },
-      { name: "Інструменти", href: "/category/auto" },
+      { name: "Аксесуари", href: "/search?category=auto" },
+      { name: "Масла та хімія", href: "/search?category=auto" },
+      { name: "Електроніка", href: "/search?category=auto" },
+      { name: "Інструменти", href: "/search?category=auto" },
     ],
   },
   {
@@ -88,11 +88,11 @@ const CATEGORIES = [
     name: "Дитячі товари",
     icon: "🧸",
     subcategories: [
-      { name: "Іграшки", href: "/category/kids" },
-      { name: "Дитяче взуття", href: "/category/kids" },
-      { name: "Дитячий одяг", href: "/category/kids" },
-      { name: "Коляски", href: "/category/kids" },
-      { name: "Автомобільні крісла", href: "/category/kids" },
+      { name: "Іграшки", href: "/search?category=kids" },
+      { name: "Дитяче взуття", href: "/search?category=kids" },
+      { name: "Дитячий одяг", href: "/search?category=kids" },
+      { name: "Коляски", href: "/search?category=kids" },
+      { name: "Автомобільні крісла", href: "/search?category=kids" },
     ],
   },
   {
@@ -100,10 +100,10 @@ const CATEGORIES = [
     name: "Товари для тварин",
     icon: "🐾",
     subcategories: [
-      { name: "Їжа для котів", href: "/category/pets" },
-      { name: "Їжа для собак", href: "/category/pets" },
-      { name: "Аксесуари", href: "/category/pets" },
-      { name: "Догляд", href: "/category/pets" },
+      { name: "Їжа для котів", href: "/search?category=pets" },
+      { name: "Їжа для собак", href: "/search?category=pets" },
+      { name: "Аксесуари", href: "/search?category=pets" },
+      { name: "Догляд", href: "/search?category=pets" },
     ],
   },
   {
@@ -111,10 +111,10 @@ const CATEGORIES = [
     name: "Інструменти",
     icon: "🔧",
     subcategories: [
-      { name: "Електроінструмент", href: "/category/tools" },
-      { name: "Ручний інструмент", href: "/category/tools" },
-      { name: "Витратні матеріали", href: "/category/tools" },
-      { name: "Побутова хімія", href: "/category/tools" },
+      { name: "Електроінструмент", href: "/search?category=tools" },
+      { name: "Ручний інструмент", href: "/search?category=tools" },
+      { name: "Витратні матеріали", href: "/search?category=tools" },
+      { name: "Побутова хімія", href: "/search?category=tools" },
     ],
   },
   {
@@ -122,10 +122,10 @@ const CATEGORIES = [
     name: "Продукти",
     icon: "🛒",
     subcategories: [
-      { name: "Солодощі", href: "/category/food" },
-      { name: "Напої", href: "/category/food" },
-      { name: "Сніки", href: "/category/food" },
-      { name: "Бакалія", href: "/category/food" },
+      { name: "Солодощі", href: "/search?category=food" },
+      { name: "Напої", href: "/search?category=food" },
+      { name: "Сніки", href: "/search?category=food" },
+      { name: "Бакалія", href: "/search?category=food" },
     ],
   },
 ] as const;
@@ -190,7 +190,7 @@ export function CategoryMenu() {
                 onMouseEnter={() => handleMouseEnter(category.id)}
               >
                 <Link
-                  href={`/category/${category.id}`}
+                  href={`/search?category=${category.id}`}
                   className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
                 >
                   <span className="text-xl">{category.icon}</span>
