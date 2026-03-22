@@ -1,61 +1,73 @@
 "use client";
 
 import { useCart } from "@/hooks/use-cart";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/format";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, ShoppingBag, ShieldCheck, Truck, User, Lock, CreditCard, Wallet, Building } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ShoppingBag, ShieldCheck, Truck, User, Lock, CreditCard, Wallet, Building, LogIn } from "lucide-react";
 
-export default function CheckoutPage() {
-  const { items, removeAll, getItemPrice } = useCart();
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const router = useRouter();
+function CheckoutClient() {
+const { items, removeAll, getItemPrice } = useCart();
+const [loading, setLoading] = useState(false);
+const [success, setSuccess] = useState(false);
+const router = useRouter();
 
-  const [formData, setFormData] = useState({
-  name: '',
-  email: '',
-  phone: '',
-  address: '',
-  deliveryMethod: 'nova_poshta',
-  paymentMethod: 'cod',
-  recipientType: 'self',
-  recipientName: '',
-  recipientPhone: '',
-  comment: '',
-  });
+const [formData, setFormData] = useState({
+name: '',
+email: '',
+phone: '',
+address: '',
+deliveryMethod: 'nova_poshta',
+paymentMethod: 'cod',
+recipientType: 'self',
+recipientName: '',
+recipientPhone: '',
+comment: '',
+});
 
-  const [savedRecipients, setSavedRecipients] = useState<any[]>([]);
-  const [selectedRecipient, setSelectedRecipient] = useState<string>('');
-  const [showRegisterPrompt, setShowRegisterPrompt] = useState(false);
+const [savedRecipients, setSavedRecipients] = useState<any[]>([]);
+const [selectedRecipient, setSelectedRecipient] = useState<string>('');
+const [showRegisterPrompt, setShowRegisterPrompt] = useState(false);
+const [session, setSession] = useState<any>(null);
+const [isLoadingSession, setIsLoadingSession] = useState(true);
 
-  useEffect(() => {
-    // Завантажуємо збережених отримувачів з localStorage
-    const stored = localStorage.getItem('savedRecipients');
-    if (stored) {
-      try {
-        setSavedRecipients(JSON.parse(stored));
-      } catch (e) {
-        console.error('Failed to parse saved recipients');
-      }
-    }
+useEffect(() => {
+// Завантажуємо збережених отримувачів з localStorage
+const stored = localStorage.getItem('savedRecipients');
+if (stored) {
+try {
+setSavedRecipients(JSON.parse(stored));
+} catch (e) {
+console.error('Failed to parse saved recipients');
+}
+}
 
-    // Перевіряємо, чи залогінений користувач
-    const sessionCheck = async () => {
-      try {
-        const res = await fetch('/api/auth/session');
-        const session = await res.json();
-        if (!session?.user) {
-          setShowRegisterPrompt(true);
-        }
-      } catch (e) {
-        setShowRegisterPrompt(true);
-      }
-    };
-    sessionCheck();
-  }, []);
+// Перевіряємо, чи залогінений користувач
+const sessionCheck = async () => {
+try {
+const res = await fetch('/api/auth/session');
+const sessionData = await res.json();
+setSession(sessionData);
+if (sessionData?.user) {
+// Автозаповнення даних з сесії
+setFormData(prev => ({
+...prev,
+name: sessionData.user.name || prev.name,
+email: sessionData.user.email || prev.email,
+}));
+} else {
+setShowRegisterPrompt(true);
+}
+} catch (e) {
+setShowRegisterPrompt(true);
+} finally {
+setIsLoadingSession(false);
+}
+};
+sessionCheck();
+}, []);
 
   const total = items.reduce((sum, item) => sum + getItemPrice(item) * item.quantity, 0);
 
@@ -488,8 +500,8 @@ export default function CheckoutPage() {
                   </div>
                   </div>
         
-                  {/* ПРОПОЗИЦІЯ РЕЄСТРАЦІЇ */}
-                  {showRegisterPrompt && (
+                  {/* ПРОПОЗИЦІЯ РЕЄСТРАЦІЇ / В уві входу */}
+                  {!isLoadingSession && !session && (
                   <div className="bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-200 rounded-2xl p-6">
                   <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -499,14 +511,29 @@ export default function CheckoutPage() {
                   <h4 className="font-bold text-slate-900 mb-1">Створіть обліковий запис</h4>
                   <p className="text-sm text-slate-600 mb-3">Отримайте доступ до історії замовлень, швидкого оформлення та персональних знижок</p>
                   <div className="flex gap-3">
-                  <Link href="/register" className="px-4 py-2 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition-colors text-sm">
+                  <Link href="/register?redirect=/checkout" className="px-4 py-2 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition-colors text-sm">
                   Зареєструватися
                   </Link>
-                  <Link href="/login" className="px-4 py-2 bg-white text-violet-600 font-bold rounded-xl border border-violet-200 hover:bg-violet-50 transition-colors text-sm">
+                  <Link href="/login?redirect=/checkout" className="px-4 py-2 bg-white text-violet-600 font-bold rounded-xl border border-violet-200 hover:bg-violet-50 transition-colors text-sm">
                   Увійти
                   </Link>
                   </div>
                   </div>
+                  </div>
+                  </div>
+                  )}
+                  
+                  {/* Привітання для залогінених */}
+                  {session?.user && (
+                  <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <User size={20} />
+                  </div>
+                  <div className="flex-1">
+                  <p className="text-sm font-semibold text-emerald-900">
+                  Вітаємо, {session.user.name || session.user.email}!
+                  </p>
+                  <p className="text-xs text-emerald-700">Ваші контактні дані заповнено автоматично</p>
                   </div>
                   </div>
                   )}
@@ -601,7 +628,15 @@ export default function CheckoutPage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
+        </div>
+        </div>
+        );
+        }
+        
+        export default function CheckoutPage() {
+        return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center"><div className="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin"></div></div>}>
+        <CheckoutClient />
+        </Suspense>
+        );
+        }

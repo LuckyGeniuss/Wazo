@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { FloatingAIChat } from "@/components/navigation/floating-ai-chat";
+import { FloatingCartButton } from "@/components/storefront/floating-cart-button";
 
 export default async function StorefrontLayout({
   children,
@@ -64,11 +65,12 @@ export default async function StorefrontLayout({
       )}
       {/* AnalyticsProvider нужен в Suspense из-за useSearchParams() */}
       <Suspense fallback={null}>
-        <AnalyticsProvider storeId={store.id}>
-          {children}
-        </AnalyticsProvider>
+      <AnalyticsProvider storeId={store.id}>
+      {children}
+      </AnalyticsProvider>
       </Suspense>
       <FloatingAIChat storeId={store.id} />
-    </div>
+      <FloatingCartButton />
+      </div>
   );
 }
