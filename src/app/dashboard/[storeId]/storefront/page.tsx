@@ -48,6 +48,7 @@ export default function StorefrontEditorPage({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSettings();
@@ -55,8 +56,12 @@ export default function StorefrontEditorPage({
 
   const fetchSettings = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch(`/api/dashboard/stores/${storeId}/storefront`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
       if (data.settings) {
         setSettings({
@@ -64,8 +69,10 @@ export default function StorefrontEditorPage({
           ...data.settings,
         });
       }
-    } catch (error) {
-      console.error("Error fetching settings:", error);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Невідома помилка";
+      console.error("Error fetching settings:", err);
+      setError(`Помилка завантаження: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -104,6 +111,23 @@ export default function StorefrontEditorPage({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-red-600 mb-2">Помилка</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">{error}</p>
+          <button
+            onClick={fetchSettings}
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
+          >
+            Спробувати ще раз
+          </button>
+        </div>
       </div>
     );
   }
