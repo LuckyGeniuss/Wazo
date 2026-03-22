@@ -171,13 +171,20 @@ export function MarketplaceHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <Link href="/login">
-              <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
-                Увійти
-              </Button>
-            </Link>
-          )}
+            ) : (
+            <div className="flex items-center gap-2">
+              <Link href="/register">
+                <Button variant="outline" size="sm" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                  Реєстрація
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  Увійти
+                </Button>
+              </Link>
+            </div>
+            )}
 
           <Button variant="ghost" size="icon" className="md:hidden">
             <Menu className="h-5 w-5" />
