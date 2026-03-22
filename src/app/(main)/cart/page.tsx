@@ -1,6 +1,6 @@
 // @ts-nocheck
-
 'use client';
+
 import Link from 'next/link';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Package } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
@@ -21,8 +21,8 @@ export default function CartPage() {
         <h2 className="text-2xl font-black mb-3">Кошик порожній</h2>
         <p className="text-slate-500 mb-8">Додайте товари щоб продовжити покупки</p>
         <Link href="/search"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-violet-600 text-white
-                         rounded-2xl font-bold hover:bg-violet-700 transition-colors">
+          className="inline-flex items-center gap-2 px-8 py-4 bg-violet-600 text-white
+          rounded-2xl font-bold hover:bg-violet-700 transition-colors">
           До каталогу <ArrowRight size={16} />
         </Link>
       </div>
@@ -52,12 +52,12 @@ export default function CartPage() {
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex items-center gap-1 border rounded-xl overflow-hidden">
                     <button onClick={() => updateQuantity(item.id, Math.max(1, (item.quantity || 1) - 1))}
-                            className="w-9 h-9 flex items-center justify-center hover:bg-slate-100">
+                      className="w-9 h-9 flex items-center justify-center hover:bg-slate-100">
                       <Minus size={14} />
                     </button>
                     <span className="w-8 text-center text-sm font-bold">{item.quantity || 1}</span>
                     <button onClick={() => updateQuantity(item.id, (item.quantity || 1) + 1)}
-                            className="w-9 h-9 flex items-center justify-center hover:bg-slate-100">
+                      className="w-9 h-9 flex items-center justify-center hover:bg-slate-100">
                       <Plus size={14} />
                     </button>
                   </div>
@@ -67,8 +67,8 @@ export default function CartPage() {
                 </div>
               </div>
               <button onClick={() => removeItem(item.id)}
-                      className="w-8 h-8 flex items-center justify-center text-slate-300
-                                 hover:text-red-500 rounded-xl flex-shrink-0">
+                className="w-8 h-8 flex items-center justify-center text-slate-300
+                hover:text-red-500 rounded-xl flex-shrink-0">
                 <Trash2 size={15} />
               </button>
             </div>
@@ -96,13 +96,13 @@ export default function CartPage() {
               </div>
             </div>
             <button onClick={() => router.push('/checkout')}
-                    className="w-full py-4 bg-violet-600 text-white rounded-2xl font-black
-                               hover:bg-violet-700 transition-colors shadow-lg
-                               flex items-center justify-center gap-2">
+              className="w-full py-4 bg-violet-600 text-white rounded-2xl font-black
+              hover:bg-violet-700 transition-colors shadow-lg
+              flex items-center justify-center gap-2">
               Оформити замовлення <ArrowRight size={16} />
             </button>
             <Link href="/search"
-                  className="mt-3 block text-center text-sm text-slate-400 hover:text-slate-600">
+              className="mt-3 block text-center text-sm text-slate-400 hover:text-slate-600">
               ← Продовжити покупки
             </Link>
           </div>

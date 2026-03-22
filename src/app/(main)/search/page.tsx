@@ -1,7 +1,29 @@
 export const dynamic = 'force-dynamic';
+import type { Metadata } from 'next';
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Star, ShoppingCart, SlidersHorizontal, ChevronRight, X } from "lucide-react";
+
+interface SearchPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const query = typeof params.q === "string" ? params.q : "";
+  
+  if (query) {
+    return {
+      title: `Пошук "${query}" | Wazo.Market`,
+      description: `Результати пошуку для "${query}". Знайдіть найкращі товари на Wazo.Market.`,
+    };
+  }
+  
+  return {
+    title: 'Пошук товарів | Wazo.Market',
+    description: 'Шукайте товари на Wazo.Market. Широкий вибір продукції за найкращими цінами.',
+  };
+}
 
 
 

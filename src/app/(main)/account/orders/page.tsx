@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: 'Історія замовлень | Wazo.Market',
+  description: 'Перегляньте історію ваших замовлень на Wazo.Market.',
+};
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import Image from "next/image";

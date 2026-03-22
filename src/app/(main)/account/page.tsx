@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: 'Особистий кабінет | Wazo.Market',
+  description: 'Керуйте своїм акаунтом, замовленнями та вподобаннями на Wazo.Market.',
+};
 import Link from "next/link";
 import { StarRating } from "@/components/ui/star-rating";
 import { WishlistButton } from "@/components/ui/wishlist-button";
