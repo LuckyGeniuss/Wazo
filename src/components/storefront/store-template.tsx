@@ -267,7 +267,7 @@ export function StoreTemplate({ store, theme, storeSlug }: StoreTemplateProps) {
       {/* ========== FOOTER ========== */}
       <footer id="contact" className="bg-slate-900 text-white py-10">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Контакти */}
             <div>
               <h4 className="font-bold text-lg mb-4">Контакти</h4>
@@ -286,7 +286,7 @@ export function StoreTemplate({ store, theme, storeSlug }: StoreTemplateProps) {
                 </div>
               </div>
             </div>
-
+      
             {/* Соцмережі */}
             <div>
               <h4 className="font-bold text-lg mb-4">Соцмережі</h4>
@@ -305,14 +305,53 @@ export function StoreTemplate({ store, theme, storeSlug }: StoreTemplateProps) {
                 </a>
               </div>
             </div>
-
+      
             {/* Інформація */}
             <div>
               <h4 className="font-bold text-lg mb-4">{store.name}</h4>
               <p className="text-slate-400 text-sm">
-                        Ваш надійний партнер у світі якісних товарів.
-                      </p>
-              <p className="text-slate-500 text-xs mt-4">© 2026 {store.name}. Всі права захищено.</p>
+                Ваш надійний партнер у світі якісних товарів.
+              </p>
+            </div>
+      
+            {/* Корисні посилання */}
+            <div>
+              <h4 className="font-bold text-lg mb-4">Інформація</h4>
+              <ul className="space-y-2 text-sm text-slate-300">
+                <li>
+                  <a href="/delivery" className="hover:text-white transition-colors">
+                    Доставка та оплата
+                  </a>
+                </li>
+                <li>
+                  <a href="/returns" className="hover:text-white transition-colors">
+                    Повернення та обмін
+                  </a>
+                </li>
+                <li>
+                  <a href="/buyer-protection" className="hover:text-white transition-colors">
+                    Захист покупця
+                  </a>
+                </li>
+                <li>
+                  <a href="/privacy" className="hover:text-white transition-colors">
+                    Політика конфіденційності
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+      
+          {/* Нижня частина */}
+          <div className="border-t border-slate-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-slate-500 text-xs">
+              © {new Date().getFullYear()} {store.name}. Всі права захищено.
+            </p>
+            <div className="flex items-center gap-4 text-xs text-slate-400">
+              <span>Працює на базі</span>
+              <a href="/" className="text-blue-400 hover:text-blue-300 transition-colors">
+                Wazo.Market
+              </a>
             </div>
           </div>
         </div>
