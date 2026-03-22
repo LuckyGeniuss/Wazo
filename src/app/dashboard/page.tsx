@@ -17,9 +17,12 @@ export default async function DashboardPage() {
   where: { id: session.user.id },
   });
   
+  console.log("[DASHBOARD] User Role:", user?.role);
+  console.log("[DASHBOARD] User ID:", session.user.id);
+
   const stores = await prisma.store.findMany({
   where: user?.role === 'SUPERADMIN'
-  ? undefined // SuperAdmin бачить всі магазини
+  ? {} // SuperAdmin бачить всі магазини
   : { ownerId: session.user.id }, // SELLER бачить тільки свої
   include: {
       _count: {

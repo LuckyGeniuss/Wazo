@@ -192,12 +192,17 @@ export async function createOrder(storeId: string, productId: string, data: Orde
   }
 }
 
-export async function updateOrderStatus(orderId: string, storeId: string, status: any) {
+export async function updateOrderStatus(
+  orderId: string,
+  storeId: string,
+  status: any,
+  trackingNumber?: string | null
+) {
   try {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return { error: "Необходима авторизация" };
+      return { error: "Необхідна авторизація" };
     }
 
     // Перевіряємо, що магазин належить користувачеві
@@ -226,9 +231,9 @@ export async function updateOrderStatus(orderId: string, storeId: string, status
     if (!currentOrder) {
       return { error: "Замовлення не знайдено" };
     }
-  
+
     const oldStatus = currentOrder.status;
-  
+
     // Отримуємо повну інформацію про замовлення для email
     const fullOrder = await prisma.order.findUnique({
       where: { id: orderId },
@@ -241,53 +246,58 @@ export async function updateOrderStatus(orderId: string, storeId: string, status
         store: true,
       },
     });
-  
+
     if (!fullOrder) {
       return { error: "Замовлення не знайдено" };
     }
-  
+
     // Отримуємо поточний statusHistory
     const currentHistory = (fullOrder.statusHistory as any[]) || [];
-    
+
     // Додаємо новий запис в історію
     const newHistoryEntry = {
       status,
       previousStatus: oldStatus,
       changedAt: new Date().toISOString(),
-      changedBy: session.user.id || 'system',
+      changedBy: session.user.id || "system",
     };
-    
-    // Оновлюємо статус та історію
+
+    // Оновлюємо статус та історію, включаючи trackingNumber якщо статус SHIPPED
     await prisma.order.update({
       where: { id: orderId },
       data: {
         status,
         statusHistory: [...currentHistory, newHistoryEntry],
+        ...(status === "SHIPPED" && trackingNumber
+          ? { trackingNumber }
+          : {}),
       },
     });
-  
+
     // Якщо статус змінено на CANCELLED — повертаємо stock
     if (status === "CANCELLED" && oldStatus !== "CANCELLED") {
       for (const item of currentOrder.orderItems) {
         await restoreStock(item.productId, item.variantId || undefined, item.quantity);
       }
     }
-  
+
     // Відправка email при статусі SHIPPED
     if (status === "SHIPPED" && oldStatus !== "SHIPPED" && fullOrder.store) {
       try {
         await sendEmail({
           to: fullOrder.customerEmail,
-          subject: `Замовлення #${fullOrder.id.slice(0, 8).toUpperCase()} відправлено!`,
+          subject: `Замовлення #${fullOrder.id
+            .slice(0, 8)
+            .toUpperCase()} відправлено!`,
           react: OrderShippedEmail({
             orderId: fullOrder.id,
             customerName: fullOrder.customerName,
             storeName: fullOrder.store.name,
-            trackingNumber: fullOrder.trackingNumber || undefined,
-            orderItems: fullOrder.orderItems.map(item => ({
+            trackingNumber: trackingNumber || fullOrder.trackingNumber || undefined,
+            orderItems: fullOrder.orderItems.map((item) => ({
               name: item.product.name,
               quantity: item.quantity,
-              price: `${Math.round(item.price).toLocaleString('uk-UA')} ₴`,
+              price: `${Math.round(item.price).toLocaleString("uk-UA")} ₴`,
               imageUrl: item.product.imageUrl || undefined,
             })),
             storeSlug: fullOrder.store.slug,
@@ -298,9 +308,9 @@ export async function updateOrderStatus(orderId: string, storeId: string, status
         // Помилка email не повинна блокувати зміну статусу
       }
     }
-  
+
     revalidatePath(`/dashboard/${storeId}/orders`);
-  
+
     return { success: "Статус замовлення оновлено!" };
   } catch (error) {
     if (error instanceof Error) {
