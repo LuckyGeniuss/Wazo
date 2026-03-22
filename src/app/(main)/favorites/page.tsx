@@ -1,55 +1,65 @@
 "use client";
 
-import { Heart, ShoppingCart, Trash2, Search } from "lucide-react";
+import { Heart, ShoppingCart, Trash2, Search, Package } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/hooks/use-cart";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-// Dummy data for demonstration
-const sampleFavorites = [
-  {
-    id: "1",
-    name: 'Смартфон Apple iPhone 15 Pro 256GB',
-    price: 42999,
-    oldPrice: 45999,
-    image: "/images/iphone15pro.jpg",
-    rating: 4.8,
-    reviews: 124,
-    inStock: true,
-  },
-  {
-    id: "2",
-    name: 'Навушники Sony WH-1000XM5',
-    price: 12999,
-    image: "/images/sony-wh1000xm5.jpg",
-    rating: 4.9,
-    reviews: 89,
-    inStock: true,
-  },
-  {
-    id: "3",
-    name: 'Годинник Apple Watch Series 9',
-    price: 18999,
-    oldPrice: 21999,
-    image: "/images/apple-watch-s9.jpg",
-    rating: 4.7,
-    reviews: 56,
-    inStock: false,
-  }
-];
+interface FavoriteItem {
+  id: string;
+  name: string;
+  price: number;
+  oldPrice?: number | null;
+  imageUrl: string | null;
+  image?: string | null;
+  rating?: number;
+  reviews?: number;
+  inStock?: boolean;
+  storeId: string;
+  store?: { slug: string } | null;
+}
 
 export default function FavoritesPage() {
   const cart = useCart();
-  // In real implementation, use favorites hook
-  const favorites = sampleFavorites;
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Завантажуємо обране з localStorage
+    const stored = localStorage.getItem('wazo-favorites');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setFavorites(Array.isArray(parsed) ? parsed : []);
+      } catch (e) {
+        setFavorites([]);
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
   const removeFromFavorites = (id: string) => {
-    console.log('Remove from favorites:', id);
-  };
-  const addToCart = (product: typeof sampleFavorites[0]) => {
-    // TODO: Implement proper add to cart with Product type
-    console.log('Add to cart:', product.name);
+    const updated = favorites.filter(item => item.id !== id);
+    setFavorites(updated);
+    localStorage.setItem('wazo-favorites', JSON.stringify(updated));
+    toast.success('Видалено з обраного');
   };
 
-  const totalPrice = favorites.reduce((sum, item) => sum + item.price, 0);
+  const addToCart = (product: FavoriteItem) => {
+    // TODO: Implement proper add to cart
+    toast.success(`Додано в кошик: ${product.name}`);
+  };
+
+  const totalPrice = favorites.reduce((sum, item) => sum + (item.price || 0), 0);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-12 max-w-6xl flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-6xl">
@@ -119,17 +129,29 @@ export default function FavoritesPage() {
                 </div>
 
                 {/* Product image */}
-                <Link href={`/product/${product.id}`} className="block mb-4">
-                  <div className="aspect-square bg-gray-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2U1ZTdlNyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzkwOTQ5NyI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+';
-                      }}
-                    />
-                  </div>
+                <Link href={`/${product.store?.slug || product.storeId}/product/${product.id}`} className="block mb-4">
+                <div className="aspect-square bg-gray-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                {(product.imageUrl || product.image) ? (
+                <img
+                src={product.imageUrl || product.image || ''}
+                alt={product.name}
+                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform"
+                onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (!target.dataset.fallback) {
+                target.dataset.fallback = 'true';
+                target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2U1ZTdlNyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzkwOTQ5NyI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+';
+                }
+                }}
+                />
+                ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                </div>
+                )}
+                </div>
                 </Link>
 
                 {/* Product info */}
