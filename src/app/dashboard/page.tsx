@@ -14,12 +14,14 @@ export default async function DashboardPage() {
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
+  where: { id: session.user.id },
   });
-
+  
   const stores = await prisma.store.findMany({
-    where: { ownerId: session.user.id },
-    include: {
+  where: user?.role === 'SUPERADMIN'
+  ? undefined // SuperAdmin бачить всі магазини
+  : { ownerId: session.user.id }, // SELLER бачить тільки свої
+  include: {
       _count: {
         select: {
           products: true,
