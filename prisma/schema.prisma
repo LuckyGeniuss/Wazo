@@ -8,62 +8,56 @@ datasource db {
 }
 
 model CustomerGroup {
- id String @id @default(uuid())
- storeId String
- name String
- discountPercentage Float @default(0)
- isDefault Boolean @default(false)
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
- store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
- users User[] @relation("CustomerGroupToUser")
- priceListId String?
- priceList PriceList? @relation(fields: [priceListId], references: [id])
- prices CustomerGroupPrice[]
+  id                 String               @id @default(uuid())
+  storeId            String
+  name               String
+  discountPercentage Float                @default(0)
+  isDefault          Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  priceListId        String?
+  priceList          PriceList?           @relation(fields: [priceListId], references: [id])
+  store              Store                @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  prices             CustomerGroupPrice[]
+  users              User[]               @relation("CustomerGroupToUser")
 }
 
 model User {
-  id                   String            @id @default(uuid())
+  id                   String              @id @default(uuid())
   name                 String?
-  email                String            @unique
+  email                String              @unique
   emailVerified        DateTime?
   image                String?
   password             String?
-  role                 Role              @default(USER)
-  isBanned             Boolean           @default(false)
-  aiGenerationsCount   Int               @default(0)
-  loyaltyPoints        Int               @default(0)
-  twoFactorEnabled     Boolean           @default(false)
-  twoFactorSecret      String?
+  role                 Role                @default(USER)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  aiGenerationsCount   Int                 @default(0)
+  isBanned             Boolean             @default(false)
+  loyaltyPoints        Int                 @default(0)
   twoFactorBackupCodes String[]
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @updatedAt
-  accounts Account[]
-  reviews Review[]
-  sessions Session[]
-  stores Store[]
-  carts Cart[]
-  wishlists Wishlist[]
-  orders Order[]
-  rfqs RFQ[]
-  customerGroup CustomerGroup[] @relation("CustomerGroupToUser")
-  storeTeamMembers StoreTeamMember[]
-  notifications Notification[]
-  
-  // Phase 31 - SuperAdmin Features
-  disputeCases DisputeCase[]
-  adminNotifications AdminNotification[]
+  twoFactorEnabled     Boolean             @default(false)
+  twoFactorSecret      String?
+  accounts             Account[]
+  adminNotifications   AdminNotification[]
+  carts                Cart[]
+  disputeCases         DisputeCase[]
+  notifications        Notification[]
+  orders               Order[]
+  rfqs                 RFQ[]
+  reviews              Review[]
+  sessions             Session[]
+  stores               Store[]
+  storeTeamMembers     StoreTeamMember[]
+  wishlists            Wishlist[]
+  customerGroup        CustomerGroup[]     @relation("CustomerGroupToUser")
 }
-
-// ==========================================
-// NOTIFICATIONS
-// ==========================================
 
 model Notification {
   id        String   @id @default(uuid())
   userId    String
   storeId   String?
-  type      String // ORDER_NEW | LOW_STOCK | REVIEW_NEW | PAYMENT_RECEIVED | RETURN_NEW
+  type      String
   title     String
   message   String
   link      String?
@@ -124,97 +118,77 @@ model Store {
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   isSuspended        Boolean             @default(false)
+  isVerified         Boolean             @default(false)
+  novaPoshtaApiKey   String?
+  openaiApiKey       String?
+  rating             Float               @default(0)
+  reviewsCount       Int                 @default(0)
+  status             String              @default("ACTIVE")
+  stripeAccountId    String?
+  telegramBotEnabled Boolean             @default(false)
+  telegramChatId     String?
   themeConfig        Json?               @default("{}")
+  adCampaigns        AdCampaign[]
+  adminNotifications AdminNotification[]
+  apiTokens          ApiToken[]
+  articles           Article[]
   banners            Banner[]
+  carts              Cart[]
   categories         Category[]
+  coupons            Coupon[]
+  customerGroups     CustomerGroup[]
+  deliveryMethods    DeliveryMethod[]
+  disputeCases       DisputeCase[]
+  exportFeeds        ExportFeed[]
+  integrations       Integration[]
   orders             Order[]
   pages              Page[]
-  products           Product[]
-  carts              Cart[]
-  owner              User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  integrations       Integration[]
-  customerGroups     CustomerGroup[]
-  coupons            Coupon[]
-  articles           Article[]
-  shoppableVideos    ShoppableVideo[]
-  subscription       Subscription?
-  teamMembers        StoreTeamMember[]
-  invites            StoreInvite[]
-  deliveryMethods    DeliveryMethod[]
   paymentMethods     PaymentMethod[]
-  taxRates           TaxRate[]
-  exportFeeds        ExportFeed[]
-  apiTokens          ApiToken[]
   priceLists         PriceList[]
+  products           Product[]
   rfqs               RFQ[]
   returnRequests     ReturnRequest[]
-  warehouses         Warehouse[]
-  rating Float @default(0)
-  reviewsCount Int @default(0)
-  status String @default("ACTIVE")
-  isVerified Boolean @default(false)
+  healthScore        SellerHealthScore?
+  leaderboardEntries SellerLeaderboard?
   sellerVerification SellerVerification?
-    tierPrices TierPrice[]
-  
-    // Integrations
-    openaiApiKey String?
-    novaPoshtaApiKey String?
-    stripeAccountId String?
+  shoppableVideos    ShoppableVideo[]
+  owner              User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  invites            StoreInvite[]
+  storeSettings      StoreSettings?
+  teamMembers        StoreTeamMember[]
+  subscription       Subscription?
+  taxRates           TaxRate[]
+  telegramLinkCodes  TelegramLinkCode[]
+  tierPrices         TierPrice[]
+  warehouses         Warehouse[]
+}
 
-    // Telegram Bot
-    telegramChatId String?
-    telegramBotEnabled Boolean @default(false)
-    telegramLinkCodes TelegramLinkCode[]
-  
-    // Monetization & Ads
-    adCampaigns AdCampaign[]
-    
-    // Phase 31 - SuperAdmin Features
-    healthScore SellerHealthScore?
-    disputeCases DisputeCase[]
-    adminNotifications AdminNotification[]
-    leaderboardEntries SellerLeaderboard[]
-    storeSettings StoreSettings?
-  }
-  
-  // ==========================================
-  // STORE FRONTEND SETTINGS (Demo Template)
-  // ==========================================
-  
-  model StoreSettings {
-    id String @id @default(uuid())
-    storeId String @unique
-  
-    // Theme Config
-    primaryColor String @default("#3b82f6")
-    secondaryColor String @default("#64748b")
-    accentColor String @default("#22c55e")
-    backgroundColor String @default("#ffffff")
-    textColor String @default("#1e293b")
-  
-    // Layout Config
-    heroBannerUrl String?
-    heroTitle String?
-    heroSubtitle String?
-    showCategories Boolean @default(true)
-    showFeaturedProducts Boolean @default(true)
-    productsLayout String @default("grid") // grid, list
-    productsPerRow Int @default(4)
-  
-    // Header/Footer
-    headerLogo String?
-    footerText String?
-    footerLinks Json @default("[]")
-  
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  
-    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  
-    @@index([storeId])
-  }
-  
-  model TelegramLinkCode {
+model StoreSettings {
+  id                   String   @id @default(uuid())
+  storeId              String   @unique
+  primaryColor         String   @default("#3b82f6")
+  secondaryColor       String   @default("#64748b")
+  accentColor          String   @default("#22c55e")
+  backgroundColor      String   @default("#ffffff")
+  textColor            String   @default("#1e293b")
+  heroBannerUrl        String?
+  heroTitle            String?
+  heroSubtitle         String?
+  showCategories       Boolean  @default(true)
+  showFeaturedProducts Boolean  @default(true)
+  productsLayout       String   @default("grid")
+  productsPerRow       Int      @default(4)
+  headerLogo           String?
+  footerText           String?
+  footerLinks          Json     @default("[]")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  store                Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId])
+}
+
+model TelegramLinkCode {
   id        String    @id @default(uuid())
   storeId   String
   code      String    @unique
@@ -244,69 +218,68 @@ model PageView {
 }
 
 model Category {
-  id String @id @default(uuid())
-  name String
-  slug String? @unique
-  imageUrl String?
-  storeId String?
-  isGlobal Boolean @default(false)
-  parentId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  parent Category? @relation("CategoryToCategory", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryToCategory")
-  store Store? @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  products Product[]
+  id           String                @id @default(uuid())
+  name         String
+  storeId      String?
+  isGlobal     Boolean               @default(false)
+  parentId     String?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  imageUrl     String?
+  slug         String?               @unique
+  parent       Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children     Category[]            @relation("CategoryToCategory")
+  store        Store?                @relation(fields: [storeId], references: [id], onDelete: Cascade)
   translations CategoryTranslation[]
+  products     Product[]
 }
 
 model Product {
-  id String @id @default(uuid())
-  externalId String?
-  name String
-  description String?
-  price Float
-  compareAtPrice Float? // Для скидок (старая цена)
-  stock Int @default(0)
-  imageUrl String?
-  videoUrl String?
-  images String[] @default([])
-  colors String[] @default([])
-  tags String[] @default([])
-  seoTitle String?
-  seoDescription String?
-  isArchived Boolean @default(false)
-  isFeatured Boolean @default(false)
-  isDraft Boolean @default(false)
-  attributes Json? @default("[]")
-  tieredPricing Json? @default("[]")
-  upsellProductId String?
-  storeId String
-  categoryId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  orderItems OrderItem[]
-  category Category? @relation(fields: [categoryId], references: [id])
-  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-    translations ProductTranslation[]
-    upsellProduct Product? @relation("ProductUpsell", fields: [upsellProductId], references: [id])
-  upsoldFor Product[] @relation("ProductUpsell")
-  reviews Review[]
-  wishlists Wishlist[]
-  shoppableVideos ShoppableVideo[]
+  id               String               @id @default(uuid())
+  name             String
+  description      String?
+  price            Float
+  imageUrl         String?
+  isArchived       Boolean              @default(false)
+  isFeatured       Boolean              @default(false)
+  storeId          String
+  categoryId       String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  attributes       Json?                @default("[]")
+  avgRating        Float                @default(0)
+  colors           String[]             @default([])
+  compareAtPrice   Float?
+  externalId       String?
+  feedScore        Float                @default(0)
+  images           String[]             @default([])
+  isDraft          Boolean              @default(false)
+  reviewsCount     Int                  @default(0)
+  salesCount       Int                  @default(0)
+  seoDescription   String?
+  seoTitle         String?
+  stock            Int                  @default(0)
+  tags             String[]             @default([])
+  tieredPricing    Json?                @default("[]")
+  upsellProductId  String?
+  videoUrl         String?
+  viewsCount       Int                  @default(0)
+  prices           CustomerGroupPrice[]
+  orderItems       OrderItem[]
   priceListEntries PriceListEntry[]
-  rfqItems RFQItem[]
-  warehouseStock WarehouseStock[]
-  stockMovements StockMovement[]
-  variants ProductVariant[]
-  tierPrices TierPrice[]
-  prices CustomerGroupPrice[]
-
-  viewsCount Int @default(0)
-  salesCount Int @default(0)
-  avgRating Float @default(0)
-  reviewsCount Int @default(0)
-  feedScore Float @default(0)
+  category         Category?            @relation(fields: [categoryId], references: [id])
+  store            Store                @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  upsellProduct    Product?             @relation("ProductUpsell", fields: [upsellProductId], references: [id])
+  upsoldFor        Product[]            @relation("ProductUpsell")
+  translations     ProductTranslation[]
+  variants         ProductVariant[]
+  rfqItems         RFQItem[]
+  reviews          Review[]
+  shoppableVideos  ShoppableVideo[]
+  stockMovements   StockMovement[]
+  tierPrices       TierPrice[]
+  warehouseStock   WarehouseStock[]
+  wishlists        Wishlist[]
 
   @@unique([storeId, externalId])
   @@index([name])
@@ -324,75 +297,71 @@ model Banner {
   location  String   @default("HOME")
   storeId   String?
   isGlobal  Boolean  @default(false)
-  isActive  Boolean  @default(true)
-  sortOrder Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
   store     Store?   @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
-  model Order {
-  id String @id @default(uuid())
-  storeId String
-  status OrderStatus @default(PENDING)
-  totalPrice Float
-  customerName String
-  customerEmail String
-  customerPhone String?
-  isB2b Boolean @default(false)
-  companyName String?
-  companyEdrpou String?
-  refundReason String?
-  reviewRequestSent Boolean @default(false)
-  // Відстеження відновлених кошиків
-  isRecovered Boolean @default(false)
-  recoveryEmailAt DateTime?
-  // Stripe Payment Intent ID
-  stripePaymentIntentId String?
-  // Fraud detection fields
-  fraudScore Float?
-  fraudFlags String[] @default([])
-  fraudStatus String?
-  // Internal manager notes
-  internalNote String?
-  // Nova Poshta delivery fields
-  trackingNumber String?
-  deliveryCity String?
-  deliveryWarehouse String?
-  novaPoshtaCityRef String?
+model Order {
+id String @id @default(uuid())
+storeId String
+totalPrice Float
+customerName String
+customerEmail String
+customerPhone String?
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+paymentMethod String?
+shippingAddress String?
+comment String?
+recipientType String? @default("self")
+recipientName String?
+recipientPhone String?
+  companyEdrpou          String?
+  companyName            String?
+  deliveryCity           String?
+  deliveryWarehouse      String?
+  fraudFlags             String[]        @default([])
+  fraudScore             Float?
+  fraudStatus            String?
+  internalNote           String?
+  isB2b                  Boolean         @default(false)
+  isRecovered            Boolean         @default(false)
+  novaPoshtaCityRef      String?
   novaPoshtaWarehouseRef String?
-  // UTM трекинг
-  utmSource String?
-  utmMedium String?
-  utmCampaign String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // Ссылка на покупателя (если зарегистрирован)
-  userId String?
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]
-  returnRequests ReturnRequest[]
-  // Історія змін статусу
-  statusHistory Json @default("[]")
-  
-  // Phase 31 - Dispute Cases
-  disputeCases DisputeCase[]
+  recoveryEmailAt        DateTime?
+  refundReason           String?
+  reviewRequestSent      Boolean         @default(false)
+  statusHistory          Json            @default("[]")
+  stripePaymentIntentId  String?
+  trackingNumber         String?
+  userId                 String?
+  utmCampaign            String?
+  utmMedium              String?
+  utmSource              String?
+  status                 OrderStatus     @default(PENDING)
+  disputeCases           DisputeCase[]
+  store                  Store           @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user                   User?           @relation(fields: [userId], references: [id])
+  orderItems             OrderItem[]
+  returnRequests         ReturnRequest[]
 
   @@index([storeId])
   @@index([storeId, createdAt(sort: Desc)])
 }
 
 model OrderItem {
-  id String @id @default(uuid())
-  orderId String
+  id        String          @id @default(uuid())
+  orderId   String
   productId String
+  quantity  Int             @default(1)
+  price     Float
   variantId String?
-  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-  quantity Int @default(1)
-  price Float
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
 }
 
 model Page {
@@ -436,7 +405,7 @@ model Coupon {
   id                    String    @id @default(uuid())
   code                  String
   discountValue         Float
-  type                  String    @default("PERCENTAGE") // PERCENTAGE или FIXED
+  type                  String    @default("PERCENTAGE")
   storeId               String
   isActive              Boolean   @default(true)
   isStackable           Boolean   @default(false)
@@ -453,71 +422,31 @@ model Coupon {
   @@unique([storeId, code])
 }
 
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  COMPLETED
-  CANCELLED
-  REFUND_REQUESTED
-  REFUNDED
-}
-
-enum PriceListType {
-  FIXED_PRICE
-  PERCENTAGE_DISCOUNT
-}
-
 model PriceList {
-  id        String        @id @default(uuid())
-  storeId   String
-  name      String
-  type      PriceListType @default(FIXED_PRICE)
-  value     Float         @default(0)
-  isActive  Boolean       @default(true)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-
+  id             String           @id @default(uuid())
+  storeId        String
+  name           String
+  type           PriceListType    @default(FIXED_PRICE)
+  value          Float            @default(0)
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  customerGroups CustomerGroup[]
   store          Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
   entries        PriceListEntry[]
-  customerGroups CustomerGroup[]
 
   @@unique([storeId, name])
 }
 
 model PriceListEntry {
-  id          String @id @default(uuid())
+  id          String    @id @default(uuid())
   priceListId String
   productId   String
   customPrice Float
-
-  priceList PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([priceListId, productId])
-}
-
-enum Role {
-  USER
-  SELLER
-  ADMIN
-  SUPERADMIN
-  MANAGER
-  MARKETER
-  OWNER
-  SUPPORT
-}
-
-enum IntegrationProvider {
-  OPENAI
-  GEMINI
-  OPENCART
-  UNSPLASH
-}
-
-enum FeedFormat {
-  YML
-  GOOGLE_XML
 }
 
 model ExportFeed {
@@ -550,9 +479,9 @@ model Article {
   id          String   @id @default(uuid())
   storeId     String
   title       String
-  content     String   @db.Text
+  content     String
   image       String?
-  metaTags    String?  @db.Text
+  metaTags    String?
   language    String   @default("ru")
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
@@ -582,8 +511,8 @@ model ShoppableVideo {
   title     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
 }
 
 model StoreTeamMember {
@@ -600,24 +529,17 @@ model StoreTeamMember {
 }
 
 model Cart {
-  id        String   @id @default(uuid())
+  id        String                  @id @default(uuid())
   userId    String
   storeId   String
-  items     Json     @default("[]")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  store     Store                   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  items     Json                    @default("[]")
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
   campaigns AbandonedCartCampaign[]
+  store     Store                   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, storeId])
-}
-
-enum AbandonedCartStatus {
-  PENDING
-  SENT
-  RECOVERED
 }
 
 model AbandonedCartCampaign {
@@ -628,8 +550,7 @@ model AbandonedCartCampaign {
   sentAt       DateTime?
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
-
-  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cart         Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
 }
 
 model StoreInvite {
@@ -661,7 +582,7 @@ model PaymentMethod {
   id        String   @id @default(uuid())
   storeId   String
   name      String
-  type      String   @default("CASH") // CASH, CARD, TRANSFER
+  type      String   @default("CASH")
   details   Json?    @default("{}")
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -673,7 +594,7 @@ model TaxRate {
   id        String   @id @default(uuid())
   storeId   String
   name      String
-  rate      Float    @default(0) // В процентах (например, 20 для 20%)
+  rate      Float    @default(0)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -700,40 +621,31 @@ model ApiToken {
   @@index([storeId])
 }
 
-enum RFQStatus {
-  PENDING
-  QUOTED
-  ACCEPTED
-  REJECTED
-}
-
 model RFQ {
   id          String    @id @default(uuid())
   storeId     String
   userId      String?
   status      RFQStatus @default(PENDING)
-  note        String?   @db.Text
+  note        String?
   totalAmount Float?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-
-  store Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  user  User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  items RFQItem[]
+  store       Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user        User?     @relation(fields: [userId], references: [id])
+  items       RFQItem[]
 
   @@index([storeId])
   @@index([userId])
 }
 
 model RFQItem {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   rfqId       String
   productId   String
   quantity    Int
   targetPrice Float?
-
-  rfq     RFQ     @relation(fields: [rfqId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  rfq         RFQ     @relation(fields: [rfqId], references: [id], onDelete: Cascade)
 
   @@index([rfqId])
   @@index([productId])
@@ -748,29 +660,12 @@ model Currency {
   updatedAt DateTime @updatedAt
 }
 
-// ==========================================
-// AUDIT LOG
-// ==========================================
-
-enum AuditAction {
-  CREATE
-  UPDATE
-  DELETE
-  LOGIN
-  LOGOUT
-  INVITE_SENT
-  INVITE_ACCEPTED
-  ORDER_STATUS_CHANGED
-  ROLE_CHANGED
-  SETTINGS_CHANGED
-}
-
 model AuditLog {
   id        String      @id @default(uuid())
   storeId   String?
   userId    String?
   action    AuditAction
-  entity    String // "Product", "Order", "User", etc.
+  entity    String
   entityId  String?
   oldData   Json?       @default("{}")
   newData   Json?       @default("{}")
@@ -783,39 +678,22 @@ model AuditLog {
   @@index([entity, entityId])
 }
 
-// ==========================================
-// RETURNS & REFUNDS
-// ==========================================
-
-enum ReturnStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  REFUNDED
-}
-
-enum RefundMethod {
-  ORIGINAL_PAYMENT
-  STORE_CREDIT
-  BANK_TRANSFER
-}
-
 model ReturnRequest {
   id             String       @id @default(uuid())
   orderId        String
   storeId        String
   status         ReturnStatus @default(PENDING)
-  reason         String       @db.Text
-  customerNote   String?      @db.Text
-  staffNote      String?      @db.Text
+  reason         String
+  customerNote   String?
+  staffNote      String?
   refundAmount   Float?
   refundMethod   RefundMethod @default(ORIGINAL_PAYMENT)
   stripeRefundId String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  items          ReturnItem[]
   order          Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
   store          Store        @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  items          ReturnItem[]
 
   @@index([storeId, createdAt(sort: Desc)])
   @@index([orderId])
@@ -833,10 +711,6 @@ model ReturnItem {
   @@index([returnRequestId])
 }
 
-// ==========================================
-// INVENTORY MANAGEMENT 2.0
-// ==========================================
-
 model Warehouse {
   id        String           @id @default(uuid())
   storeId   String
@@ -845,9 +719,9 @@ model Warehouse {
   isDefault Boolean          @default(false)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
+  movements StockMovement[]
   store     Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
   stock     WarehouseStock[]
-  movements StockMovement[]
 
   @@index([storeId])
 }
@@ -862,20 +736,12 @@ model WarehouseStock {
   available   Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
   product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
 
   @@unique([warehouseId, productId, variantSku])
   @@index([productId])
   @@index([warehouseId])
-}
-
-enum StockMovementType {
-  RECEIPT
-  SALE
-  RETURN
-  ADJUSTMENT
-  TRANSFER
 }
 
 model StockMovement {
@@ -887,16 +753,442 @@ model StockMovement {
   reason      String?
   orderId     String?
   createdAt   DateTime          @default(now())
-  warehouse   Warehouse         @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
   product     Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse   Warehouse         @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
 
   @@index([productId, createdAt(sort: Desc)])
   @@index([warehouseId])
 }
 
-// ==========================================
-// BACKGROUND JOBS (Poor Man's Queue)
-// ==========================================
+model BackgroundJob {
+  id         String              @id @default(uuid())
+  type       BackgroundJobType
+  status     BackgroundJobStatus @default(PENDING)
+  payload    Json                @default("{}")
+  runAt      DateTime            @default(now())
+  startedAt  DateTime?
+  finishedAt DateTime?
+  error      String?
+  attempts   Int                 @default(0)
+  maxRetries Int                 @default(3)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  @@index([status, runAt])
+  @@index([type, status])
+}
+
+model ProductVariant {
+  id         String      @id @default(uuid())
+  productId  String
+  name       String
+  sku        String?
+  price      Float?
+  stock      Int         @default(0)
+  options    Json
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ProductTranslation {
+  id             String   @id @default(uuid())
+  productId      String
+  locale         String
+  name           String
+  description    String?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+  @@index([productId])
+}
+
+model CategoryTranslation {
+  id          String   @id @default(uuid())
+  categoryId  String
+  locale      String
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@index([categoryId])
+}
+
+model TierPrice {
+  id          String  @id @default(uuid())
+  productId   String
+  minQuantity Int
+  price       Float
+  storeId     String
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store       Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, minQuantity])
+  @@index([productId])
+  @@index([storeId])
+}
+
+model CustomerGroupPrice {
+  id              String        @id @default(uuid())
+  customerGroupId String
+  productId       String
+  price           Float
+  customerGroup   CustomerGroup @relation(fields: [customerGroupId], references: [id], onDelete: Cascade)
+  product         Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([customerGroupId, productId])
+  @@index([customerGroupId])
+  @@index([productId])
+}
+
+model ErrorLog {
+  id         String   @id @default(uuid())
+  type       String
+  message    String
+  stackTrace String?
+  userId     String?
+  storeId    String?
+  url        String?
+  userAgent  String?
+  severity   String   @default("ERROR")
+  metadata   Json?    @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([type])
+  @@index([severity])
+  @@index([userId])
+  @@index([storeId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model AdCampaign {
+  id               String           @id @default(uuid())
+  storeId          String
+  name             String
+  type             AdCampaignType   @default(CPC)
+  status           AdCampaignStatus @default(DRAFT)
+  dailyBudget      Float?
+  totalBudget      Float?
+  maxBid           Float
+  currentBid       Float
+  targetCategories String[]         @default([])
+  targetKeywords   String[]         @default([])
+  targetStores     String[]         @default([])
+  placements       AdPlacement[]    @default([])
+  title            String
+  description      String?
+  imageUrl         String?
+  linkUrl          String
+  startDate        DateTime?
+  endDate          DateTime?
+  impressionsCount Int              @default(0)
+  clicksCount      Int              @default(0)
+  conversionsCount Int              @default(0)
+  spentAmount      Float            @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  store            Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  items            AdCampaignItem[]
+  adImpressions    AdImpression[]
+
+  @@index([storeId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AdCampaignItem {
+  id         String     @id @default(uuid())
+  campaignId String
+  productId  String?
+  categoryId String?
+  campaign   AdCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+}
+
+model AdImpression {
+  id         String      @id @default(uuid())
+  campaignId String
+  storeId    String?
+  userId     String?
+  placement  AdPlacement
+  occurredAt DateTime    @default(now())
+  clicked    Boolean     @default(false)
+  converted  Boolean     @default(false)
+  campaign   AdCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([storeId])
+  @@index([occurredAt])
+}
+
+model PlatformMonetization {
+  id                  String   @id @unique @default(uuid())
+  adEnabled           Boolean  @default(true)
+  minCpcBid           Float    @default(0.01)
+  maxCpcBid           Float    @default(100.0)
+  minCpaBid           Float    @default(0.1)
+  maxCpaBid           Float    @default(1000.0)
+  platformCommission  Float    @default(0.05)
+  totalRevenue        Float    @default(0)
+  adRevenue           Float    @default(0)
+  subscriptionRevenue Float    @default(0)
+  commissionRevenue   Float    @default(0)
+  updatedAt           DateTime @updatedAt
+}
+
+model MarketplaceTheme {
+  id               String   @id @default(uuid())
+  name             String
+  slug             String   @unique
+  description      String?
+  config           Json     @default("{}")
+  primaryColor     String   @default("#3b82f6")
+  secondaryColor   String   @default("#64748b")
+  accentColor      String   @default("#22c55e")
+  backgroundColor  String   @default("#ffffff")
+  textColor        String   @default("#1e293b")
+  headerStyle      String   @default("default")
+  footerStyle      String   @default("default")
+  productCardStyle String   @default("default")
+  showRatings      Boolean  @default(true)
+  showCompare      Boolean  @default(true)
+  showWishlist     Boolean  @default(true)
+  quickViewEnabled Boolean  @default(true)
+  isActive         Boolean  @default(false)
+  isPremium        Boolean  @default(false)
+  price            Float    @default(0)
+  previewImageUrl  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([slug])
+}
+
+model SellerHealthScore {
+  id                    String   @id @default(uuid())
+  storeId               String   @unique
+  overallScore          Float    @default(50)
+  orderFulfillmentScore Float    @default(50)
+  customerServiceScore  Float    @default(50)
+  productQualityScore   Float    @default(50)
+  shippingSpeedScore    Float    @default(50)
+  communicationScore    Float    @default(50)
+  totalOrders           Int      @default(0)
+  completedOrders       Int      @default(0)
+  cancelledOrders       Int      @default(0)
+  avgShippingTimeHours  Float    @default(0)
+  avgResponseTimeHours  Float    @default(0)
+  returnRate            Float    @default(0)
+  disputeRate           Float    @default(0)
+  avgRating             Float    @default(0)
+  tier                  String   @default("BRONZE")
+  lastCalculatedAt      DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  store                 Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId])
+  @@index([overallScore])
+  @@index([tier])
+}
+
+model DisputeCase {
+  id                  String           @id @default(uuid())
+  orderId             String
+  storeId             String
+  userId              String
+  assignedAdminId     String?
+  type                DisputeType
+  status              DisputeStatus    @default(OPEN)
+  title               String
+  description         String
+  customerNote        String?
+  sellerNote          String?
+  adminNote           String?
+  requestedResolution String           @default("REFUND")
+  refundAmount        Float?
+  finalDecision       String?
+  decisionReason      String?
+  resolvedAt          DateTime?
+  priority            String           @default("NORMAL")
+  daysOpen            Int              @default(0)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  order               Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  store               Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages            DisputeMessage[]
+
+  @@index([storeId])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([priority])
+}
+
+model DisputeMessage {
+  id              String      @id @default(uuid())
+  disputeCaseId   String
+  senderId        String?
+  senderType      String
+  message         String
+  attachments     String[]    @default([])
+  isVisibleToBoth Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  disputeCase     DisputeCase @relation(fields: [disputeCaseId], references: [id], onDelete: Cascade)
+
+  @@index([disputeCaseId])
+  @@index([senderType])
+}
+
+model AdminNotification {
+  id          String                    @id @default(uuid())
+  type        AdminNotificationType
+  severity    AdminNotificationSeverity @default(MEDIUM)
+  title       String
+  message     String
+  storeId     String?
+  userId      String?
+  orderId     String?
+  disputeId   String?
+  actionLabel String?
+  actionUrl   String?
+  isRead      Boolean                   @default(false)
+  isArchived  Boolean                   @default(false)
+  metadata    Json                      @default("{}")
+  createdAt   DateTime                  @default(now())
+  expiresAt   DateTime?
+  store       Store?                    @relation(fields: [storeId], references: [id])
+  user        User?                     @relation(fields: [userId], references: [id])
+
+  @@index([isRead])
+  @@index([severity])
+  @@index([type])
+  @@index([createdAt])
+  @@index([storeId])
+}
+
+model SellerLeaderboard {
+  id                 String    @id @default(uuid())
+  storeId            String    @unique
+  storeName          String
+  overallRank        Int
+  categoryRanks      Json      @default("{}")
+  healthScore        Float
+  totalSales         Float
+  totalOrders        Int
+  avgRating          Float
+  responseRate       Float
+  onTimeShipmentRate Float
+  period             String    @default("MONTHLY")
+  periodStart        DateTime
+  periodEnd          DateTime?
+  badges             String[]  @default([])
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  store              Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([overallRank])
+  @@index([period])
+  @@index([healthScore])
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+  REFUND_REQUESTED
+  REFUNDED
+}
+
+enum PriceListType {
+  FIXED_PRICE
+  PERCENTAGE_DISCOUNT
+}
+
+enum Role {
+  USER
+  SELLER
+  ADMIN
+  SUPERADMIN
+  MANAGER
+  MARKETER
+  OWNER
+  SUPPORT
+}
+
+enum IntegrationProvider {
+  OPENAI
+  GEMINI
+  OPENCART
+  UNSPLASH
+}
+
+enum FeedFormat {
+  YML
+  GOOGLE_XML
+}
+
+enum AbandonedCartStatus {
+  PENDING
+  SENT
+  RECOVERED
+}
+
+enum RFQStatus {
+  PENDING
+  QUOTED
+  ACCEPTED
+  REJECTED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  INVITE_SENT
+  INVITE_ACCEPTED
+  ORDER_STATUS_CHANGED
+  ROLE_CHANGED
+  SETTINGS_CHANGED
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REFUNDED
+}
+
+enum RefundMethod {
+  ORIGINAL_PAYMENT
+  STORE_CREDIT
+  BANK_TRANSFER
+}
+
+enum StockMovementType {
+  RECEIPT
+  SALE
+  RETURN
+  ADJUSTMENT
+  TRANSFER
+}
 
 enum BackgroundJobStatus {
   PENDING
@@ -913,540 +1205,68 @@ enum BackgroundJobType {
   GENERATE_SITEMAP
 }
 
-model BackgroundJob {
-  id         String              @id @default(uuid())
-  type       BackgroundJobType
-  status     BackgroundJobStatus @default(PENDING)
-  payload    Json                @default("{}")
-  runAt      DateTime            @default(now())
-  startedAt  DateTime?
-  finishedAt DateTime?
-  error      String?             @db.Text
-  attempts   Int                 @default(0)
-  maxRetries Int                 @default(3)
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
-
-  @@index([status, runAt])
-  @@index([type, status])
+enum AdCampaignType {
+  CPC
+  CPA
+  CPM
 }
 
-// ==========================================
-// EMAIL CAMPAIGNS (Marketing)
-// ==========================================
-
-
-// ==========================================
-// PRODUCT VARIANTS (Module 83)
-// ==========================================
-
-model ProductVariant {
-  id String @id @default(uuid())
-  productId String
-  name String // напр., "Білий / M" або "Red / Large"
-  sku String? // Унікальний артикул варіанту
-  price Float? // Якщо null, використовується ціна з Product
-  stock Int @default(0) // Залишок цього конкретного варіанту
-  options Json // Збереження виборів: {"Колір": "Білий", "Розмір": "M"}
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@index([productId])
+enum AdCampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  REJECTED
 }
-  
-  // ==========================================
-  // MULTILINGUAL TRANSLATIONS (Module 84)
-  // ==========================================
-  model ProductTranslation {
-    id String @id @default(uuid())
-    productId String
-    locale String
-    name String
-    description String? @db.Text
-    seoTitle String?
-    seoDescription String?
-  
-    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
-    @@unique([productId, locale])
-    @@index([productId])
-  
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  }
-  
-  model CategoryTranslation {
-    id String @id @default(uuid())
-    categoryId String
-    locale String
-    name String
-    description String? @db.Text
-  
-    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  
-    @@unique([categoryId, locale])
-    @@index([categoryId])
-  
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  }
-  
-  // ==========================================
-  // TIERED PRICING (Module 58)
-  // ==========================================
-  
-  model TierPrice {
-    id String @id @default(uuid())
-    productId String
-    minQuantity Int
-    price Float
-    storeId String
-    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  
-    @@unique([productId, minQuantity])
-    @@index([productId])
-    @@index([storeId])
-  }
-  
-  // ==========================================
-  // CUSTOMER GROUP PRICING (Module 59)
-  // ==========================================
-  
-  model CustomerGroupPrice {
-    id String @id @default(uuid())
-    customerGroupId String
-    productId String
-    price Float
-    customerGroup CustomerGroup @relation(fields: [customerGroupId], references: [id], onDelete: Cascade)
-    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
-    @@unique([customerGroupId, productId])
-    @@index([customerGroupId])
-    @@index([productId])
-  }
-  
-  // ==========================================
-  // ERROR LOGGING (Module 80)
-  // ==========================================
-  
-  model ErrorLog {
-    id String @id @default(uuid())
-    type String // "FRONTEND" | "BACKEND" | "DATABASE" | "API"
-    message String @db.Text
-    stackTrace String? @db.Text
-    userId String?
-    storeId String?
-    url String?
-    userAgent String?
-    severity String @default("ERROR") // "ERROR" | "WARNING" | "INFO"
-    metadata Json? @default("{}")
-    createdAt DateTime @default(now())
-  
-    @@index([type])
-    @@index([severity])
-    @@index([userId])
-    @@index([storeId])
-    @@index([createdAt(sort: Desc)])
-  }
-  
-  // ==========================================
-  // PLATFORM MONETIZATION & AD SYSTEM
-  // ==========================================
-  
-  enum AdCampaignType {
-    CPC // Cost Per Click
-    CPA // Cost Per Action
-    CPM // Cost Per Mille (impressions)
-  }
-  
-  enum AdCampaignStatus {
-    DRAFT
-    ACTIVE
-    PAUSED
-    COMPLETED
-    REJECTED
-  }
-  
-  enum AdPlacement {
-    MARKETPLACE_HEADER
-    MARKETPLACE_SIDEBAR
-    STOREFRONT_HEADER
-    STOREFRONT_SIDEBAR
-    PRODUCT_DETAIL
-    CATEGORY_PAGE
-    CHECKOUT_PAGE
-    SEARCH_RESULTS
-  }
-  
-  model AdCampaign {
-    id String @id @default(uuid())
-    storeId String
-    name String
-    type AdCampaignType @default(CPC)
-    status AdCampaignStatus @default(DRAFT)
-    
-    // Budget & Bidding
-    dailyBudget Float?
-    totalBudget Float?
-    maxBid Float // Maximum bid per click/action
-    currentBid Float // Current active bid
-    
-    // Targeting
-    targetCategories String[] @default([]) // Category IDs
-    targetKeywords String[] @default([])
-    targetStores String[] @default([]) // Show on specific stores
-    
-    // Placement
-    placements AdPlacement[] @default([])
-    
-    // Creative
-    title String
-    description String?
-    imageUrl String?
-    linkUrl String // Destination URL
-    
-    // Tracking
-    startDate DateTime?
-    endDate DateTime?
-    
-    // Stats (denormalized for performance)
-      impressionsCount Int @default(0)
-      clicksCount Int @default(0)
-      conversionsCount Int @default(0)
-      spentAmount Float @default(0)
-    
-      createdAt DateTime @default(now())
-      updatedAt DateTime @updatedAt
-    
-      store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-      items AdCampaignItem[]
-      adImpressions AdImpression[]
-    
-    @@index([storeId])
-    @@index([status])
-    @@index([createdAt])
-  }
-  
-  model AdCampaignItem {
-    id String @id @default(uuid())
-    campaignId String
-    productId String?
-    categoryId String?
-    
-    campaign AdCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-    
-    @@index([campaignId])
-  }
-  
-  model AdImpression {
-    id String @id @default(uuid())
-    campaignId String
-    storeId String? // Where impression occurred
-    userId String?
-    
-    placement AdPlacement
-    occurredAt DateTime @default(now())
-    clicked Boolean @default(false)
-    converted Boolean @default(false)
-    
-    campaign AdCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-    
-    @@index([campaignId])
-    @@index([storeId])
-    @@index([occurredAt])
-  }
-  
-  model PlatformMonetization {
-    id String @id @default(uuid())
-    
-    // Platform-wide settings
-    adEnabled Boolean @default(true)
-    minCpcBid Float @default(0.01)
-    maxCpcBid Float @default(100.0)
-    minCpaBid Float @default(0.1)
-    maxCpaBid Float @default(1000.0)
-    platformCommission Float @default(0.05) // 5% default
-    
-    // Revenue tracking
-    totalRevenue Float @default(0)
-    adRevenue Float @default(0)
-    subscriptionRevenue Float @default(0)
-    commissionRevenue Float @default(0)
-    
-    updatedAt DateTime @updatedAt
-    
-    @@unique([id])
-  }
-  
-  // ==========================================
-  // MARKETPLACE THEMES
-  // ==========================================
-  
-  model MarketplaceTheme {
-    id String @id @default(uuid())
-    name String
-    slug String @unique
-    description String?
-    
-    // Theme configuration
-    config Json @default("{}")
-    
-    // Styling
-    primaryColor String @default("#3b82f6")
-    secondaryColor String @default("#64748b")
-    accentColor String @default("#22c55e")
-    backgroundColor String @default("#ffffff")
-    textColor String @default("#1e293b")
-    
-    // Layout
-    headerStyle String @default("default") // default, minimal, centered
-    footerStyle String @default("default")
-    productCardStyle String @default("default")
-    
-    // Features
-    showRatings Boolean @default(true)
-    showCompare Boolean @default(true)
-    showWishlist Boolean @default(true)
-    quickViewEnabled Boolean @default(true)
-    
-    isActive Boolean @default(false)
-    isPremium Boolean @default(false)
-    price Float @default(0)
-    
-    previewImageUrl String?
-    
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    
-    @@index([isActive])
-    @@index([slug])
-  }
-  
-  // ==========================================
-  // PHASE 31: ADVANCED SUPERADMIN FEATURES
-  // ==========================================
-  
-  // Seller Health Score - комплексна оцінка продавця
-  model SellerHealthScore {
-    id String @id @default(uuid())
-    storeId String @unique
-    
-    // Основні метрики (0-100)
-    overallScore Float @default(50)
-    orderFulfillmentScore Float @default(50)
-    customerServiceScore Float @default(50)
-    productQualityScore Float @default(50)
-    shippingSpeedScore Float @default(50)
-    communicationScore Float @default(50)
-    
-    // Деталі
-    totalOrders Int @default(0)
-    completedOrders Int @default(0)
-    cancelledOrders Int @default(0)
-    avgShippingTimeHours Float @default(0)
-    avgResponseTimeHours Float @default(0)
-    returnRate Float @default(0)
-    disputeRate Float @default(0)
-    avgRating Float @default(0)
-    
-    // Рівень продавця
-    tier String @default("BRONZE") // BRONZE, SILVER, GOLD, PLATINUM, DIAMOND
-    
-    lastCalculatedAt DateTime @default(now())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    
-    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-    
-    @@index([storeId])
-    @@index([overallScore])
-    @@index([tier])
-  }
-  
-  // Dispute Resolution System
-  enum DisputeStatus {
-    OPEN
-    IN_REVIEW
-    CUSTOMER_RESPONDED
-    SELLER_RESPONDED
-    UNDER_SUPERADMIN_REVIEW
-    RESOLVED_CUSTOMER
-    RESOLVED_SELLER
-    ESCALATED
-    CLOSED
-  }
-  
-  enum DisputeType {
-    PRODUCT_NOT_RECEIVED
-    PRODUCT_DAMAGED
-    PRODUCT_NOT_AS_DESCRIBED
-    WRONG_ITEM
-    REFUND_ISSUE
-    SHIPPING_ISSUE
-    OTHER
-  }
-  
-  model DisputeCase {
-    id String @id @default(uuid())
-    
-    // Зв'язки
-    orderId String
-    storeId String
-    userId String
-    assignedAdminId String?
-    
-    // Інформація
-    type DisputeType
-    status DisputeStatus @default(OPEN)
-    title String
-    description String @db.Text
-    customerNote String? @db.Text
-    sellerNote String? @db.Text
-    adminNote String? @db.Text
-    
-    // Вимога покупця
-    requestedResolution String @default("REFUND") // REFUND, REPLACEMENT, PARTIAL_REFUND
-    refundAmount Float?
-    
-    // Рішення
-    finalDecision String? // CUSTOMER, SELLER, COMPROMISE
-    decisionReason String? @db.Text
-    resolvedAt DateTime?
-    
-    // Пріоритет (автоматично)
-    priority String @default("NORMAL") // LOW, NORMAL, HIGH, CRITICAL
-    daysOpen Int @default(0)
-    
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    
-    order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    messages DisputeMessage[]
-    
-    @@index([storeId])
-    @@index([userId])
-    @@index([status])
-    @@index([createdAt])
-    @@index([priority])
-  }
-  
-  model DisputeMessage {
-    id String @id @default(uuid())
-    
-    disputeCaseId String
-    senderId String? // null для системних повідомлень
-    senderType String // CUSTOMER, SELLER, SYSTEM, ADMIN
-    message String @db.Text
-    attachments String[] @default([])
-    isVisibleToBoth Boolean @default(true)
-    
-    createdAt DateTime @default(now())
-    
-    disputeCase DisputeCase @relation(fields: [disputeCaseId], references: [id], onDelete: Cascade)
-    
-    @@index([disputeCaseId])
-    @@index([senderType])
-  }
-  
-  // Smart Admin Notifications
-  enum AdminNotificationType {
-    CRITICAL_ALERT
-    HIGH_PRIORITY_DISPUTE
-    SELLER_MILESTONE
-    PLATFORM_ANOMALY
-    REVENUE_MILESTONE
-    SYSTEM_ALERT
-    HEALTH_SCORE_DROP
-    VERIFICATION_PENDING
-    FRAUD_ALERT
-  }
-  
-  enum AdminNotificationSeverity {
-    LOW
-    MEDIUM
-    HIGH
-    CRITICAL
-  }
-  
-  model AdminNotification {
-    id String @id @default(uuid())
-    
-    type AdminNotificationType
-    severity AdminNotificationSeverity @default(MEDIUM)
-    
-    title String
-    message String @db.Text
-    
-    // Зв'язки (опціонально)
-    storeId String?
-    userId String?
-    orderId String?
-    disputeId String?
-    
-    // Дії
-    actionLabel String?
-    actionUrl String?
-    
-    // Статус
-    isRead Boolean @default(false)
-    isArchived Boolean @default(false)
-    
-    // Мета для UI
-    metadata Json @default("{}")
-    
-    createdAt DateTime @default(now())
-    expiresAt DateTime?
-    
-    store Store? @relation(fields: [storeId], references: [id], onDelete: SetNull)
-    user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-    
-    @@index([isRead])
-    @@index([severity])
-    @@index([type])
-    @@index([createdAt])
-    @@index([storeId])
-  }
-  
-  // Leaderboard Cache - для продуктивності
-  model SellerLeaderboard {
-    id String @id @default(uuid())
-    
-    storeId String @unique
-    storeName String
-    
-    // Поточний рейтинг
-    overallRank Int
-    categoryRanks Json @default("{}") // {"electronics": 1, "fashion": 5}
-    
-    // Метрики для розрахунку
-    healthScore Float
-    totalSales Float
-    totalOrders Int
-    avgRating Float
-    responseRate Float
-    onTimeShipmentRate Float
-    
-    // Період
-    period String @default("MONTHLY") // WEEKLY, MONTHLY, QUARTERLY, YEARLY, ALL_TIME
-    periodStart DateTime
-    periodEnd DateTime?
-    
-    // Бейджі
-    badges String[] @default([]) // "TOP_SELLER", "FAST_SHIPPER", "EXCELLENT_SERVICE", etc.
-    
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    
-    store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
-    
-    @@index([overallRank])
-    @@index([period])
-    @@index([healthScore])
-  }
-  
+
+enum AdPlacement {
+  MARKETPLACE_HEADER
+  MARKETPLACE_SIDEBAR
+  STOREFRONT_HEADER
+  STOREFRONT_SIDEBAR
+  PRODUCT_DETAIL
+  CATEGORY_PAGE
+  CHECKOUT_PAGE
+  SEARCH_RESULTS
+}
+
+enum DisputeStatus {
+  OPEN
+  IN_REVIEW
+  CUSTOMER_RESPONDED
+  SELLER_RESPONDED
+  UNDER_SUPERADMIN_REVIEW
+  RESOLVED_CUSTOMER
+  RESOLVED_SELLER
+  ESCALATED
+  CLOSED
+}
+
+enum DisputeType {
+  PRODUCT_NOT_RECEIVED
+  PRODUCT_DAMAGED
+  PRODUCT_NOT_AS_DESCRIBED
+  WRONG_ITEM
+  REFUND_ISSUE
+  SHIPPING_ISSUE
+  OTHER
+}
+
+enum AdminNotificationType {
+  CRITICAL_ALERT
+  HIGH_PRIORITY_DISPUTE
+  SELLER_MILESTONE
+  PLATFORM_ANOMALY
+  REVENUE_MILESTONE
+  SYSTEM_ALERT
+  HEALTH_SCORE_DROP
+  VERIFICATION_PENDING
+  FRAUD_ALERT
+}
+
+enum AdminNotificationSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}

@@ -17,7 +17,12 @@ const CreateOrderSchema = z.object({
   customerName: z.string().min(2),
   customerEmail: z.string().email(),
   customerPhone: z.string().min(5),
-  shippingAddress: z.string().min(5),
+  shippingAddress: z.string().min(5).optional(),
+  paymentMethod: z.string().optional(),
+  comment: z.string().optional(),
+  recipientType: z.string().optional(),
+  recipientName: z.string().optional(),
+  recipientPhone: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -35,7 +40,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { storeId, items, customerName, customerEmail, customerPhone, shippingAddress } = result.data;
+    const { storeId, items, customerName, customerEmail, customerPhone, shippingAddress, paymentMethod, comment, recipientType, recipientName, recipientPhone } = result.data;
 
     // Optional: Verify products exist and stock is available
     const productIds = items.map(item => item.productId);
@@ -67,7 +72,12 @@ export async function POST(req: Request) {
           customerName,
           customerEmail,
           customerPhone,
-          // shippingAddress, // Removed since not in schema
+          shippingAddress: shippingAddress || null,
+          paymentMethod: paymentMethod || null,
+          comment: comment || null,
+          recipientType: recipientType || 'self',
+          recipientName: recipientName || null,
+          recipientPhone: recipientPhone || null,
           totalPrice,
           status: 'PENDING',
           orderItems: {

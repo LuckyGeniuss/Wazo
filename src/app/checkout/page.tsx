@@ -1,12 +1,12 @@
 "use client";
 
 import { useCart } from "@/hooks/use-cart";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/format";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, ShoppingBag, ShieldCheck, Truck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ShoppingBag, ShieldCheck, Truck, User, Lock, CreditCard, Wallet, Building } from "lucide-react";
 
 export default function CheckoutPage() {
   const { items, removeAll, getItemPrice } = useCart();
@@ -15,12 +15,47 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    deliveryMethod: 'nova_poshta',
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+  deliveryMethod: 'nova_poshta',
+  paymentMethod: 'cod',
+  recipientType: 'self',
+  recipientName: '',
+  recipientPhone: '',
+  comment: '',
   });
+
+  const [savedRecipients, setSavedRecipients] = useState<any[]>([]);
+  const [selectedRecipient, setSelectedRecipient] = useState<string>('');
+  const [showRegisterPrompt, setShowRegisterPrompt] = useState(false);
+
+  useEffect(() => {
+    // Завантажуємо збережених отримувачів з localStorage
+    const stored = localStorage.getItem('savedRecipients');
+    if (stored) {
+      try {
+        setSavedRecipients(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to parse saved recipients');
+      }
+    }
+
+    // Перевіряємо, чи залогінений користувач
+    const sessionCheck = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        const session = await res.json();
+        if (!session?.user) {
+          setShowRegisterPrompt(true);
+        }
+      } catch (e) {
+        setShowRegisterPrompt(true);
+      }
+    };
+    sessionCheck();
+  }, []);
 
   const total = items.reduce((sum, item) => sum + getItemPrice(item) * item.quantity, 0);
 
@@ -28,58 +63,100 @@ export default function CheckoutPage() {
   // В простом варианте мы берем storeId из первого товара (в идеале корзина должна разделяться по магазинам)
   const storeId = items[0]?.product?.storeId;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  setFormData({
+  ...formData,
+  [e.target.name]: e.target.value
+  });
+  };
+
+  const handleRecipientSelect = (recipientId: string) => {
+  setSelectedRecipient(recipientId);
+  if (recipientId === 'new') {
+  setFormData({
+  ...formData,
+  recipientName: '',
+  recipientPhone: '',
+  });
+  } else {
+  const recipient = savedRecipients.find(r => r.id === recipientId);
+  if (recipient) {
+  setFormData({
+  ...formData,
+  recipientName: recipient.name,
+  recipientPhone: recipient.phone,
+  });
+  }
+  }
+  };
+
+  const saveRecipient = () => {
+  if (!formData.recipientName || !formData.recipientPhone) {
+  toast.error("Будь ласка, заповніть дані отримувача");
+  return;
+  }
+  const newRecipient = {
+  id: Date.now().toString(),
+  name: formData.recipientName,
+  phone: formData.recipientPhone,
+  };
+  const updated = [...savedRecipients, newRecipient];
+  setSavedRecipients(updated);
+  localStorage.setItem('savedRecipients', JSON.stringify(updated));
+  setSelectedRecipient(newRecipient.id);
+  toast.success("Отримувача збережено!");
   };
 
   const onCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (items.length === 0) return;
-    if (!storeId) {
-      toast.error("Помилка кошика: неможливо визначити магазин");
-      return;
-    }
+  e.preventDefault();
+  if (items.length === 0) return;
+  if (!storeId) {
+  toast.error("Помилка кошика: неможливо визначити магазин");
+  return;
+  }
 
-    setLoading(true);
-    try {
-      const orderData = {
-        storeId: storeId,
-        customerName: formData.name,
-        customerEmail: formData.email,
-        customerPhone: formData.phone,
-        shippingAddress: `[${formData.deliveryMethod}] ${formData.address}`,
-        items: items.map(item => ({
-          productId: item.product.id,
-          quantity: item.quantity,
-          price: getItemPrice(item),
-        }))
-      };
+  setLoading(true);
+  try {
+  const orderData = {
+  storeId: storeId,
+  customerName: formData.name,
+  customerEmail: formData.email,
+  customerPhone: formData.phone,
+  shippingAddress: `[${formData.deliveryMethod}] ${formData.address}`,
+  paymentMethod: formData.paymentMethod,
+  comment: formData.comment,
+  recipientType: formData.recipientType,
+  recipientName: formData.recipientType === 'other' ? formData.recipientName : formData.name,
+  recipientPhone: formData.recipientType === 'other' ? formData.recipientPhone : formData.phone,
+  items: items.map(item => ({
+  productId: item.product.id,
+  quantity: item.quantity,
+  price: getItemPrice(item),
+  }))
+  };
 
-      const response = await fetch('/api/orders/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      });
+  const response = await fetch('/api/orders/create', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(orderData)
+  });
 
-      const data = await response.json();
+  const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Помилка при створенні замовлення');
-      }
+  if (!response.ok) {
+  throw new Error(data.error || 'Помилка при створенні замовлення');
+  }
 
-      removeAll();
-      toast.success("Замовлення успішно оформлено!");
-      router.push("/account/orders?success=true");
-      
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || "Помилка при оформленні замовлення");
-    } finally {
-      setLoading(false);
-    }
+  removeAll();
+  toast.success("Замовлення успішно оформлено!");
+  router.push("/account/orders?success=true");
+
+  } catch (error: any) {
+  console.error(error);
+  toast.error(error.message || "Помилка при оформленні замовлення");
+  } finally {
+  setLoading(false);
+  }
   };
 
   if (success) {
@@ -219,17 +296,222 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label htmlFor="address" className="text-sm font-semibold text-slate-700">Адреса доставки <span className="text-red-500">*</span></label>
-                    <input 
-                      type="text" id="address" name="address" required
-                      value={formData.address} onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
-                      placeholder="Місто, Відділення Нової Пошти №1"
-                    />
+                  <label htmlFor="address" className="text-sm font-semibold text-slate-700">Адреса доставки <span className="text-red-500">*</span></label>
+                  <input
+                  type="text" id="address" name="address" required
+                  value={formData.address} onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
+                  placeholder="Місто, Відділення Нової Пошти №1"
+                  />
                   </div>
-                </div>
-              </form>
-            </div>
+                  </div>
+        
+                  {/* СПОСОБИ ОПЛАТИ */}
+                  <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-slate-800 border-b pb-2">Способи оплати</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.paymentMethod === 'cod' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={formData.paymentMethod === 'cod'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Накладений платіж</span>
+                  <span className="text-xs text-slate-500">Готівкою при отриманні</span>
+                  </div>
+                  </label>
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.paymentMethod === 'card_test' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card_test"
+                  checked={formData.paymentMethod === 'card_test'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Картка (тест)</span>
+                  <span className="text-xs text-slate-500">Тестова оплата карткою</span>
+                  </div>
+                  </label>
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.paymentMethod === 'monobank' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="monobank"
+                  checked={formData.paymentMethod === 'monobank'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Monobank</span>
+                  <span className="text-xs text-slate-500">Оплата через Monobank</span>
+                  </div>
+                  </label>
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.paymentMethod === 'privat24' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="privat24"
+                  checked={formData.paymentMethod === 'privat24'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Приват24</span>
+                  <span className="text-xs text-slate-500">Оплата через Приват24</span>
+                  </div>
+                  </label>
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.paymentMethod === 'liqpay' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="liqpay"
+                  checked={formData.paymentMethod === 'liqpay'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">LiqPay</span>
+                  <span className="text-xs text-slate-500">Оплата через LiqPay</span>
+                  </div>
+                  </label>
+                  </div>
+                  </div>
+        
+                  {/* ОТРИМУВАЧ */}
+                  <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-slate-800 border-b pb-2">Отримувач</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.recipientType === 'self' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="recipientType"
+                  value="self"
+                  checked={formData.recipientType === 'self'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Я отримую сам</span>
+                  <span className="text-xs text-slate-500">Використовувати мої дані</span>
+                  </div>
+                  </label>
+                  <label className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all ${formData.recipientType === 'other' ? 'border-violet-500 bg-violet-50 shadow-sm ring-1 ring-violet-500' : 'border-slate-200 hover:border-violet-300'}`}>
+                  <input
+                  type="radio"
+                  name="recipientType"
+                  value="other"
+                  checked={formData.recipientType === 'other'}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 text-violet-600 focus:ring-violet-500 border-gray-300"
+                  />
+                  <div className="flex flex-col">
+                  <span className="font-bold text-slate-900 text-sm">Інший отримувач</span>
+                  <span className="text-xs text-slate-500">Вказати іншу особу</span>
+                  </div>
+                  </label>
+                  </div>
+        
+                  {savedRecipients.length > 0 && (
+                  <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">Збережені отримувачі</label>
+                  <select
+                  value={selectedRecipient}
+                  onChange={(e) => handleRecipientSelect(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
+                  >
+                  <option value="">Обрати збереженого отримувача</option>
+                  {savedRecipients.map(recipient => (
+                  <option key={recipient.id} value={recipient.id}>{recipient.name} ({recipient.phone})</option>
+                  ))}
+                  </select>
+                  </div>
+                  )}
+        
+                  {formData.recipientType === 'other' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                  <label htmlFor="recipientName" className="text-sm font-semibold text-slate-700">ПІБ отримувача</label>
+                  <input
+                  type="text"
+                  id="recipientName"
+                  name="recipientName"
+                  value={formData.recipientName}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
+                  placeholder="Іванов Іван Іванович"
+                  />
+                  </div>
+                  <div className="space-y-1.5">
+                  <label htmlFor="recipientPhone" className="text-sm font-semibold text-slate-700">Телефон отримувача</label>
+                  <input
+                  type="tel"
+                  id="recipientPhone"
+                  name="recipientPhone"
+                  value={formData.recipientPhone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
+                  placeholder="+38 (000) 000-00-00"
+                  />
+                  </div>
+                  <div className="md:col-span-2">
+                  <button
+                  type="button"
+                  onClick={saveRecipient}
+                  className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors"
+                  >
+                  Зберегти отримувача
+                  </button>
+                  </div>
+                  </div>
+                  )}
+                  </div>
+        
+                  {/* КОМЕНТАР ДО ЗАМОВЛЕННЯ */}
+                  <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-slate-800 border-b pb-2">Коментар до замовлення</h3>
+                  <div className="space-y-1.5">
+                  <label htmlFor="comment" className="text-sm font-semibold text-slate-700">Ваш коментар</label>
+                  <textarea
+                  id="comment"
+                  name="comment"
+                  value={formData.comment}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all min-h-[100px]"
+                  placeholder="Будь ласка, покладіть дзвінки у дзвіночки, а дзвіночки у дзвіночки..."
+                  />
+                  </div>
+                  </div>
+        
+                  {/* ПРОПОЗИЦІЯ РЕЄСТРАЦІЇ */}
+                  {showRegisterPrompt && (
+                  <div className="bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-200 rounded-2xl p-6">
+                  <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Lock size={24} />
+                  </div>
+                  <div className="flex-1">
+                  <h4 className="font-bold text-slate-900 mb-1">Створіть обліковий запис</h4>
+                  <p className="text-sm text-slate-600 mb-3">Отримайте доступ до історії замовлень, швидкого оформлення та персональних знижок</p>
+                  <div className="flex gap-3">
+                  <Link href="/register" className="px-4 py-2 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition-colors text-sm">
+                  Зареєструватися
+                  </Link>
+                  <Link href="/login" className="px-4 py-2 bg-white text-violet-600 font-bold rounded-xl border border-violet-200 hover:bg-violet-50 transition-colors text-sm">
+                  Увійти
+                  </Link>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+                  )}
+                  </form>
+                  </div>
           </div>
 
           {/* Order Summary */}
