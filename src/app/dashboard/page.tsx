@@ -19,6 +19,18 @@ export default async function DashboardPage() {
   
   console.log("[DASHBOARD] User Role:", user?.role);
   console.log("[DASHBOARD] User ID:", session.user.id);
+  console.log("[DASHBOARD] Session User:", {
+    id: session.user.id,
+    email: session.user.email,
+    role: session.user.role,
+    name: session.user.name
+  });
+  console.log("[DASHBOARD] User DB lookup:", {
+    id: user?.id,
+    email: user?.email,
+    role: user?.role,
+    isBanned: user?.isBanned
+  });
 
   const stores = await prisma.store.findMany({
   where: user?.role === 'SUPERADMIN'
@@ -37,6 +49,14 @@ export default async function DashboardPage() {
       },
     },
     orderBy: { createdAt: "desc" },
+  });
+
+  console.log("[DASHBOARD] Query condition:", {
+    userRole: user?.role,
+    isSuperAdmin: user?.role === 'SUPERADMIN',
+    ownerId: session.user.id,
+    storesFound: stores.length,
+    stores: stores.map(s => ({ id: s.id, name: s.name, ownerId: s.ownerId }))
   });
 
   const storesWithGMV = stores.map(store => ({
