@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { ProductModal } from "@/components/modals/product-modal";
 import { ProductsClient } from "./client";
 
 export default async function ProductsPage({
