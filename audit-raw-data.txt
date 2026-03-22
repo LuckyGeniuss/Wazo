@@ -1,0 +1,623 @@
+=== 1. PROJECT STRUCTURE (src directories) ===
+src
+src/actions
+src/actions/superadmin
+src/app
+src/app/(auth)
+src/app/(auth)/login
+src/app/(auth)/register
+src/app/(main)
+src/app/(main)/about
+src/app/(main)/account
+src/app/(main)/account/orders
+src/app/(main)/account/orders/[orderId]
+src/app/(main)/account/orders/[orderId]/return
+src/app/(main)/account/wishlist
+src/app/(main)/bestsellers
+src/app/(main)/brands
+src/app/(main)/buyer-protection
+src/app/(main)/cart
+src/app/(main)/checkout
+src/app/(main)/compare
+src/app/(main)/contact
+src/app/(main)/cookies
+src/app/(main)/delivery
+src/app/(main)/favorites
+src/app/(main)/feed
+src/app/(main)/help
+src/app/(main)/new
+src/app/(main)/pricing
+src/app/(main)/privacy
+src/app/(main)/returns
+src/app/(main)/search
+src/app/(main)/sellers
+src/app/(main)/terms
+src/app/(storefront)
+src/app/(storefront)/[storeSlug]
+src/app/(storefront)/[storeSlug]/[pageSlug]
+src/app/(storefront)/[storeSlug]/product
+src/app/(storefront)/[storeSlug]/product/[productId]
+src/app/admin
+src/app/api
+src/app/api-docs
+src/app/api/ads
+src/app/api/ads/track
+src/app/api/ai
+src/app/api/ai/chat
+src/app/api/ai/generate
+src/app/api/auth
+src/app/api/auth/[...nextauth]
+src/app/api/cart
+src/app/api/cron
+src/app/api/cron/abandoned-carts
+src/app/api/cron/review-requests
+src/app/api/cron/sync-marketplace-orders
+src/app/api/cron/worker
+src/app/api/currencies
+src/app/api/dashboard
+src/app/api/dashboard/orders
+src/app/api/dashboard/orders/[orderId]
+src/app/api/dashboard/orders/[orderId]/status
+src/app/api/dashboard/products
+src/app/api/dashboard/products/[id]
+src/app/api/dashboard/products/[id]/archive
+src/app/api/dashboard/stats
+src/app/api/dashboard/stores
+src/app/api/dashboard/stores/[storeId]
+src/app/api/dashboard/stores/[storeId]/settings
+src/app/api/dashboard/stores/[storeId]/storefront
+src/app/api/dashboard/stores/[storeId]/telegram
+src/app/api/dashboard/stores/[storeId]/telegram/connect
+src/app/api/dashboard/stores/[storeId]/telegram/disconnect
+src/app/api/dashboard/stores/[storeId]/telegram/test
+src/app/api/feeds
+src/app/api/mobile
+src/app/api/notifications
+src/app/api/openapi.json
+src/app/api/orders
+src/app/api/orders/create
+src/app/api/public
+src/app/api/reviews
+src/app/api/search
+src/app/api/search/suggest
+src/app/api/stripe
+src/app/api/telegram
+src/app/api/telegram/webhook
+src/app/api/track
+src/app/api/upload
+src/app/api/v1
+src/app/api/v1/products
+src/app/api/v1/search
+src/app/api/v1/stores
+src/app/banned
+src/app/dashboard
+src/app/dashboard/[storeId]
+src/app/dashboard/[storeId]/analytics
+src/app/dashboard/[storeId]/banners
+src/app/dashboard/[storeId]/builder
+src/app/dashboard/[storeId]/builder/[pageId]
+src/app/dashboard/[storeId]/categories
+src/app/dashboard/[storeId]/customers
+src/app/dashboard/[storeId]/integrations
+src/app/dashboard/[storeId]/inventory
+src/app/dashboard/[storeId]/logistics
+src/app/dashboard/[storeId]/marketing
+src/app/dashboard/[storeId]/orders
+src/app/dashboard/[storeId]/pages
+src/app/dashboard/[storeId]/price-lists
+src/app/dashboard/[storeId]/products
+src/app/dashboard/[storeId]/products/[productId]
+src/app/dashboard/[storeId]/products/[productId]/edit
+src/app/dashboard/[storeId]/products/new
+src/app/dashboard/[storeId]/returns
+src/app/dashboard/[storeId]/rfq
+src/app/dashboard/[storeId]/settings
+src/app/dashboard/[storeId]/settings/api-keys
+src/app/dashboard/[storeId]/settings/telegram
+src/app/dashboard/[storeId]/storefront
+src/app/dashboard/[storeId]/translations
+src/app/invite
+src/app/maintenance
+src/app/offline
+src/app/superadmin
+src/app/superadmin/settings
+src/app/superadmin/stores
+src/app/superadmin/users
+src/components
+src/components/auth
+src/components/dashboard
+src/components/dashboard/categories
+src/components/marketplace
+src/components/modals
+src/components/navigation
+src/components/providers
+src/components/renderers
+src/components/storefront
+src/components/superadmin
+src/components/ui
+src/emails
+src/hooks
+src/lib
+src/lib/ads
+src/lib/ai
+src/lib/api
+src/lib/audit
+src/lib/auth
+src/lib/cache
+src/lib/currency
+src/lib/feeds
+src/lib/integrations
+src/lib/integrations/allegro
+src/lib/integrations/amazon
+src/lib/integrations/kaspi
+src/lib/integrations/prom-ua
+src/lib/marketplace
+src/lib/notifications
+src/lib/nova-poshta
+src/lib/pdf
+src/lib/push
+src/lib/superadmin
+src/lib/telegram
+src/lib/ukrposhta
+src/lib/validations
+src/lib/webhooks
+src/modules
+src/modules/builder
+src/modules/builder/actions
+src/modules/builder/components
+src/modules/builder/services
+src/modules/builder/types
+src/modules/core
+src/modules/core/actions
+src/modules/core/components
+src/modules/core/services
+src/modules/core/types
+src/modules/crm
+src/modules/crm/actions
+src/modules/crm/components
+src/modules/crm/services
+src/modules/crm/types
+src/modules/marketplace
+src/modules/marketplace/actions
+src/modules/marketplace/components
+src/modules/marketplace/services
+src/modules/marketplace/types
+src/types
+
+=== 2. FILE COUNTS ===
+Total TS/TSX files:
+     284
+Total files:
+     288
+
+=== 3. ROUTING STRUCTURE (pages, layouts, routes) ===
+src/app/(auth)/login/page.tsx
+src/app/(auth)/register/page.tsx
+src/app/(main)/about/page.tsx
+src/app/(main)/account/layout.tsx
+src/app/(main)/account/orders/page.tsx
+src/app/(main)/account/page.tsx
+src/app/(main)/bestsellers/page.tsx
+src/app/(main)/brands/page.tsx
+src/app/(main)/buyer-protection/page.tsx
+src/app/(main)/cart/page.tsx
+src/app/(main)/checkout/page.tsx
+src/app/(main)/compare/page.tsx
+src/app/(main)/contact/page.tsx
+src/app/(main)/cookies/page.tsx
+src/app/(main)/delivery/page.tsx
+src/app/(main)/favorites/page.tsx
+src/app/(main)/help/page.tsx
+src/app/(main)/layout.tsx
+src/app/(main)/new/page.tsx
+src/app/(main)/page.tsx
+src/app/(main)/pricing/page.tsx
+src/app/(main)/privacy/page.tsx
+src/app/(main)/returns/page.tsx
+src/app/(main)/search/page.tsx
+src/app/(main)/sellers/page.tsx
+src/app/(main)/terms/page.tsx
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx
+src/app/(storefront)/[storeSlug]/layout.tsx
+src/app/(storefront)/[storeSlug]/page.tsx
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx
+src/app/(storefront)/layout.tsx
+src/app/admin/layout.tsx
+src/app/admin/page.tsx
+src/app/api-docs/page.tsx
+src/app/api/ads/track/route.ts
+src/app/api/ai/generate/route.ts
+src/app/api/auth/[...nextauth]/route.ts
+src/app/api/dashboard/orders/[orderId]/status/route.ts
+src/app/api/dashboard/products/[id]/archive/route.ts
+src/app/api/dashboard/products/[id]/route.ts
+src/app/api/dashboard/products/route.ts
+src/app/api/dashboard/stats/route.ts
+src/app/api/dashboard/stores/[storeId]/settings/route.ts
+src/app/api/dashboard/stores/[storeId]/storefront/route.ts
+src/app/api/dashboard/stores/[storeId]/telegram/connect/route.ts
+src/app/api/dashboard/stores/[storeId]/telegram/disconnect/route.ts
+src/app/api/dashboard/stores/[storeId]/telegram/test/route.ts
+src/app/api/orders/create/route.ts
+src/app/api/reviews/route.ts
+src/app/api/search/suggest/route.ts
+src/app/api/telegram/webhook/route.ts
+src/app/api/v1/products/route.ts
+src/app/api/v1/stores/route.ts
+src/app/dashboard/[storeId]/banners/page.tsx
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx
+src/app/dashboard/[storeId]/builder/page.tsx
+src/app/dashboard/[storeId]/categories/page.tsx
+src/app/dashboard/[storeId]/inventory/page.tsx
+src/app/dashboard/[storeId]/layout.tsx
+src/app/dashboard/[storeId]/orders/page.tsx
+src/app/dashboard/[storeId]/page.tsx
+src/app/dashboard/[storeId]/pages/page.tsx
+src/app/dashboard/[storeId]/price-lists/page.tsx
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx
+src/app/dashboard/[storeId]/products/new/page.tsx
+src/app/dashboard/[storeId]/products/page.tsx
+src/app/dashboard/[storeId]/returns/page.tsx
+src/app/dashboard/[storeId]/rfq/page.tsx
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx
+src/app/dashboard/[storeId]/settings/page.tsx
+src/app/dashboard/[storeId]/settings/telegram/page.tsx
+src/app/dashboard/[storeId]/storefront/page.tsx
+src/app/dashboard/[storeId]/translations/page.tsx
+src/app/dashboard/page.tsx
+src/app/layout.tsx
+src/app/superadmin/layout.tsx
+src/app/superadmin/page.tsx
+src/app/superadmin/settings/page.tsx
+src/app/superadmin/stores/page.tsx
+src/app/superadmin/users/page.tsx
+
+=== 4. PARAMS USAGE (potential Next.js 15+ issues) ===
+src/app/dashboard/[storeId]/settings/telegram/page.tsx:24:      const res = await fetch(`/api/dashboard/stores/${params.storeId}/telegram/test`, {
+src/app/dashboard/[storeId]/settings/telegram/page.tsx:44:      const res = await fetch(`/api/dashboard/stores/${params.storeId}/telegram/connect`, {
+src/app/dashboard/[storeId]/settings/telegram/page.tsx:62:      const res = await fetch(`/api/dashboard/stores/${params.storeId}/telegram/disconnect`, {
+src/app/dashboard/[storeId]/builder/[pageId]/client-builder.tsx:102:            href={`/dashboard/${params.storeId}/pages`}
+src/app/(main)/search/page.tsx:15:  const query = typeof params.q === "string" ? params.q : "";
+src/app/(main)/search/page.tsx:16:  const categorySlug = typeof params.category === "string" ? params.category : undefined;
+src/app/(main)/search/page.tsx:17:  const storeId = typeof params.storeId === "string" ? params.storeId : undefined;
+src/app/(main)/search/page.tsx:18:  const sort = typeof params.sort === "string" ? params.sort : "newest"; // "newest", "price_asc", "price_desc"
+src/app/(main)/search/page.tsx:20:  const minPrice = typeof params.minPrice === "string" ? parseFloat(params.minPrice) : undefined;
+src/app/(main)/search/page.tsx:21:  const maxPrice = typeof params.maxPrice === "string" ? parseFloat(params.maxPrice) : undefined;
+src/app/(main)/search/page.tsx:23:  const page = typeof params.page === "string" ? parseInt(params.page, 10) : 1;
+src/app/(storefront)/[storeSlug]/page.tsx:15:  const storeSlug = params.storeSlug;
+
+=== 5. CONSOLE.LOG USAGE ===
+       5
+First 30 console.log usages:
+src/app/dashboard/[storeId]/products/page.tsx:30:  console.log('[Products] storeId:', storeId, 'found:', products.length);
+src/lib/superadmin/smart-alerts.ts:241:  console.log("Starting smart alerts generation...");
+src/lib/superadmin/smart-alerts.ts:245:    console.log("- Health score checks completed");
+src/lib/superadmin/smart-alerts.ts:248:    console.log("- Verification checks completed");
+src/lib/superadmin/smart-alerts.ts:251:    console.log("- Dispute checks completed");
+
+=== 6. ANY TYPES USAGE ===
+Count of ': any' usages:
+      76
+First 30 ': any' usages:
+src/app/dashboard/[storeId]/storefront/page.tsx:99:  const updateSetting = (key: keyof StoreSettings, value: any) => {
+src/app/dashboard/[storeId]/products/client.tsx:46:    } catch (error: any) {
+src/app/dashboard/[storeId]/products/client.tsx:65:    } catch (error: any) {
+src/app/dashboard/[storeId]/builder/[pageId]/client-builder.tsx:379:function getDefaultContent(type: BlockType): any {
+src/app/api/v1/products/route.ts:21:    const where: any = {
+src/app/(main)/checkout/page.tsx:166:  } catch (error: any) {
+src/app/(main)/search/page.tsx:28:  const where: any = {
+src/app/(main)/search/page.tsx:55:  let orderBy: any = [{ createdAt: "desc" }, { id: "desc" }];
+src/app/(main)/cart/page.tsx:44:          {items.map((item: any) => (
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx:62:    ? product.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / product.reviews.length
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx:205:                  {product.variants.map((variant: any) => (
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx:359:              {product.reviews.map((review: any) => (
+src/components/ui/add-to-cart-button.tsx:11:  product?: any; // To maintain compatibility
+src/components/renderers/product-grid.tsx:14:  const where: any = {
+src/components/renderers/block-renderer.tsx:174:                    {((block as any).content.items || []).map((item: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:200:                      {((block as any).content.items || []).map((item: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:222:                    {(block as any).content.columns?.map((col: any) => (
+src/components/renderers/block-renderer.tsx:240:                    {((block as any).content.images || []).map((img: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:257:                    {((block as any).content.images || []).map((img: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:269:                    {((block as any).content.items || []).map((item: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:285:                      {((block as any).content.plans || []).map((plan: any, idx: number) => (
+src/components/renderers/block-renderer.tsx:317:                    {((block as any).content.features || []).map((feature: any, idx: number) => (
+src/components/storefront/product-card-client.tsx:13:  p: any;
+src/components/storefront/storefront-client.tsx:9:  store: any;
+src/components/storefront/storefront-client.tsx:12:  theme: any;
+src/components/storefront/storefront-client.tsx:19:    ? store.products.filter((p: any) => p.category?.slug === activeCategory)
+src/components/storefront/storefront-client.tsx:83:            {filteredProducts.map((p: any) => (
+src/components/storefront/add-to-cart-btn.tsx:12:  p: any;
+src/components/navigation/floating-ai-chat.tsx:84:                  {m.parts ? m.parts.map((p: any) => p.text).join("") : ""}
+src/components/navigation/currency-switcher.tsx:32:          data.forEach((c: any) => {
+
+=== 7. HARDCODED URLS ===
+localhost URLs:
+wazo-market URLs:
+src/app/robots.ts:4:  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}';
+src/app/dashboard/[storeId]/page.tsx:65:              <a href={`https://wazo-market.vercel.app/${store.slug}`} target="_blank" className="hover:text-violet-600 hover:underline transition-all">
+src/app/dashboard/[storeId]/page.tsx:66:                wazo-market.vercel.app/{store.slug}
+src/app/dashboard/page.tsx:121:                        <p className="text-xs text-slate-500 font-medium mt-1">wazo-market.vercel.app/{store.slug}</p>
+src/app/sitemap.ts:8:  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}';
+src/app/(storefront)/[storeSlug]/robots.ts:9:  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app";
+src/app/(storefront)/[storeSlug]/sitemap.ts:11:  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app";
+src/emails/low-stock-alert.tsx:33:  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
+src/emails/return-confirmation.tsx:33:  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
+src/emails/order-shipped.tsx:39:  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
+src/emails/review-request.tsx:31:  appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app",
+src/emails/abandoned-cart.tsx:34:              We noticed you left some great items in your cart at <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}`} style={anchor}>{storeName}</Link>.
+src/emails/abandoned-cart.tsx:54:            <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}/cart`} style={button}>
+src/emails/order-confirmation.tsx:37:            Thank you for your order at <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/${storeSlug}`} style={anchor}>{storeName}</Link>.
+src/emails/order-confirmation.tsx:62:            You can track your order status by logging into your <Link href={`${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}/account`} style={anchor}>account</Link>.
+src/actions/telegram.ts:8:const APP_URL = (process.env.NEXTAUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL) || "https://wazo-market.vercel.app";
+
+=== 8. ASYNC COMPONENTS WITHOUT AWAIT ===
+src/app/superadmin/stores/page.tsx:5:export default async function SuperAdminStores() {
+src/app/superadmin/layout.tsx:16:export default async function SuperAdminLayout({
+src/app/superadmin/users/page.tsx:5:export default async function SuperAdminUsers() {
+src/app/superadmin/page.tsx:15:export default async function SuperAdminDashboard() {
+src/app/admin/layout.tsx:4:export default async function AdminLayout({
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx:5:export default async function ApiKeysPage(
+src/app/dashboard/[storeId]/settings/page.tsx:6:export default async function SettingsPage({
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx:6:export default async function EditProductPage({
+src/app/dashboard/[storeId]/products/new/page.tsx:6:export default async function NewProductPage({
+src/app/dashboard/[storeId]/products/page.tsx:7:export default async function ProductsPage({
+src/app/dashboard/[storeId]/price-lists/page.tsx:6:export default async function PriceListsPage({
+src/app/dashboard/[storeId]/banners/page.tsx:6:export default async function BannersPage({
+src/app/dashboard/[storeId]/rfq/page.tsx:6:export default async function RFQPage({
+src/app/dashboard/[storeId]/inventory/page.tsx:9:export default async function InventoryPage({
+src/app/dashboard/[storeId]/layout.tsx:9:export default async function StoreDashboardLayout({
+src/app/dashboard/[storeId]/returns/page.tsx:6:export default async function ReturnsPage({
+src/app/dashboard/[storeId]/orders/page.tsx:6:export default async function OrdersPage({
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx:7:export default async function BuilderPageServer({
+src/app/dashboard/[storeId]/builder/page.tsx:3:export default async function BuilderRootRedirect({
+src/app/dashboard/[storeId]/page.tsx:18:export default async function StoreDashboardPage(
+src/app/dashboard/[storeId]/pages/page.tsx:6:export default async function PagesManager({
+src/app/dashboard/[storeId]/categories/page.tsx:9:export default async function CategoriesPage({
+src/app/dashboard/[storeId]/translations/page.tsx:6:export default async function TranslationsPage({
+src/app/dashboard/page.tsx:9:export default async function DashboardPage() {
+src/app/sitemap.ts:7:export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+src/app/(main)/search/page.tsx:12:export default async function SearchPage({ searchParams }: SearchPageProps) {
+src/app/(main)/account/layout.tsx:4:export default async function AccountLayout({
+src/app/(main)/account/orders/page.tsx:23:export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
+src/app/(main)/account/page.tsx:41:export default async function BuyerAccountPage() {
+src/app/(main)/page.tsx:93:export default async function MarketplacePage() {
+src/app/(storefront)/[storeSlug]/robots.ts:3:export default async function robots({
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx:6:export default async function PublicPage({
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx:15:export default async function ProductPage(
+src/app/(storefront)/[storeSlug]/sitemap.ts:4:export default async function sitemap({
+src/app/(storefront)/[storeSlug]/layout.tsx:9:export default async function StorefrontLayout({
+src/app/(storefront)/[storeSlug]/page.tsx:11:export default async function StorefrontPage(
+src/app/superadmin/stores/page.tsx:5:export default async function SuperAdminStores() {
+src/app/superadmin/stores/page.tsx-6-  const stores = await prisma.store.findMany({
+src/app/superadmin/stores/page.tsx-7-    orderBy: { createdAt: "desc" },
+src/app/superadmin/stores/page.tsx-8-    include: {
+src/app/superadmin/stores/page.tsx-9-      _count: { select: { products: true, orders: true } },
+src/app/superadmin/stores/page.tsx-10-      owner: { select: { name: true, email: true } },
+--
+src/app/superadmin/layout.tsx:16:export default async function SuperAdminLayout({
+src/app/superadmin/layout.tsx-17-  children,
+src/app/superadmin/layout.tsx-18-}: {
+src/app/superadmin/layout.tsx-19-  children: ReactNode;
+src/app/superadmin/layout.tsx-20-}) {
+src/app/superadmin/layout.tsx-21-  const session = await auth();
+--
+src/app/superadmin/users/page.tsx:5:export default async function SuperAdminUsers() {
+src/app/superadmin/users/page.tsx-6-  const users = await prisma.user.findMany({
+src/app/superadmin/users/page.tsx-7-    orderBy: { createdAt: "desc" }
+src/app/superadmin/users/page.tsx-8-  });
+src/app/superadmin/users/page.tsx-9-
+src/app/superadmin/users/page.tsx-10-  return (
+--
+src/app/superadmin/page.tsx:15:export default async function SuperAdminDashboard() {
+src/app/superadmin/page.tsx-16-  const [
+src/app/superadmin/page.tsx-17-    storesCount, 
+src/app/superadmin/page.tsx-18-    usersCount, 
+src/app/superadmin/page.tsx-19-    productsCount, 
+src/app/superadmin/page.tsx-20-    ordersStats, 
+--
+src/app/admin/layout.tsx:4:export default async function AdminLayout({
+src/app/admin/layout.tsx-5-  children,
+src/app/admin/layout.tsx-6-}: {
+src/app/admin/layout.tsx-7-  children: React.ReactNode;
+src/app/admin/layout.tsx-8-}) {
+src/app/admin/layout.tsx-9-  const session = await auth();
+--
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx:5:export default async function ApiKeysPage(
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx-6-  props: { params: Promise<{ storeId: string }> }
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx-7-) {
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx-8-  const { storeId } = await props.params;
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx-9-  const session = await auth();
+src/app/dashboard/[storeId]/settings/api-keys/page.tsx-10-  if (!session?.user?.id) redirect('/login');
+--
+src/app/dashboard/[storeId]/settings/page.tsx:6:export default async function SettingsPage({
+src/app/dashboard/[storeId]/settings/page.tsx-7-  params,
+src/app/dashboard/[storeId]/settings/page.tsx-8-}: {
+src/app/dashboard/[storeId]/settings/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/settings/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx:6:export default async function EditProductPage({
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx-7-  params,
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx-8-}: {
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx-9-  params: Promise<{ storeId: string; productId: string }>;
+src/app/dashboard/[storeId]/products/[productId]/edit/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/products/new/page.tsx:6:export default async function NewProductPage({
+src/app/dashboard/[storeId]/products/new/page.tsx-7-  params,
+src/app/dashboard/[storeId]/products/new/page.tsx-8-}: {
+src/app/dashboard/[storeId]/products/new/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/products/new/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/products/page.tsx:7:export default async function ProductsPage({
+src/app/dashboard/[storeId]/products/page.tsx-8-  params,
+src/app/dashboard/[storeId]/products/page.tsx-9-}: {
+src/app/dashboard/[storeId]/products/page.tsx-10-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/products/page.tsx-11-}) {
+--
+src/app/dashboard/[storeId]/price-lists/page.tsx:6:export default async function PriceListsPage({
+src/app/dashboard/[storeId]/price-lists/page.tsx-7-  params,
+src/app/dashboard/[storeId]/price-lists/page.tsx-8-}: {
+src/app/dashboard/[storeId]/price-lists/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/price-lists/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/banners/page.tsx:6:export default async function BannersPage({
+src/app/dashboard/[storeId]/banners/page.tsx-7-  params,
+src/app/dashboard/[storeId]/banners/page.tsx-8-}: {
+src/app/dashboard/[storeId]/banners/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/banners/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/rfq/page.tsx:6:export default async function RFQPage({
+src/app/dashboard/[storeId]/rfq/page.tsx-7-  params,
+src/app/dashboard/[storeId]/rfq/page.tsx-8-}: {
+src/app/dashboard/[storeId]/rfq/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/rfq/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/inventory/page.tsx:9:export default async function InventoryPage({
+src/app/dashboard/[storeId]/inventory/page.tsx-10-  params,
+src/app/dashboard/[storeId]/inventory/page.tsx-11-}: {
+src/app/dashboard/[storeId]/inventory/page.tsx-12-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/inventory/page.tsx-13-}) {
+--
+src/app/dashboard/[storeId]/layout.tsx:9:export default async function StoreDashboardLayout({
+src/app/dashboard/[storeId]/layout.tsx-10-  children,
+src/app/dashboard/[storeId]/layout.tsx-11-  params,
+src/app/dashboard/[storeId]/layout.tsx-12-}: {
+src/app/dashboard/[storeId]/layout.tsx-13-  children: React.ReactNode;
+src/app/dashboard/[storeId]/layout.tsx-14-  params: Promise<{ storeId: string }>;
+--
+src/app/dashboard/[storeId]/returns/page.tsx:6:export default async function ReturnsPage({
+src/app/dashboard/[storeId]/returns/page.tsx-7-  params,
+src/app/dashboard/[storeId]/returns/page.tsx-8-}: {
+src/app/dashboard/[storeId]/returns/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/returns/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/orders/page.tsx:6:export default async function OrdersPage({
+src/app/dashboard/[storeId]/orders/page.tsx-7-params,
+src/app/dashboard/[storeId]/orders/page.tsx-8-}: {
+src/app/dashboard/[storeId]/orders/page.tsx-9-params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/orders/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx:7:export default async function BuilderPageServer({
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx-8-  params,
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx-9-}: {
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx-10-  params: Promise<{ storeId: string; pageId: string }>;
+src/app/dashboard/[storeId]/builder/[pageId]/page.tsx-11-}) {
+--
+src/app/dashboard/[storeId]/builder/page.tsx:3:export default async function BuilderRootRedirect({
+src/app/dashboard/[storeId]/builder/page.tsx-4-  params,
+src/app/dashboard/[storeId]/builder/page.tsx-5-}: {
+src/app/dashboard/[storeId]/builder/page.tsx-6-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/builder/page.tsx-7-}) {
+--
+src/app/dashboard/[storeId]/page.tsx:18:export default async function StoreDashboardPage(
+src/app/dashboard/[storeId]/page.tsx-19-  props: { params: Promise<{ storeId: string }> }
+src/app/dashboard/[storeId]/page.tsx-20-) {
+src/app/dashboard/[storeId]/page.tsx-21-  const { storeId } = await props.params;
+src/app/dashboard/[storeId]/page.tsx-22-  const session = await auth();
+src/app/dashboard/[storeId]/page.tsx-23-  if (!session?.user?.id) redirect('/login');
+--
+src/app/dashboard/[storeId]/pages/page.tsx:6:export default async function PagesManager({
+src/app/dashboard/[storeId]/pages/page.tsx-7-  params,
+src/app/dashboard/[storeId]/pages/page.tsx-8-}: {
+src/app/dashboard/[storeId]/pages/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/pages/page.tsx-10-}) {
+--
+src/app/dashboard/[storeId]/categories/page.tsx:9:export default async function CategoriesPage({
+src/app/dashboard/[storeId]/categories/page.tsx-10-  params,
+src/app/dashboard/[storeId]/categories/page.tsx-11-}: {
+src/app/dashboard/[storeId]/categories/page.tsx-12-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/categories/page.tsx-13-}) {
+src/app/dashboard/[storeId]/categories/page.tsx-14-  const session = await auth();
+--
+src/app/dashboard/[storeId]/translations/page.tsx:6:export default async function TranslationsPage({
+src/app/dashboard/[storeId]/translations/page.tsx-7-  params,
+src/app/dashboard/[storeId]/translations/page.tsx-8-}: {
+src/app/dashboard/[storeId]/translations/page.tsx-9-  params: Promise<{ storeId: string }>;
+src/app/dashboard/[storeId]/translations/page.tsx-10-}) {
+--
+src/app/dashboard/page.tsx:9:export default async function DashboardPage() {
+src/app/dashboard/page.tsx-10-  const session = await auth();
+src/app/dashboard/page.tsx-11-
+src/app/dashboard/page.tsx-12-  if (!session?.user) {
+src/app/dashboard/page.tsx-13-    redirect("/login");
+src/app/dashboard/page.tsx-14-  }
+--
+src/app/sitemap.ts:7:export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+src/app/sitemap.ts-8-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || '${process.env.NEXT_PUBLIC_APP_URL || "https://wazo-market.vercel.app"}';
+src/app/sitemap.ts-9-
+src/app/sitemap.ts-10-  const stores = await prisma.store.findMany({
+src/app/sitemap.ts-11-    select: {
+src/app/sitemap.ts-12-      slug: true,
+--
+src/app/(main)/search/page.tsx:12:export default async function SearchPage({ searchParams }: SearchPageProps) {
+src/app/(main)/search/page.tsx-13-  const params = await searchParams;
+src/app/(main)/search/page.tsx-14-  
+src/app/(main)/search/page.tsx-15-  const query = typeof params.q === "string" ? params.q : "";
+src/app/(main)/search/page.tsx-16-  const categorySlug = typeof params.category === "string" ? params.category : undefined;
+src/app/(main)/search/page.tsx-17-  const storeId = typeof params.storeId === "string" ? params.storeId : undefined;
+--
+src/app/(main)/account/layout.tsx:4:export default async function AccountLayout({
+src/app/(main)/account/layout.tsx-5-  children,
+src/app/(main)/account/layout.tsx-6-}: { 
+src/app/(main)/account/layout.tsx-7-  children: React.ReactNode 
+src/app/(main)/account/layout.tsx-8-}) {
+src/app/(main)/account/layout.tsx-9-  const session = await auth();
+--
+src/app/(main)/account/orders/page.tsx:23:export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
+src/app/(main)/account/orders/page.tsx-24-  const session = await auth();
+src/app/(main)/account/orders/page.tsx-25-  const sp = await searchParams;
+src/app/(main)/account/orders/page.tsx-26-
+src/app/(main)/account/orders/page.tsx-27-  if (!session?.user) {
+src/app/(main)/account/orders/page.tsx-28-    redirect("/login");
+--
+src/app/(main)/account/page.tsx:41:export default async function BuyerAccountPage() {
+src/app/(main)/account/page.tsx-42-  const session = await auth();
+src/app/(main)/account/page.tsx-43-
+src/app/(main)/account/page.tsx-44-  if (!session?.user) {
+src/app/(main)/account/page.tsx-45-    redirect("/login");
+src/app/(main)/account/page.tsx-46-  }
+--
+src/app/(main)/page.tsx:93:export default async function MarketplacePage() {
+src/app/(main)/page.tsx-94-  // Получаем все магазины для отображения
+src/app/(main)/page.tsx-95-  const stores = await prisma.store.findMany({
+src/app/(main)/page.tsx-96-    orderBy: { createdAt: "desc" },
+src/app/(main)/page.tsx-97-    include: {
+src/app/(main)/page.tsx-98-      _count: {
+--
+src/app/(storefront)/[storeSlug]/robots.ts:3:export default async function robots({
+src/app/(storefront)/[storeSlug]/robots.ts-4-  params,
+src/app/(storefront)/[storeSlug]/robots.ts-5-}: {
+src/app/(storefront)/[storeSlug]/robots.ts-6-  params: Promise<{ storeSlug: string }>;
+src/app/(storefront)/[storeSlug]/robots.ts-7-}): Promise<MetadataRoute.Robots> {
+--
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx:6:export default async function PublicPage({
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx-7-  params,
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx-8-}: {
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx-9-  params: Promise<{ storeSlug: string; pageSlug: string }>;
+src/app/(storefront)/[storeSlug]/[pageSlug]/page.tsx-10-}) {
+--
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx:15:export default async function ProductPage(
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx-16-  props: { params: Promise<{ storeSlug: string; productId: string }> }
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx-17-) {
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx-18-  const { storeSlug, productId } = await props.params;
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx-19-
+src/app/(storefront)/[storeSlug]/product/[productId]/page.tsx-20-  const product = await prisma.product.findUnique({
+--
+src/app/(storefront)/[storeSlug]/sitemap.ts:4:export default async function sitemap({
+src/app/(storefront)/[storeSlug]/sitemap.ts-5-  params,
+src/app/(storefront)/[storeSlug]/sitemap.ts-6-}: {
+src/app/(storefront)/[storeSlug]/sitemap.ts-7-  params: Promise<{ storeSlug: string }>;
+src/app/(storefront)/[storeSlug]/sitemap.ts-8-}): Promise<MetadataRoute.Sitemap> {
+--
+src/app/(storefront)/[storeSlug]/layout.tsx:9:export default async function StorefrontLayout({
+src/app/(storefront)/[storeSlug]/layout.tsx-10-  children,
+src/app/(storefront)/[storeSlug]/layout.tsx-11-  params,
+src/app/(storefront)/[storeSlug]/layout.tsx-12-}: {
+src/app/(storefront)/[storeSlug]/layout.tsx-13-  children: React.ReactNode;
+src/app/(storefront)/[storeSlug]/layout.tsx-14-  params: Promise<{ storeSlug: string }>;
+--
+src/app/(storefront)/[storeSlug]/page.tsx:11:export default async function StorefrontPage(
+src/app/(storefront)/[storeSlug]/page.tsx-12-  props: { params: Promise<{ storeSlug: string }> }
+src/app/(storefront)/[storeSlug]/page.tsx-13-) {
+src/app/(storefront)/[storeSlug]/page.tsx-14-  const params = await props.params;
+src/app/(storefront)/[storeSlug]/page.tsx-15-  const storeSlug = params.storeSlug;
+src/app/(storefront)/[storeSlug]/page.tsx-16-

@@ -238,17 +238,10 @@ export async function checkHighPriorityDisputes() {
  * Generate all smart alerts (Cron Job)
  */
 export async function generateSmartAlerts() {
-  console.log("Starting smart alerts generation...");
-
   try {
     await checkHealthScoreDrops();
-    console.log("- Health score checks completed");
-
     await checkPendingVerifications();
-    console.log("- Verification checks completed");
-
     await checkHighPriorityDisputes();
-    console.log("- Dispute checks completed");
 
     // TODO: Додати інші перевірки
     // - Fraud detection
