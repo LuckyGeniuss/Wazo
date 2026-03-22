@@ -58,6 +58,11 @@ function LoginForm() {
 
   return (
     <Card className="w-full max-w-md shadow-lg border-muted">
+      <div className="pt-4 text-center">
+        <Link href="/" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+          ← Повернутись на головну
+        </Link>
+      </div>
       <CardHeader className="space-y-2 text-center">
         <CardTitle className="text-3xl font-bold tracking-tight">Войти в аккаунт</CardTitle>
         <CardDescription>Выберите удобный способ входа</CardDescription>

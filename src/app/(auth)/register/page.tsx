@@ -50,6 +50,11 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-muted/30">
       <Card className="w-full max-w-md shadow-lg border-muted">
+        <div className="pt-4 text-center">
+          <Link href="/" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+            ← Повернутись на головну
+          </Link>
+        </div>
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-3xl font-bold tracking-tight">Создать аккаунт</CardTitle>
           <CardDescription>Зарегистрируйтесь, чтобы начать</CardDescription>
