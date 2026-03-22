@@ -8,6 +8,7 @@ import { CurrencySwitcher } from "./currency-switcher";
 import { InstallPwaButton } from "@/components/ui/install-pwa-button";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { SearchDropdown } from "./search-dropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,19 +88,7 @@ export function MarketplaceHeader() {
         </Link>
 
         {/* Пошук */}
-        <div className="flex-1 max-w-2xl hidden md:block">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              className="flex h-11 w-full rounded-full border border-gray-300 bg-white px-12 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-transparent transition-all"
-              placeholder="Шукати товари, категорії, бренди..."
-              type="search"
-            />
-            <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
-              Знайти
-            </button>
-          </div>
-        </div>
+        <SearchDropdown />
 
         {/* Дії */}
         <nav className="flex items-center gap-2 md:gap-4">

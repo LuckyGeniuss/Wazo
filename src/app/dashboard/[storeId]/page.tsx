@@ -13,6 +13,7 @@ import {
   CreditCard,
   ArrowUpRight
 } from 'lucide-react';
+import { SalesChart } from '@/components/dashboard/sales-chart';
 
 export default async function StoreDashboardPage(
   props: { params: Promise<{ storeId: string }> }
@@ -124,9 +125,12 @@ export default async function StoreDashboardPage(
               <span>Працюєте з нами</span>
             </div>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          </div>
+        
+          {/* Sales Chart Section */}
+          <SalesChart storeId={storeId} />
+        
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Quick Actions */}
           <div className="lg:col-span-1 space-y-6">
             <h2 className="text-xl font-bold text-slate-900">Швидкий доступ</h2>

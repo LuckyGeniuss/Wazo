@@ -27,7 +27,7 @@ export async function GET(request: Request) {
             }
           }
         },
-        take: 5
+        take: 8
       }),
       prisma.store.findMany({
         where: {
