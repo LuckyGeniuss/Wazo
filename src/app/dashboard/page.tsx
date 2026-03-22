@@ -13,8 +13,9 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  // Отримуємо юзера по email з БД для визначення isSuperAdmin
   const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
+    where: { email: session.user.email! },
   });
 
   // Визначаємо, чи є користувач SUPERADMIN за даними з БД
