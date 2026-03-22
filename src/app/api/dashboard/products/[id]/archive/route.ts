@@ -42,3 +42,47 @@ export async function POST(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const shouldArchive = body.shouldArchive !== undefined ? body.shouldArchive : null;
+
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+      include: { store: true },
+    });
+
+    if (!existingProduct) {
+      return new NextResponse("Not found", { status: 404 });
+    }
+
+    if (existingProduct.store.ownerId !== session.user.id) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const product = await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        isArchived: shouldArchive !== null ? shouldArchive : !existingProduct.isArchived,
+      },
+    });
+
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error("[PRODUCT_ARCHIVE_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
