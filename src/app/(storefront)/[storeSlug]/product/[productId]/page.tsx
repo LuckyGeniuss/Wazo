@@ -12,6 +12,8 @@ import { TrackView } from '@/components/storefront/track-view';
 import { BuyOneClick } from '@/components/storefront/buy-one-click';
 import { ProductCardProduct } from '@/components/renderers/product-card';
 
+const FALLBACK_IMAGE = "https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image";
+
 export default async function ProductPage(
   props: { params: Promise<{ storeSlug: string; productId: string }> }
 ) {
@@ -99,41 +101,52 @@ export default async function ProductPage(
 
           {/* ── ГАЛЕРЕЯ ──────────────────────────────────── */}
           <div className="space-y-3">
-            {/* Головне зображення */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted group">
-              {allImages[0] ? (
-                <img src={allImages[0]} alt={product.name}
-                     className="w-full h-full object-cover group-hover:scale-105
-                                transition-transform duration-500" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl">🛍️</div>
-              )}
-              {discount && (
-                <div className="absolute top-4 left-4 bg-red-500 text-white
-                                text-sm font-black px-3 py-1.5 rounded-xl shadow-lg">
-                  -{discount}%
-                </div>
-              )}
-              <button className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm
-                                  rounded-xl flex items-center justify-center shadow
-                                  hover:bg-white transition-colors">
-                <ZoomIn size={18} className="text-slate-600" />
-              </button>
-            </div>
-            {/* Мініатюри */}
-            {allImages.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-1">
-                {allImages.map((img, i) => (
-                  <div key={i}
-                       className="flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden
-                                  border-2 border-transparent hover:border-violet-500
-                                  cursor-pointer transition-all bg-muted">
-                    <img src={img} alt={`₴{product.name} ${i + 1}`}
-                         className="w-full h-full object-cover" />
-                  </div>
-                ))}
+          {/* Головне зображення */}
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted group">
+            <img
+              src={allImages[0] || FALLBACK_IMAGE}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = FALLBACK_IMAGE;
+                target.onerror = null;
+              }}
+            />
+            {discount && (
+              <div className="absolute top-4 left-4 bg-red-500 text-white
+              text-sm font-black px-3 py-1.5 rounded-xl shadow-lg">
+              -{discount}%
               </div>
             )}
+            <button className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm
+            rounded-xl flex items-center justify-center shadow
+            hover:bg-white transition-colors">
+            <ZoomIn size={18} className="text-slate-600" />
+            </button>
+          </div>
+          {/* Мініатюри */}
+          {allImages.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {allImages.map((img, i) => (
+                <div key={i}
+                className="flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden
+                border-2 border-transparent hover:border-violet-500
+                cursor-pointer transition-all bg-muted">
+                <img
+                  src={img}
+                  alt={`${product.name} ${i + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = FALLBACK_IMAGE;
+                    target.onerror = null;
+                  }}
+                />
+                </div>
+              ))}
+            </div>
+          )}
           </div>
 
           {/* ── ІНФОРМАЦІЯ ───────────────────────────────── */}

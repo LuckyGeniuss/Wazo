@@ -39,6 +39,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const inCompare = isInCompare(product.id);
 
+  // Універсальне fallback зображення для товарів
+  const fallbackImageUrl = "https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image";
+  
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = fallbackImageUrl;
+    e.currentTarget.onerror = null; // Запобігає нескінченному циклу
+    setImageError(true);
+  };
+
   const averageRating = product.reviews && product.reviews.length > 0
     ? product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length
     : 0;
@@ -98,39 +107,41 @@ export function ProductCard({ product }: ProductCardProps) {
           <>
             {/* Основное изображение */}
             <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className={cn(
-                "object-cover object-center transition-all duration-500",
-                hoverImage && !imageError ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
-              )}
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              onError={() => setImageError(true)}
-            />
-    
-            {/* Второе изображение (hover) */}
-            {hoverImage && !imageError && (
-              <Image
-                src={hoverImage}
-                alt={`${product.name} - вид 2`}
-                fill
-                className={cn(
-                  "object-cover object-center transition-all duration-500 scale-105",
-                  !imageError ? "opacity-0 group-hover:opacity-100" : "opacity-100 group-hover:scale-110"
-                )}
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                onError={() => setImageError(true)}
-              />
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            className={cn(
+              "object-cover object-center transition-all duration-500",
+              hoverImage && !imageError ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
             )}
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-100">
-            <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            onError={handleImageError}
+          />
+
+          {/* Второе изображение (hover) */}
+          {hoverImage && !imageError && (
+            <Image
+            src={hoverImage}
+            alt={`${product.name} - вид 2`}
+            fill
+            className={cn(
+              "object-cover object-center transition-all duration-500 scale-105",
+              !imageError ? "opacity-0 group-hover:opacity-100" : "opacity-100 group-hover:scale-110"
+            )}
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            onError={handleImageError}
+          />
         )}
+      </>
+    ) : (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <img
+          src={fallbackImageUrl}
+          alt="No image available"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    )}
         
         {/* Кнопки поверх картинки при hover (bottom) */}
         <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0 flex gap-2 z-20">
