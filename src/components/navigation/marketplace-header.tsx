@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CategoryMenu } from "./category-menu";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function MarketplaceHeader() {
   const cart = useCart();
@@ -96,9 +97,10 @@ export function MarketplaceHeader() {
           <Button variant="ghost" size="icon" className="md:hidden">
             <Search className="h-5 w-5" />
           </Button>
-
+  
           <div className="hidden md:flex items-center gap-2">
             <CurrencySwitcher />
+            <ThemeToggle />
           </div>
 
           <Link href="/cart">

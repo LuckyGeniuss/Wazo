@@ -11,6 +11,7 @@ import { WishlistButton } from "@/components/ui/wishlist-button";
 import { useCompare } from "@/hooks/use-compare";
 import { useState } from "react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export type ProductCardProduct = {
   id: string;
@@ -35,6 +36,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const quickView = useQuickView();
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
   const inCompare = isInCompare(product.id);
 
   const averageRating = product.reviews && product.reviews.length > 0
@@ -92,32 +94,34 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden">
-        {product.imageUrl || hoverImage ? (
+        {product.imageUrl && !imageError ? (
           <>
             {/* Основное изображение */}
-            {product.imageUrl && (
-               <Image
-                 src={product.imageUrl}
-                 alt={product.name}
-                 fill
-                 className={`object-cover object-center transition-all duration-500 ${
-                   hoverImage ? "opacity-100 group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
-                 }`}
-                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-               />
-            )}
-            
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              className={cn(
+                "object-cover object-center transition-all duration-500",
+                hoverImage && !imageError ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
+              )}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              onError={() => setImageError(true)}
+            />
+    
             {/* Второе изображение (hover) */}
-            {hoverImage && (
-               <Image
-                 src={hoverImage}
-                 alt={`₴{product.name} - вид 2`}
-                 fill
-                 className={`object-cover object-center transition-all duration-500 scale-105 ${
-                   product.imageUrl ? "opacity-0 group-hover:opacity-100" : "opacity-100 group-hover:scale-110"
-                 }`}
-                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-               />
+            {hoverImage && !imageError && (
+              <Image
+                src={hoverImage}
+                alt={`${product.name} - вид 2`}
+                fill
+                className={cn(
+                  "object-cover object-center transition-all duration-500 scale-105",
+                  !imageError ? "opacity-0 group-hover:opacity-100" : "opacity-100 group-hover:scale-110"
+                )}
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                onError={() => setImageError(true)}
+              />
             )}
           </>
         ) : (
