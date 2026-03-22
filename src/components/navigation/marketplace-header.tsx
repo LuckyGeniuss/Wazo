@@ -151,13 +151,15 @@ export function MarketplaceHeader() {
                     <span>Обране</span>
                   </Link>
                 </DropdownMenuItem>
-                {session.user.role === "ADMIN" || session.user.role === "SUPERADMIN" ? (
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
-                      <LayoutDashboard className="mr-2 h-4 w-4" />
-                      <span>Панель керування</span>
-                    </Link>
-                  </DropdownMenuItem>
+                {(session.user.role === "SELLER" || session.user.role === "ADMIN" || session.user.role === "SUPERADMIN") ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="cursor-pointer">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        <span>CRM →</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
                 ) : null}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

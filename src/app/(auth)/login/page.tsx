@@ -18,7 +18,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered");
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || searchParams.get("redirect") || "/";
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
@@ -43,7 +43,7 @@ function LoginForm() {
     });
 
     if (res?.error) {
-      setError("Неверный email или пароль");
+      setError("Невірний email або пароль");
       setIsPending(false);
     } else {
       router.push(callbackUrl);
@@ -64,11 +64,11 @@ function LoginForm() {
         </Link>
       </div>
       <CardHeader className="space-y-2 text-center">
-        <CardTitle className="text-3xl font-bold tracking-tight">Войти в аккаунт</CardTitle>
-        <CardDescription>Выберите удобный способ входа</CardDescription>
+        <CardTitle className="text-3xl font-bold tracking-tight">Увійти в акаунт</CardTitle>
+        <CardDescription>Виберіть зручний спосіб входу</CardDescription>
         {registered && (
           <div className="mt-2 text-sm text-green-600 bg-green-50 p-3 rounded-md border border-green-200">
-            Регистрация успешна! Теперь вы можете войти.
+            Реєстрація успішна! Тепер ви можете увійти.
           </div>
         )}
       </CardHeader>
@@ -102,7 +102,7 @@ function LoginForm() {
               />
             </svg>
           )}
-          {isGooglePending ? "Вход через Google..." : "Войти через Google"}
+          {isGooglePending ? "Вхід через Google..." : "Увійти через Google"}
         </Button>
 
         <div className="relative">
@@ -110,7 +110,7 @@ function LoginForm() {
             <div className="w-full border-t border-muted" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Или продолжить с email</span>
+            <span className="bg-background px-2 text-muted-foreground">Або увійти з email</span>
           </div>
         </div>
 
@@ -151,25 +151,25 @@ function LoginForm() {
               {error}
             </div>
           )}
-
+    
           <Button
             type="submit"
             className="w-full h-11"
             disabled={isPending || isGooglePending}
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isPending ? "Вход..." : "Войти"}
+            {isPending ? "Вхід..." : "Увійти"}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Нет аккаунта?{" "}
+          Немає акаунту?{" "}
           <Link
             href="/register"
             className="font-medium text-primary hover:underline"
           >
-            Создать
+            Створити
           </Link>
         </p>
       </CardFooter>
