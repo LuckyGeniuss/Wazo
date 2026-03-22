@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface TelegramSettingsPageProps {
   params: {
@@ -15,6 +16,27 @@ export default function TelegramSettingsPage({ params }: TelegramSettingsPagePro
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [connectLink, setConnectLink] = useState('');
+  const [isTestLoading, setIsTestLoading] = useState(false);
+
+  const handleTestNotification = async () => {
+    setIsTestLoading(true);
+    try {
+      const res = await fetch(`/api/dashboard/stores/${params.storeId}/telegram/test`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.error || 'Помилка надсилання тестового сповіщення');
+      }
+    } catch (error) {
+      toast.error('Помилка надсилання тестового сповіщення');
+    } finally {
+      setIsTestLoading(false);
+    }
+  };
 
   const handleConnect = async () => {
     setIsLoading(true);
@@ -63,9 +85,9 @@ export default function TelegramSettingsPage({ params }: TelegramSettingsPagePro
         {connectLink ? (
           <div className="p-4 border border-violet-200 bg-violet-50 rounded-lg">
             <p className="mb-4">Перейдіть за посиланням нижче в Telegram та натисніть "Розпочати" (Start):</p>
-            <a 
-              href={connectLink} 
-              target="_blank" 
+            <a
+              href={connectLink}
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-4 py-2 bg-[#0088cc] text-white rounded-md font-medium hover:bg-[#0077b3] transition-colors"
             >
@@ -84,6 +106,25 @@ export default function TelegramSettingsPage({ params }: TelegramSettingsPagePro
           </Button>
         </div>
       </div>
+
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Тестування сповіщень</CardTitle>
+          <CardDescription>
+            Надішліть тестове сповіщення, щоб переконатися, що Telegram налаштовано правильно.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            onClick={handleTestNotification}
+            disabled={isTestLoading}
+            className="w-full"
+            variant="outline"
+          >
+            {isTestLoading ? 'Надсилання...' : '📤 Надіслати тестове сповіщення'}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

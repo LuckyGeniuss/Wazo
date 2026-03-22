@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 import { z } from 'zod';
-import { sendTelegramMessage } from '@/lib/telegram';
+import { sendTelegramMessage, escapeHtml } from '@/lib/telegram';
 import { sendOrderConfirmationEmailToBuyer } from '@/lib/email-order';
 
 const OrderItemSchema = z.object({
@@ -120,22 +120,27 @@ export async function POST(req: Request) {
         storeName: store.name,
       });
 
-      // Send Telegram Notification to Seller
+      // Send Telegram Notification to Seller (non-blocking, try-catch to not block order creation)
       if (store.telegramBotEnabled && store.telegramChatId) {
-        let orderDetails = `📦 <b>Нове замовлення!</b>\n\n`;
-        orderDetails += `👤 Клієнт: ${customerName}\n`;
-        orderDetails += `📱 Телефон: ${customerPhone}\n`;
-        orderDetails += `💰 Сума: ₴${totalPrice.toLocaleString('uk-UA')}\n\n`;
-        orderDetails += `<b>Товари:</b>\n`;
-        
-        items.forEach((item) => {
-          const product = productMap.get(item.productId);
-          if (product) {
-            orderDetails += `- ${product.name} (x${item.quantity})\n`;
-          }
-        });
+        try {
+          let orderDetails = `📦 <b>Нове замовлення!</b>\n\n`;
+          orderDetails += `👤 Клієнт: ${escapeHtml(customerName)}\n`;
+          orderDetails += `📱 Телефон: ${escapeHtml(customerPhone)}\n`;
+          orderDetails += `💰 Сума: ₴${totalPrice.toLocaleString('uk-UA')}\n\n`;
+          orderDetails += `<b>Товари:</b>\n`;
 
-        await sendTelegramMessage(store.telegramChatId, orderDetails);
+          items.forEach((item) => {
+            const product = productMap.get(item.productId);
+            if (product) {
+              orderDetails += `- ${escapeHtml(product.name)} (x${item.quantity})\n`;
+            }
+          });
+
+          await sendTelegramMessage(store.telegramChatId, orderDetails);
+        } catch (telegramError) {
+          // Log error but don't block order creation
+          console.error('[Telegram Notification Error]', telegramError);
+        }
       }
     }
 
