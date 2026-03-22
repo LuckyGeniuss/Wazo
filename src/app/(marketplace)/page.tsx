@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, ShoppingBag, Store, TrendingUp, Star, ArrowRight, ShieldCheck, FolderTree, Tag, Sparkles } from "lucide-react";
+import { Search, ShoppingBag, Store, TrendingUp, Star, ArrowRight, ShieldCheck, FolderTree, Tag, Sparkles, Zap, Clock } from "lucide-react";
 import { LiveSearchDropdown } from "@/components/navigation/live-search-dropdown";
 import { ProductGrid } from "@/components/renderers/product-grid";
 import { CategoryCarousel } from "@/components/renderers/category-carousel";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { getFeedProducts } from "@/actions/marketplace";
 import { ProductCard, ProductCardProduct } from "@/components/renderers/product-card";
 import { RecentlyViewed } from "@/components/marketplace/recently-viewed";
+import { FlashDeals } from "@/components/marketplace/flash-deals";
 
 export const revalidate = 3600;
 
@@ -179,9 +180,13 @@ export default async function MarketplacePage() {
       </header>
 
       <main>
-        {/* Hero Section */}
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-12">
+      {/* Flash Deals Section - перший блок одразу після header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <FlashDeals />
+      </div>
+      
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="col-span-1 lg:col-span-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-10 text-white shadow-xl relative overflow-hidden h-80 flex flex-col justify-center">
               <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
