@@ -2,7 +2,7 @@ import { MarketplaceHeader } from "@/components/navigation/marketplace-header";
 import { MarketplaceFooter } from "@/components/navigation/marketplace-footer";
 import { BackToTop } from "@/components/ui/back-to-top";
 
-export default function MarketplaceLayout({
+export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;

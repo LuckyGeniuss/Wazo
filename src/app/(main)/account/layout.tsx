@@ -13,9 +13,9 @@ export default async function AccountLayout({
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col bg-background">
+    <div className="relative flex min-h-screen flex-col bg-background">
       {/* TODO: Add account navigation / header here */}
       {children}
-    </main>
+    </div>
   );
 }
