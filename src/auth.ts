@@ -69,8 +69,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.sub = user.id;
-        token.role = user.role ?? ("USER" as Role);
-        token.isBanned = user.isBanned ?? false;
+        // Отримуємо роль з БД для Google користувачів (вони можуть не мати role в user object)
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { role: true, isBanned: true },
+        });
+        token.role = dbUser?.role ?? user.role ?? ("USER" as Role);
+        token.isBanned = dbUser?.isBanned ?? user.isBanned ?? false;
         token.lastChecked = Date.now();
       } else if (
         Date.now() - ((token.lastChecked as number) ?? 0) >
@@ -98,13 +103,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   events: {
-    // При первом входе через Google — устанавливаем роль USER если ещё нет
+    // При першому вході через Google — встановлюємо роль USER
     async createUser({ user }) {
       if (user.id) {
         await prisma.user.update({
           where: { id: user.id },
           data: { role: "USER" },
         });
+      }
+    },
+    // При першому вході через Google — отримуємо роль з БД після створення
+    async signIn({ user, account }) {
+      if (account?.provider === "google" && user.id) {
+        // Перевіряємо чи користувач вже має роль, якщо ні — встановлюємо USER
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { role: true },
+        });
+        if (!dbUser?.role) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: "USER" },
+          });
+        }
       }
     },
   },
