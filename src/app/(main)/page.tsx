@@ -102,13 +102,18 @@ export default async function MarketplacePage() {
     take: 12
   });
 
-  // Получаем глобальные категории
+  // Отримуємо глобальні категорії з кількістю продуктів
   const globalCategories = await prisma.category.findMany({
     where: {
       isGlobal: true,
       storeId: null,
     },
     orderBy: { createdAt: "asc" },
+    include: {
+      _count: {
+        select: { products: true }
+      }
+    }
   });
 
   
@@ -182,7 +187,7 @@ export default async function MarketplacePage() {
       <main>
       {/* Flash Deals Section - перший блок одразу після header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <FlashDeals />
+        <FlashDeals products={discountProducts} />
       </div>
       
       {/* Hero Section */}
@@ -400,9 +405,62 @@ export default async function MarketplacePage() {
               </div>
             </div>
           </section>
-        )}
-
-        {/* Trending Products */}
+          )}
+        
+          {/* Benefits Banner */}
+          <section className="py-12 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Якість гарантовано</h4>
+                    <p className="text-xs text-blue-100">Перевірені продавці</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Швидка доставка</h4>
+                    <p className="text-xs text-blue-100">Від 1 дня</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Безпечна оплата</h4>
+                    <p className="text-xs text-blue-100">Захист угоги</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 15V9a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16l4-4m0 0l-4-4m4 4H8" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Легке повернення</h4>
+                    <p className="text-xs text-blue-100">14 днів на поверхнення</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        
+          {/* Trending Products */}
         {true && (
           <section className="py-16 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

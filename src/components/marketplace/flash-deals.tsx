@@ -2,60 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Clock, ArrowRight, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, Zap } from "lucide-react";
 import { ProductCard, ProductCardProduct } from "@/components/renderers/product-card";
 
-interface FlashDeal {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice: number;
-  imageUrl: string;
-  href: string;
-  discount: number;
+interface FlashDealsProps {
+  products: ProductCardProduct[];
 }
 
-const FLASH_DEALS: FlashDeal[] = [
-  {
-    id: "1",
-    name: 'Apple iPhone 15 Pro Max 256GB',
-    price: 42999,
-    originalPrice: 54999,
-    imageUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=400&auto=format&fit=crop',
-    href: '/product/1',
-    discount: 22,
-  },
-  {
-    id: "2",
-    name: 'Sony WH-1000XM5',
-    price: 9999,
-    originalPrice: 14999,
-    imageUrl: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=400&auto=format&fit=crop',
-    href: '/product/2',
-    discount: 33,
-  },
-  {
-    id: "3",
-    name: 'Samsung Galaxy Watch 6',
-    price: 7999,
-    originalPrice: 11999,
-    imageUrl: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=400&auto=format&fit=crop',
-    href: '/product/3',
-    discount: 33,
-  },
-  {
-    id: "4",
-    name: 'MacBook Air M3 15"',
-    price: 52999,
-    originalPrice: 62999,
-    imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&auto=format&fit=crop',
-    href: '/product/4',
-    discount: 16,
-  },
-];
-
-export function FlashDeals() {
+export function FlashDeals({ products }: FlashDealsProps) {
   const [timeLeft, setTimeLeft] = useState({
     hours: 23,
     minutes: 59,
@@ -124,36 +78,8 @@ export function FlashDeals() {
 
         {/* Картки товарів */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {FLASH_DEALS.map((deal) => (
-            <Link
-              key={deal.id}
-              href={deal.href}
-              className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <div className="relative aspect-square overflow-hidden">
-                <img
-                  src={deal.imageUrl}
-                  alt={deal.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-md">
-                  -{deal.discount}%
-                </div>
-              </div>
-              <div className="p-3">
-                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
-                  {deal.name}
-                </h3>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-gray-900">
-                    {deal.price.toLocaleString('uk-UA')} ₴
-                  </span>
-                  <span className="text-sm text-gray-400 line-through">
-                    {deal.originalPrice.toLocaleString('uk-UA')} ₴
-                  </span>
-                </div>
-              </div>
-            </Link>
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>
