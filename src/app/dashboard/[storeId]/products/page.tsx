@@ -27,6 +27,8 @@ export default async function ProductsPage({
     orderBy: { createdAt: "desc" },
   });
 
+  console.log('[Products] storeId:', storeId, 'found:', products.length);
+
   return (
     <div>
       <ProductsClient data={products} storeId={storeId} />

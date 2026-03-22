@@ -42,6 +42,7 @@ import {
 interface SidebarProps {
   stores: Store[];
   userRole: Role;
+  storeId: string;
 }
 
 interface RouteConfig {
@@ -57,10 +58,8 @@ type SidebarGroup = {
   routes: RouteConfig[];
 };
 
-export function Sidebar({ stores, userRole }: SidebarProps) {
+export function Sidebar({ stores, userRole, storeId }: SidebarProps) {
   const pathname = usePathname();
-  const params = useParams();
-  const storeId = params.storeId as string;
   const { isOpen, close } = useMobileSidebar();
 
   const groups: SidebarGroup[] = [
@@ -324,7 +323,7 @@ export function Sidebar({ stores, userRole }: SidebarProps) {
         </div>
 
         <div className="px-6 py-4 border-b border-slate-800">
-          <StoreSwitcher items={stores} />
+          <StoreSwitcher items={stores} storeId={storeId} />
         </div>
 
         {/* Скролл контента сайдбара */}

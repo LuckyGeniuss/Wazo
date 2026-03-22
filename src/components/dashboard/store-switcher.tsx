@@ -1,19 +1,19 @@
 "use client";
 
 import type { Store } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStoreModal } from "@/hooks/use-store-modal";
 
 interface StoreSwitcherProps {
   items: Store[];
+  storeId: string;
 }
 
-export function StoreSwitcher({ items = [] }: StoreSwitcherProps) {
+export function StoreSwitcher({ items = [], storeId }: StoreSwitcherProps) {
   const storeModal = useStoreModal();
-  const params = useParams();
   const router = useRouter();
-  
+
   const [isOpen, setIsOpen] = useState(false);
 
   const formattedItems = items.map((item) => ({
@@ -22,7 +22,7 @@ export function StoreSwitcher({ items = [] }: StoreSwitcherProps) {
   }));
 
   const currentStore = formattedItems.find(
-    (item) => item.value === params.storeId
+    (item) => item.value === storeId
   );
 
   const onStoreSelect = (store: { value: string; label: string }) => {
